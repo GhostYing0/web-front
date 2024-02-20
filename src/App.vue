@@ -1,15 +1,18 @@
 <template>
-  <div class="common-layout">
-    <el-container>
-      <el-header id="header">Header</el-header>
-      <el-container>
-        <el-aside id="aside">Aside</el-aside>
-        <el-container id="middle">
-          <el-main class="main">Main</el-main>
-          <el-footer class="footer">Footer</el-footer>
-        </el-container>
-      </el-container>
-    </el-container>
+  <div class="common-layout" id="app">
+    <router-view />
+    <!--<el-container>-->
+      <!--<el-header id="header">Header</el-header>-->
+      <!--<el-container>-->
+        <!--<el-aside id="aside">-->
+
+        <!--</el-aside>-->
+        <!--<el-container id="middle">-->
+          <!--<el-main class="main">Main</el-main>-->
+          <!--<el-footer class="footer">Footer</el-footer>-->
+        <!--</el-container>-->
+      <!--</el-container>-->
+    <!--</el-container>-->
   </div>
 </template>
 
@@ -23,51 +26,51 @@ export default {
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<!--<style>-->
+<!--#app {-->
+  <!--font-family: Avenir, Helvetica, Arial, sans-serif;-->
+  <!-- -webkit-font-smoothing: antialiased;-->
+  <!-- -moz-osx-font-smoothing: grayscale;-->
+  <!--text-align: center;-->
+  <!--color: #2c3e50;-->
+<!--}-->
 
-.common-layout {
-  display: flex;
-}
+<!--.common-layout {-->
+  <!--display: flex;-->
+<!--}-->
 
-#header {
-  flex: 1;
-  height: 10vh;
-  width: 100vw;
-  background-color: blueviolet;
-}
+<!--#header {-->
+  <!--flex: 1;-->
+  <!--height: 10vh;-->
+  <!--width: 100vw;-->
+  <!--background-color: blueviolet;-->
+<!--}-->
 
-#middle {
-  flex: 9;
-  display: flex;
-  height: 90vh;
-  flex-direction: column;
-}
+<!--#middle {-->
+  <!--flex: 9;-->
+  <!--display: flex;-->
+  <!--height: 90vh;-->
+  <!--flex-direction: column;-->
+<!--}-->
 
-#aside {
-  float:left;
-  flex: 1;
-  height: 90vh;
-  width: 10vw;
-  background-color: darkgrey;
-}
+<!--#aside {-->
+  <!--float:left;-->
+  <!--flex: 1;-->
+  <!--height: 90vh;-->
+  <!--width: 10vw;-->
+  <!--background-color: darkgrey;-->
+<!--}-->
 
-.footer {
-  flex:1;
-  float:left;
-  background-color: red;
-}
+<!--.footer {-->
+  <!--flex:1;-->
+  <!--float:left;-->
+  <!--background-color: red;-->
+<!--}-->
 
-.main {
-  flex:8;
-  float:left;
-  background-color: yellow;
-}
+<!--.main {-->
+  <!--flex:8;-->
+  <!--float:left;-->
+  <!--background-color: yellow;-->
+<!--}-->
 
-</style>
+<!--</style>-->
