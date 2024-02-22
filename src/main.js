@@ -6,11 +6,8 @@ import ElementPlus from 'element-plus'
 import '@/premission'
 
 const app=createApp(App)
-//app.use(store)
 app.use(router)
 app.use(ElementPlus)
-
-//app.use(ElementPlus)
 
 app.config.globalProperties.$http=axios;
 

@@ -12,8 +12,9 @@ router.beforeEach(async(to, from, next) => {
 
     console.log(to.path)
     if (to.path === '/') {
-        next({path: '/cms_login'})
+        //next({path: '/cms_login'})
         console.log("asdasd")
+        next()
         NProgress.done()
     } else {
         console.log("0000000000")
