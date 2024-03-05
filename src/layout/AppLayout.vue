@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import AppMenu from '@/components/AppMenu.vue';
+import AppMenu from './Sidebar/AppMenu.vue';
 </script>
 
 <style scoped lang="scss">

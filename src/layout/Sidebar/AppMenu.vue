@@ -15,7 +15,6 @@
     >
         <el-sub-menu index="1" class="base-menu">
             <template #title>
-                <el-icon><location /></el-icon>
                 <span>Navigator One</span>
             </template>
             <el-menu-item-group title="Test One">
@@ -24,11 +23,11 @@
                 <el-menu-item index="/add_user">添加用户</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="Test Two">
-                <el-menu-item index="/cms_login">管理员登陆</el-menu-item>
+                <el-menu-item index="/Login">管理员登陆</el-menu-item>
             </el-menu-item-group>
             <el-sub-menu index="1-4" class="derive-menu">
                 <template #title><span>二级栏</span></template>
-                <el-menu-item index="1-4-1">item one</el-menu-item>
+                <el-menu-item index="index">item one</el-menu-item>
             </el-sub-menu>
         </el-sub-menu>
     </el-menu>
