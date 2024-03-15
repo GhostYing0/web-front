@@ -1,4 +1,4 @@
-import { asyncRoutes, constantRoutes } from '../router'
+import {asyncRoutes, constantRoutes} from '../../router'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -6,8 +6,8 @@ import { asyncRoutes, constantRoutes } from '../router'
  * @param route
  */
 function hasPermission(roles, route) {
-    if (route.meta && route.meta.roles) {
-        return roles.some(role => route.meta.roles.includes(role))
+    if (route && route.roles) {
+        return roles.some(role => route.roles.includes(role))
     } else {
         return true
     }
@@ -28,6 +28,7 @@ export function filterAsyncRoutes(routes, roles) {
                 tmp.children = filterAsyncRoutes(tmp.children, roles)
             }
             res.push(tmp)
+            console.log("add:", tmp)
         }
     })
 

@@ -1,16 +1,20 @@
 import axios from "axios";
+import { getToken } from '@/utils/auth'
 
 const request = axios.create({
     baseURL: "http://localhost:9006/api/",
     timeout: 5000
 })
 
-request.interceptors.request.use(config => {
-    if(config && config.headers){
-        config.headers['content-Type'] = 'application/json;charset=utf-8';
-    }
-    return config
-}, error => {
+request.interceptors.request.use(
+    config => {
+        if(config && config.headers) {
+            config.headers['content-Type'] = 'application/json;charset=utf-8';
+            config.headers["BackServer-token"] = getToken()
+        }
+        return config
+    },
+        error => {
     return Promise.reject(error)
 });
 

@@ -36,7 +36,7 @@
             </el-form-item>
             <!-- 权限 -->
             <el-form-item prop="authority">
-                <el-select v-model="loginForm.role" placeholder="请选择" style="width: 418px">
+                <el-select v-model="loginForm.role" placeholder="请选择" style="width:240px">
                     <el-option :key="0" label="学生" :value=1></el-option>
                     <el-option :key="1" label="教师" :value=2></el-option>
                     <el-option :key="2" label="管理员" :value=0></el-option>
@@ -55,8 +55,10 @@
 <script>
     // import request from '../../http/axios';
     // import {login, getUser, state} from "../../store/manger"
+    import { getToken } from '@/utils/auth'
     export default {
         name: 'UserLogin',
+
         data() {
             const validateUsername = (rule, value, callback) => {
                 callback()
@@ -66,9 +68,9 @@
             }
             return {
                 loginForm: {
-                    username: '',
-                    password: '',
-                    role: 1
+                    username: 'gu',
+                    password: 'gu112233..',
+                    role: 0
                 },
                 loginRules: {
                     username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -76,7 +78,7 @@
                 },
                 loading: false,
                 passwordType: 'password',
-                redirect: undefined
+                redirect: undefined,
             }
         },
         methods: {
@@ -93,25 +95,28 @@
             handleLogin() {
                 this.$refs.loginForm.validate(valid => {
                     if (valid) {
-                        this.loading = true;
-                        console.log(this.loginForm)
-                        this.$store.dispatch('user/Login', this.loginForm).then((data) => {
+                        if (!getToken()) {
+                            this.loading = true;
+                            console.log(this.loginForm)
+                            this.$store.dispatch('user/Login', this.loginForm).then((data) => {
                                 console.log("data:", data)
-                                // const redirectPath = this.$store.state.redirectPath || localStorage.getItem('redirectPath') || '/';
-                                //
-                                // // 重定向到之前要去的界面
-                                // this.$router.push(redirectPath);
-                                //
-                                // // 清除之前保存的路径
-                                // this.$store.commit('clearRedirectPath');
-                                // localStorage.removeItem('redirectPath');
-                                this.loading = false
+
+                                const redirect = this.$route.query.redirect || '/dashboard';
+
+                                // 登录成功后跳转到登录前的页面
+                                this.$router.push(redirect);
+
+
                             }).catch((error) => {
-                            console.error("error:", error)
-                            this.loading = false
-                        })
-                    } else {
-                        console.log('不允许提交!')
+                                console.error("error:", error)
+                                this.loading = false
+                            })
+                        } else {
+                            console.log('您已登录,不能重复登陆')
+                        }
+                    }
+                    else {
+                        console.log("表单验证不通过，不允许提交")
                         return false
                     }
                 })

@@ -47,8 +47,9 @@ const actions = {
                         reject(message)
                     }
 
-                    commit("SET_TOKEN", data.token)
-                    setToken(data.token)
+                    commit("SET_TOKEN", data.data.token)
+                    console.log("asdasdasd:",data.data.token)
+                    setToken(data.data.token)
                     resolve(data)
                 }).catch(error => {
                     console.log("error!")
@@ -62,8 +63,8 @@ const actions = {
                         reject(message)
                     }
 
-                    commit("SET_TOKEN", data.token)
-                    setToken(data.token)
+                    commit("SET_TOKEN", data.data.token)
+                    setToken(data.data.token)
                     resolve(data)
                 }).catch(error => {
                     console.log("error!")
@@ -77,8 +78,8 @@ const actions = {
                         reject(message)
                     }
 
-                    commit("SET_TOKEN", data.token)
-                    setToken(data.token)
+                    commit("SET_TOKEN", data.data.token)
+                    setToken(data.data.token)
                     resolve(data)
                 }).catch(error => {
                     console.log("error!")
@@ -93,32 +94,35 @@ const actions = {
     getInfo({commit, state}) {
     return new Promise((resolve, reject) => {
         cmsInfo(state.token).then(response => {
-            const {data} = response
+            const {data} = response.data
             if(!data) {
                 reject("验证失败，请重新登录")
             }
 
+            console.log("返回值:",data)
             if(data.role === 0) {
-                data["roles"] = "manager"
+                data["roles"] = ["manager"]
             } else if(data.role === 1) {
-                data["roles"] = "student"
+                data["roles"] = ["student"]
             } else if(data.role === 2) {
-                data["roles"] = "teacher"
+                data["roles"] = ["teacher"]
             } else {
                 reject("非法用户身份!")
             }
 
-            console.log(data)
-            const { userid, roles, username } = data
+            const {id, roles, username} = data
 
             // roles must be a non-empty array
             if (!roles || roles.length <= 0) {
                 reject('getInfo: roles 必须是非空数组!')
             }
 
-            commit('SET_ID', userid)
+            commit('SET_ID', id)
             commit('SET_ROLES', roles)
             commit('SET_NAME', username)
+            console.log(state.id)
+            console.log(state.roles)
+            console.log(state.name)
             resolve(data)
         }).catch(error => {
             reject(error)
