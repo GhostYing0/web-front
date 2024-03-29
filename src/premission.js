@@ -3,7 +3,7 @@ import NProgress from 'nprogress' // progress bar
 import store from './store'
 import { getToken } from '@/utils/auth'
 import { ElMessage  } from 'element-plus'
-//import user from './store/user/student.js'
+//import user from './store/user/user.js'
 
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration

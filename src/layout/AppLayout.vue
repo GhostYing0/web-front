@@ -1,19 +1,29 @@
 <template>
     <div class="common-layout">
         <el-container class="master-container">
+            <!--<AppMenu/>-->
             <el-aside class="aside">
-                <AppMenu/>
+                <template v-if="store.getters.roles.includes('manager')">
+                    <AppMenu/>
+                </template>
+                <template v-else-if="store.getters.roles.includes('student') || store.getters.roles.includes('teacher')">
+                    <UserAppMenu/>
+                </template>
             </el-aside>
             <el-container class="container">
-                <el-header class="header">Header</el-header>
+                <el-header class="header"><Navbar/></el-header>
                 <el-main class="main"><router-view/></el-main>
             </el-container>
         </el-container>
     </div>
 </template>
 
+
 <script setup>
-import AppMenu from './Sidebar/AppMenu.vue';
+    import store from '../store'
+    import AppMenu from './Sidebar/AppMenu'
+    import UserAppMenu from './Sidebar/UserAppMenu'
+    import Navbar from './Navbar'
 </script>
 
 <style scoped lang="scss">
@@ -21,7 +31,7 @@ import AppMenu from './Sidebar/AppMenu.vue';
         height: 100vh;
         display: flex;
         .aside{
-            background: #797979;
+            background: white;
             order: -1;
             flex: 1;
         }

@@ -28,7 +28,7 @@ request.interceptors.response.use(
         //     res = res ? JSON.parse(res) : res
         // }
         // return res;
-        return response
+        return response.data
     },
     error => {
         console.log('err' + error)

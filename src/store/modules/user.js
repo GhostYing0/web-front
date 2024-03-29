@@ -1,9 +1,8 @@
 // import {login, register, updatePassword, getUser} from "@/api/manager";
-import {login as cmsLogin, getInfo as cmsInfo} from "@/api/manager";
-import {login as studentLogin, getInfo as studentInfo} from "@/api/student";
-import {login as teacherLogin, getInfo as teacherInfo} from "@/api/teacher";
+import {login as userLogin, getInfo, cmsLogin, logout} from "@/api/user";
 // import {getToken, setToken, removeToken} from "../../utils/auth";
 import {getToken, setToken, removeToken} from "../../utils/auth";
+import {resetRouter} from "../../router";
 //import {resetRouter} from "../../router";
 
 const getDefaultState = () => {
@@ -41,45 +40,31 @@ const actions = {
         return new Promise((resolve, reject) => {
             if(role === 0){
                 cmsLogin({username: username.trim(), password: password, role: role}).then(response => {
-                    const {status, message, data} = response
+                    console.log(response)
+                    const {code, message, data} = response
 
-                    if(status != 200) {
+                    if(code != 200) {
                         reject(message)
                     }
 
-                    commit("SET_TOKEN", data.data.token)
-                    console.log("asdasdasd:",data.data.token)
-                    setToken(data.data.token)
+                    commit("SET_TOKEN", data.token)
+                    console.log("asdasdasd:",data.token)
+                    setToken(data.token)
                     resolve(data)
                 }).catch(error => {
                     console.log("error!")
                     reject(error)
                 })
-            } else if(role === 1) {
-                studentLogin({username: username.trim(), password: password, role: role}).then(response => {
-                    const {status, message, data} = response
+            } else if(role === 1 || role === 2) {
+                userLogin({username: username.trim(), password: password, role: role}).then(response => {
+                    const {code, message, data} = response
 
-                    if(status != 200) {
+                    if(code != 200) {
                         reject(message)
                     }
 
-                    commit("SET_TOKEN", data.data.token)
-                    setToken(data.data.token)
-                    resolve(data)
-                }).catch(error => {
-                    console.log("error!")
-                    reject(error)
-                })
-            } else if(role === 2) {
-                teacherLogin({username: username.trim(), password: password, role: role}).then(response => {
-                    const {status, message, data} = response
-
-                    if(status != 200) {
-                        reject(message)
-                    }
-
-                    commit("SET_TOKEN", data.data.token)
-                    setToken(data.data.token)
+                    commit("SET_TOKEN", data.token)
+                    setToken(data.token)
                     resolve(data)
                 }).catch(error => {
                     console.log("error!")
@@ -93,8 +78,8 @@ const actions = {
 
     getInfo({commit, state}) {
     return new Promise((resolve, reject) => {
-        cmsInfo(state.token).then(response => {
-            const {data} = response.data
+        getInfo(state.token).then(response => {
+            const {data} = response
             if(!data) {
                 reject("验证失败，请重新登录")
             }
@@ -127,10 +112,21 @@ const actions = {
         }).catch(error => {
             reject(error)
         })
-
-        studentInfo(state.token)
-        teacherInfo(state.token)
     })
+    },
+
+    // user logout
+    logout({ commit, state }) {
+        return new Promise((resolve, reject) => {
+            logout(state.token).then(() => {
+                removeToken() // must remove  token  first
+                resetRouter()
+                commit('RESET_STATE')
+                resolve()
+            }).catch(error => {
+                reject(error)
+            })
+        })
     },
 
     // remove token

@@ -18,6 +18,36 @@ const asyncRoutes = [
                 component: () => import("@/views/my-test-adduser"),
                 roles: ["manager","student", "teacher"],
             },
+            {
+                path: "/enrollContest",
+                component: () => import("@/views/enroll/indexEnrollContest"),
+                roles: ["student"]
+            },
+            {
+                path: "/searchEnrollResult",
+                component: () => import("@/views/enroll/indexSearchEnrollResult"),
+                roles: ["student"]
+            },
+            {
+                path: "/enrollManage",
+                component: () => import("@/views/enrollManage/index"),
+                roles: ["manager"]
+            },
+            {
+                path: "/userManage",
+                component: () => import("@/views/userManage/index"),
+                roles: ["manager"]
+            },
+            {
+                path: "/contestManage",
+                component: () => import("@/views/contestManage/index"),
+                roles: ["manager"]
+            },
+            {
+                path: "/gradeManage",
+                component: () => import("@/views/gradeManage/index"),
+                roles: ["manager"]
+            }
         ]
     }
 ];
@@ -53,8 +83,21 @@ const router = createRouter({
 });
 
 export function resetRouter() {
-    const newRouter = createRouter()
-    router.matcher = newRouter.matcher // reset router
+    const newRouter = createRouter({
+        history: createWebHistory(),
+        scrollBehavior: () => ({ top: 0 }),
+        routes: constantRoutes
+    })
+
+    // 移除所有已注册的路由
+    router.getRoutes().forEach((route) => {
+        router.removeRoute(route.name);
+    });
+
+    // 添加新的路由
+    newRouter.getRoutes().forEach((route) => {
+        router.addRoute(route);
+    });
 }
 
 export {router, asyncRoutes, constantRoutes};
