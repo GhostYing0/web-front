@@ -22,7 +22,7 @@ router.beforeEach(async(to, from, next) => {
     if (hasToken) {
         if (to.path === '/login' || to.path === "/register") {
             console.log("您已登录")
-            next("/")
+            next("/test");
             NProgress.done()
         } else {
             console.log("你有令牌访问其他网页,还需要写身份验证")

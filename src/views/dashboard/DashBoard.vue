@@ -1,22 +1,23 @@
 <template>
     <div class="mb-4">
-        <el-button type="primary" plain @click="DisplayContest">预览竞赛</el-button>
-        <el-button type="success" plain @click="AddUser">添加用户</el-button>
+        <el-button type="primary" plain @click="login">登录</el-button>
+        <el-button type="success" plain @click="register">注册</el-button>
     </div>
 </template>
 
 <script>
+    import {router} from '../../router'
     export default {
         name: "DashBoard",
 
 
         methods: {
-            DisplayContest() {
-                this.$router.push("/display_contest")
+            login() {
+                router.push("/login")
             },
 
-            AddUser() {
-                this.$router.push("/add_user")
+            register() {
+                router.push("/register")
             }
         }
     }

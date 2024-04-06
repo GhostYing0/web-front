@@ -3,6 +3,7 @@
         <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
             <el-input v-model="param.contest_name" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            <el-input v-model="param.grade" placeholder="成绩" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             <div class="block">
                 <span class="demonstration"></span>
                 <el-date-picker
@@ -52,30 +53,20 @@
                 label="竞赛"
                 show-overflow-tooltip>
         </el-table-column>
-        <el-table-column
-                prop="team_id"
-                label="队伍ID"
-                width="55"
-                show-tooltip>
-        </el-table-column>
+
         <el-table-column
                 prop="create_time"
                 label="报名时间"
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-                prop="school"
-                label="学校"
+                prop="grade"
+                label="成绩"
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-                prop="phone"
-                label="电话号码"
-                show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-                prop="email"
-                label="邮箱"
+                prop="certificate"
+                label="证明材料"
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
@@ -105,7 +96,7 @@
 </template>
 
 <script>
-    import {getUserEnroll} from '@/api/enroll'
+    import {searchGrade} from '@/api/grade'
     import {computed, ref} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
 
@@ -173,7 +164,7 @@
                     page_number: 1,
                     page_size: 10,
                     username: '',
-                    team_id: '',
+                    grade: '',
                     contest_name: '',
                     start_time: '',
                     end_time: '',
@@ -197,7 +188,7 @@
                 this.param.page_number = 1
                 console.log("asda:",this.param.contest_name)
                 console.log("asda:",this.param.state)
-                getUserEnroll(this.param).then(resp => {
+                searchGrade(this.param).then(resp => {
                     console.log(resp)
                     if (resp.code === 200) {
                         this.tableData = resp.data.list
@@ -215,7 +206,7 @@
             // 分页大小改变监听
             handleSizeChange(curSize) {
                 this.param.page_size = curSize
-                getUserEnroll(this.param).then(resp => {
+                searchGrade(this.param).then(resp => {
                     console.log('分页数据获取成功', resp)
                     this.tableData = resp.data.list
                     this.recordTotal = resp.data.total
@@ -225,7 +216,7 @@
             // 点击分页监听方法
             handleCurrentChange(curPage) {
                 this.param.page_number = curPage
-                getUserEnroll(this.param).then(resp => {
+                searchGrade(this.param).then(resp => {
                     console.log('分页数据获取成功', resp)
                     this.tableData = resp.data.list
                     this.recordTotal = resp.data.total
@@ -234,7 +225,7 @@
 
             handleShowUser() {
                 this.param.page_number = 1
-                getUserEnroll(this.param).then(resp => {
+                searchGrade(this.param).then(resp => {
                     console.log(resp)
                     if (resp.code === 200) {
                         this.tableData = resp.data.list
@@ -257,7 +248,7 @@
                     email: '',
                     state: -1
                 }
-                getUserEnroll(this.param).then(resp => {
+                searchGrade(this.param).then(resp => {
                     console.log(resp)
                     if (resp.code === 200) {
                         this.tableData = resp.data.list

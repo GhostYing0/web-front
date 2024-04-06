@@ -47,6 +47,26 @@ const asyncRoutes = [
                 path: "/gradeManage",
                 component: () => import("@/views/gradeManage/index"),
                 roles: ["manager"]
+            },
+            {
+                path: "/uploadGrade",
+                component: () => import("@/views/grade/indexUploadGrade"),
+                roles: ["student"]
+            },
+            {
+                path: "/searchGrade",
+                component: () => import("@/views/grade/indexSearchGrade"),
+                roles: ["student"]
+            },
+            {
+                path: "/processEnroll",
+                component: () => import("@/views/process/processEnroll"),
+                roles: ["teacher"]
+            },
+            {
+                path: "/processGrade",
+                component: () => import("@/views/process/processGrade"),
+                roles: ["teacher"]
             }
         ]
     }
@@ -55,7 +75,6 @@ const asyncRoutes = [
 const constantRoutes= [
     {
         path: '/',
-        component: AppLayout,
         redirect: '/dashboard',
         children: [
             {
@@ -72,7 +91,7 @@ const constantRoutes= [
     },
     {
         path: '/register',
-        component: () => import("@/views/Register"),
+        component: () => import("@/views/register/index"),
     }
 ]
 

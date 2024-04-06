@@ -26,8 +26,8 @@
                             <span>成绩信息模块</span>
                         </template>
                         <el-menu-item-group title="Group One">
-                            <el-menu-item index="/display_contest">展示竞赛信息</el-menu-item>
-                            <el-menu-item index="/add_user">添加用户</el-menu-item>
+                            <el-menu-item index="/uploadGrade">上传成绩</el-menu-item>
+                            <el-menu-item index="/SearchGrade">查看成绩</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
                     <el-sub-menu index="3" class="menu-border">
@@ -39,23 +39,16 @@
                             <el-menu-item index="/Login">管理员登陆</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
-                    <el-sub-menu index="4" class="menu-border">
-                        <template #title>
-                            <el-icon><location /></el-icon>
-                            <span>Navigator One</span>
-                        </template>
-                        <el-menu-item-group title="Group One">
-                            <el-menu-item index="1-1">item one</el-menu-item>
-                            <el-menu-item index="1-2">item two</el-menu-item>
-                        </el-menu-item-group>
-                        <el-menu-item-group title="Group Two">
-                            <el-menu-item index="1-3">item three</el-menu-item>
-                        </el-menu-item-group>
-                        <el-sub-menu index="1-4">
-                            <template #title>item four</template>
-                            <el-menu-item index="1-4-1">item one</el-menu-item>
+                        <el-sub-menu index="4" class="menu-border">
+                            <template #title>
+                                <el-icon><location /></el-icon>
+                                <span>审核信息</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="processEnroll">审核报名</el-menu-item>
+                                <el-menu-item index="processGrade">审核成绩</el-menu-item>
+                            </el-menu-item-group>
                         </el-sub-menu>
-                    </el-sub-menu>
                 </el-menu>
             </div>
         </el-col>

@@ -3,6 +3,7 @@
         <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
             <el-input v-model="param.username" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            <el-input v-model="param.team_id" placeholder="队伍" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             <el-input v-model="param.contest_name" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             <div class="block">
                 <span class="demonstration"></span>
@@ -22,7 +23,9 @@
                         :shortcuts="shortcuts"
                 />
             </div>
-            <el-input v-model="param.grade" placeholder="成绩" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            <el-input v-model="param.school" placeholder="学校" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            <el-input v-model="param.phone" placeholder="电话号码" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            <el-input v-model="param.email" placeholder="邮箱" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             <el-form-item label="审核状态" prop="role">
                 <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
                 <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
@@ -37,64 +40,8 @@
             <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowALL">
                 显示全部
             </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="primary" icon="el-icon-a-07" @click="handleCreate">
-                添加报名信息
-            </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="danger" icon="el-icon-a-022" @click="handleDeleteSome">
-                批量删除
-            </el-button>
         </div>
     </div>
-
-
-    <!--查看图片-->
-    <el-dialog v-model="dialogPictureVisible" width="30%">
-        <!--普通表单-->
-            <div>
-                <el-image :src="picture" />
-            </div>
-    </el-dialog>
-
-    <!--弹出框-->
-    <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
-        <!--普通表单-->
-        <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
-            <el-form-item label="用户名称" prop="username">
-                <el-input v-model="form.username"></el-input>
-            </el-form-item>
-            <el-form-item label="竞赛" prop="contest">
-                <el-input v-model="form.contest_name"></el-input>
-            </el-form-item>
-            <el-form-item label="成绩" prop="grade">
-                <el-input v-model="form.grade"></el-input>
-            </el-form-item>
-            <el-form-item label="证书" prop="certificate">
-                <el-input v-model="form.certificate"></el-input>
-            </el-form-item>
-            <el-form-item label="上传时间" prop="create_time">
-                <!--<el-input v-model="form.create_time"></el-input>-->
-                <div class="block">
-                    <span class="demonstration"></span>
-                    <el-date-picker
-                            v-model="form.create_time"
-                            type="datetime"
-                            placeholder="Select date and time"
-                            :shortcuts="shortcuts"
-                    />
-                </div>
-            </el-form-item>
-            <el-form-item label="审核状态" prop="state">
-                <el-radio v-model="form.state" :label="3">审核中</el-radio>
-                <el-radio v-model="form.state" :label="1">通过</el-radio>
-                <el-radio v-model="form.state" :label="2">未通过</el-radio>
-            </el-form-item>
-        </el-form>
-
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="submitForm">确 定</el-button>
-        </div>
-    </el-dialog>
 
     用户管理界面
     <el-table
@@ -121,6 +68,18 @@
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
+                prop="user_id"
+                label="用户ID"
+                width="55"
+                show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+                prop="team_id"
+                label="队伍ID"
+                width="55"
+                show-tooltip>
+        </el-table-column>
+        <el-table-column
                 prop="contest"
                 label="竞赛"
                 show-overflow-tooltip>
@@ -131,29 +90,19 @@
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-                prop="grade"
-                label="成绩"
+                prop="school"
+                label="学校"
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-                prop="certificate"
-                label="证书"
+                prop="phone"
+                label="电话号码"
                 show-overflow-tooltip>
-            <!--<div>-->
-                <!--<el-image style="width: 100px; height: 100px" :src="form.certificate" :fit="fit" />-->
-            <!--</div>-->
-            <!--<template #default="{ row }">-->
-                <!--<el-button @click="handDown(row.certificate)">查看</el-button>-->
-            <!--</template>-->
-
-            <template #default="{row}">
-            <el-popover trigger="hover" placement="top">
-                <template #reference>
-                    <el-button type="primary" @click="handDown(row.certificate)">查看</el-button>-->
-                </template>
-                <el-image :src="row.certificate" fit="contain" />
-            </el-popover>
-                </template>
+        </el-table-column>
+        <el-table-column
+                prop="email"
+                label="邮箱"
+                show-overflow-tooltip>
         </el-table-column>
         <el-table-column
                 prop="state"
@@ -167,8 +116,8 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="150" type="index">
             <template #default="{ row, $index }">
-                <el-button @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
-                <el-button @click="handleDelete(row, $index)" type="danger" size="small">删除</el-button>
+                <el-button @click="handleUpdate(row)" type="primary" size="small">通过</el-button>
+                <el-button @click="handleDelete(row, $index)" type="danger" size="small">驳回</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -188,7 +137,7 @@
 </template>
 
 <script>
-    import {getGrade, addGrade, deleteGrade, updateGrade,getCount} from '@/api/grade'
+    import {getUserEnroll, getCount} from '@/api/enroll'
     import {computed, ref} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
 
@@ -256,26 +205,31 @@
                     page_number: 1,
                     page_size: 10,
                     username: '',
+                    team_id: '',
                     contest_name: '',
                     start_time: '',
                     end_time: '',
+                    school: '',
+                    phone: '',
+                    email: '',
                     state: -1
                 },
 
 
                 // 对话框表单显示
-                dialogPictureVisible: false,
                 dialogFormVisible: false,
                 // 表单类型（添加数据:0,修改数据:1）
                 formType: 0,
 
                 form: {
-                    id: '',
+                    id: -1,
                     username: '',
+                    team_id: '',
                     contest_name: '',
                     create_time: '',
-                    grade: '',
-                    certificate: '',
+                    school: '',
+                    phone: '',
+                    email: '',
                     state: -1
                 },
 
@@ -298,7 +252,7 @@
             handleFilter() {
                 this.param.page_number = 1
                 console.log("asd:",this.param)
-                getGrade(this.param).then(resp => {
+                getUserEnroll(this.param).then(resp => {
                     console.log(resp)
                     if(resp.code === 200) {
                         this.tableData = resp.data.list
@@ -316,7 +270,7 @@
             submitForm() {
                 if (this.formType === 0) {  // 添加记录
                     console.log("addUser:", this.form)
-                    addGrade(this.form).then(resp => {
+                    addEnroll(this.form).then(resp => {
                         console.log("addUser:", resp)
                         if(resp.code === 200) {
                             this.$message.success('添加记录成功')
@@ -337,7 +291,7 @@
                     })
                 } else if(this.formType === 1) {  //更新记录
                     console.log("update:",this.form)
-                    updateGrade(this.form).then(resp => {
+                    updateEnroll(this.form).then(resp => {
                         if(resp.code === 200) {
                             ElMessage({
                                 type: 'success',
@@ -358,7 +312,7 @@
             // 分页大小改变监听
             handleSizeChange(curSize) {
                 this.param.page_size = curSize
-                getGrade(this.param).then(resp => {
+                getUserEnroll(this.param).then(resp => {
                     console.log('分页数据获取成功',resp)
                     this.tableData = resp.data.list
                     this.recordTotal = resp.data.total
@@ -368,7 +322,7 @@
             // 点击分页监听方法
             handleCurrentChange(curPage) {
                 this.param.page_number = curPage
-                getGrade(this.param).then(resp => {
+                getUserEnroll(this.param).then(resp => {
                     console.log('分页数据获取成功',resp)
                     this.tableData = resp.data.list
                     this.recordTotal = resp.data.total
@@ -377,7 +331,7 @@
 
             handleShowUser() {
                 this.param.page_number = 1
-                getGrade(this.param).then(resp => {
+                getUserEnroll(this.param).then(resp => {
                     console.log(resp)
                     if(resp.code === 200) {
                         this.tableData = resp.data.list
@@ -400,7 +354,7 @@
                     email: '',
                     state: -1
                 }
-                getGrade(this.param).then(resp => {
+                getUserEnroll(this.param).then(resp => {
                     console.log(resp)
                     if(resp.code === 200) {
                         this.tableData = resp.data.list
@@ -408,153 +362,6 @@
                     }
                 })
             },
-
-            // 点击添加用户
-            handleCreate() {
-                // 表单是添加状态
-                this.formType = 0
-                console.log("handleCreate")
-                // 将空数据置入form
-                this.form = {
-                    username: '',
-                    team_id: '',
-                    contest_name: '',
-                    create_time: '',
-                    school: '',
-                    phone: '',
-                    email: '',
-                    state: ''
-                }
-                // 显示表单框
-                this.dialogFormVisible = true
-                console.log("dialogFormVisible",this.dialogFormVisible)
-            },
-
-            // 点击添加用户
-            handleUpdate(row) {
-                // 表单是添加状态
-                this.formType = 1
-                console.log("handleUpdate")
-                // 将空数据置入form
-                this.form = {
-                    id: row.id,
-                    username: row.username,
-                    team_id: row.team_id,
-                    contest_name: row.contest,
-                    create_time: row.create_time,
-                    grade: row.grade,
-                    certificate: row.certificate,
-                    state: row.state
-                }
-                // 显示表单框
-                this.dialogFormVisible = true
-                console.log("dialogFormVisible",this.dialogFormVisible)
-            },
-
-            // 删除记录
-            handleDelete(row, index) {
-                ElMessageBox.confirm('确定要删除这条记录吗?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    const param = {ids:[row.id]};
-                    console.log("index:", index)
-                    console.log(param)
-                    deleteGrade(param).then(resp => {
-                        if(resp.code === 200) {
-                            ElMessage({
-                                type: 'success',
-                                message: '删除成功',
-                            })//
-                            //const index = this.multipleTable.value.findIndex(item => item === row);
-                            console.log("index:", index)
-                            this.tableData.splice(index, 1)
-                            // 如果删完了，获取上一页
-                            if(this.tableData.length === 0) {
-                                this.page_number = this.handleCurrentChange - 1
-                                this.handleCurrentChange(this.page_number)
-                            }
-                        }
-                    })
-                }).catch(() => {
-                    ElMessage({
-                        type: 'error',
-                        message: '删除失败',
-                    })
-                })
-            },
-
-            // 删除一些
-            handleDeleteSome() {
-                ElMessageBox.confirm('确定要删除这些记录吗?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    // 获取选中的对象数组
-                    const param = {ids:[]};
-                    this.multipleSelection.forEach(row => {
-                        param.ids.push(row.id)
-                    });
-                    console.log(param)
-
-                    deleteGrade(param).then(resp => {
-                        console.log("deletes:",resp)
-                        if(resp.code === 200) {
-                            ElMessage({
-                                type: 'success',
-                                message: '删除成功',
-                            })
-                            if(this.tableData.length === 0) {  //如果本页内容全部删光了
-                                //当前页为上一页
-                                if(this.page_number !== 1) {
-                                    this.page_number = this.page_number - 1
-                                }
-                            }
-                            // 重载当前页
-                            this.handleCurrentChange(this.page_number)
-                        } else {
-                            ElMessage({
-                                type: 'error',
-                                message: '删除失败',
-                            })
-                        }
-                    })
-                }).catch(() => {
-                    ElMessage({
-                        type: 'info',
-                        message: '取消',
-                    })
-                })
-            },
-            // downloadPicture(imgSrc, name) {
-            //     const image = new Image();
-            //     // 解决跨域 Canvas 污染问题
-            //     image.setAttribute("crossOrigin", "anonymous");
-            //     image.src = imgSrc;
-            //     image.onload = () => {
-            //         const canvas = document.createElement("canvas");
-            //         canvas.width = image.width;
-            //         canvas.height = image.height;
-            //         const context = canvas.getContext("2d");
-            //         context.drawImage(image, 0, 0, image.width, image.height);
-            //         canvas.toBlob((blob) => {
-            //             const url = URL.createObjectURL(blob);
-            //             const a = document.createElement("a");
-            //             a.download = name || "photo";
-            //             a.href = url;
-            //             a.click();
-            //             a.remove();
-            //             URL.revokeObjectURL(url);
-            //         });
-            //     };
-            // },
-            handDown(url) {
-                // this.downloadPicture(url, "pic")
-                this.picture = url
-                this.dialogPictureVisible = true
-            }
         },
     };
 </script>
@@ -581,9 +388,4 @@
         font-size: 14px;
         margin-bottom: 20px;
     }
-
-     /*.custom-popover .el-popover__popper {*/
-         /*width: 500px; !* 设置气泡宽度 *!*/
-         /*height: 500px; !* 设置气泡高度 *!*/
-     /*}*/
 </style>

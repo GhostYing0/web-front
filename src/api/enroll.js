@@ -43,3 +43,21 @@ export function updateEnroll(data) {
         data
     })
 }
+
+//报名
+export function enrollContest(data) {
+    return request({
+        url: "/enrollContest",
+        method: "post",
+        data
+    })
+}
+
+//报名
+export function getUserEnroll(param) {
+    return request({
+        url: "/searchEnrollResult",
+        method: "get",
+        params: param
+    })
+}

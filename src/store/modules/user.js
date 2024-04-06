@@ -1,5 +1,5 @@
 // import {login, register, updatePassword, getUser} from "@/api/manager";
-import {login as userLogin, getInfo, cmsLogin, logout} from "@/api/user";
+import {login as userLogin, getInfo, cmsLogin, logout, cmsRegister, register} from "@/api/user";
 // import {getToken, setToken, removeToken} from "../../utils/auth";
 import {getToken, setToken, removeToken} from "../../utils/auth";
 import {resetRouter} from "../../router";
@@ -65,6 +65,42 @@ const actions = {
 
                     commit("SET_TOKEN", data.token)
                     setToken(data.token)
+                    resolve(data)
+                }).catch(error => {
+                    console.log("error!")
+                    reject(error)
+                })
+            } else {
+                reject("非法role")
+            }
+        })
+    },
+
+    Register({commit}, userInfo) {
+        const {username, password, confirm_password, role} = userInfo
+        return new Promise((resolve, reject) => {
+            if(role === 0){
+                cmsRegister({username: username.trim(), password: password, confirm_password: confirm_password, role: role}).then(response => {
+                    console.log(response)
+                    const {code, message, data} = response
+
+                    if(code != 200) {
+                        reject(message)
+                    }
+
+                    resolve(data)
+                }).catch(error => {
+                    console.log("error!")
+                    reject(error)
+                })
+            } else if(role === 1 || role === 2) {
+                register({username: username.trim(), password: password, confirm_password: confirm_password, role: role}).then(response => {
+                    const {code, message, data} = response
+
+                    if(code != 200) {
+                        reject(message)
+                    }
+
                     resolve(data)
                 }).catch(error => {
                     console.log("error!")
