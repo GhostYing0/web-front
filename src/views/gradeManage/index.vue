@@ -96,7 +96,7 @@
         </div>
     </el-dialog>
 
-    用户管理界面
+    成绩管理界面
     <el-table
             ref="multipleTable"
             :data="tableData"

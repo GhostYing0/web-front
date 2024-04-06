@@ -105,14 +105,24 @@
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-                prop="type"
+                prop="contest_type"
                 label="竞赛类型"
                 width="55"
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
                 prop="create_time"
-                label="报名时间"
+                label="创建时间"
+                show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+                prop="start_time"
+                label="开赛时间"
+                show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+                prop="deadline"
+                label="报名截至时间"
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
