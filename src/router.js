@@ -5,7 +5,7 @@ import AppLayout from  './layout/AppLayout.vue'
 
 const asyncRoutes = [
     {
-        path:"/test",
+        path:"/contestInformationManager",
         component:() => import("@/layout/AppLayout"),
         children:[
             {
@@ -89,8 +89,8 @@ const constantRoutes= [
         children: [
             {
                 title: "系统",
-                path: 'dashboard',
-                component: () => import("@/views/dashboard/DashBoard"),
+                path: '/dashboard',
+                component: () => import("@/views/dashboard/index"),
                 meta: { title: "首页" }
             }
         ]

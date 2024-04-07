@@ -22,7 +22,7 @@ router.beforeEach(async(to, from, next) => {
     if (hasToken) {
         if (to.path === '/login' || to.path === "/register") {
             console.log("您已登录")
-            next("/test");
+            next("/contestInformationManager");
             NProgress.done()
         } else {
             console.log("你有令牌访问其他网页,还需要写身份验证")
@@ -34,7 +34,6 @@ router.beforeEach(async(to, from, next) => {
                 console.log("进行添加路由")
                 try {
                     const { roles } = await store.dispatch("user/getInfo")
-                    console.log("rolesasdsa:", roles)
 
                     const accessedRoutes = await store.dispatch("permission/generateRoutes", roles)
 

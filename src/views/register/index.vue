@@ -40,11 +40,80 @@
                 <el-input
                         class="yuan"
                         :key="passwordType"
-                        ref="password"
+                        ref="confirm_password"
                         v-model="registerForm.confirm_password"
                         :type="passwordType"
                         placeholder="请再次输入密码"
                         name="confirm_password"
+                        tabindex="2"
+                        auto-complete="on"
+                        @keyup.enter="handleRegister"
+                />
+            </el-form-item>
+            <el-form-item prop="name">
+                <el-input
+                        class="yuan"
+                        ref="name"
+                        v-model="registerForm.name"
+                        :type="text"
+                        placeholder="请输入姓名"
+                        name="name"
+                        tabindex="2"
+                        auto-complete="on"
+                        @keyup.enter="handleRegister"
+                />
+            </el-form-item>
+            <el-form-item label="性别" prop="gender">
+                <el-radio v-model="registerForm.gender" :label="1">男</el-radio>
+                <el-radio v-model="registerForm.gender" :label="2">女</el-radio>
+            </el-form-item>
+            <el-form-item prop="school">
+                <el-input
+                        class="yuan"
+                        ref="school"
+                        v-model="registerForm.school"
+                        :type="text"
+                        placeholder="学校"
+                        name="school"
+                        tabindex="2"
+                        auto-complete="on"
+                        @keyup.enter="handleRegister"
+                />
+            </el-form-item>
+            <el-form-item prop="college">
+                <el-input
+                        class="yuan"
+                        ref="college"
+                        v-model="registerForm.college"
+                        :type="text"
+                        placeholder="学院"
+                        name="college"
+                        tabindex="2"
+                        auto-complete="on"
+                        @keyup.enter="handleRegister"
+                />
+            </el-form-item>
+            <el-form-item prop="semester" v-if="registerForm.role === 1">
+                <el-input
+                        class="yuan"
+                        ref="semester"
+                        v-model="registerForm.semester"
+                        :type="text"
+                        placeholder="入学年份"
+                        name="semester"
+                        tabindex="2"
+                        auto-complete="on"
+                        @keyup.enter="handleRegister"
+                />
+            </el-form-item>
+            <el-form-item prop="class" v-if="registerForm.role === 1">
+                <el-input
+                        class="yuan"
+                        ref="class"
+                        v-model="registerForm.class"
+                        :type="text"
+                        placeholder="班级"
+                        name="class"
                         tabindex="2"
                         auto-complete="on"
                         @keyup.enter="handleRegister"
@@ -55,7 +124,7 @@
                 <el-select v-model="registerForm.role" placeholder="请选择" style="width:240px">
                     <el-option :key="0" label="学生" :value=1></el-option>
                     <el-option :key="1" label="教师" :value=2></el-option>
-                    <el-option :key="2" label="管理员" :value=0></el-option>
+                    <!--<el-option :key="2" label="管理员" :value=0></el-option>-->
                 </el-select>
             </el-form-item>
 
@@ -73,33 +142,30 @@
         name: 'register',
 
         data() {
-            // const validateUsername = (rule, value, callback) => {
-            //     callback()
-            // }
-            // const validatePassword = (rule, value, callback) => {
-            //     callback()
-            // }
-            // const validateConfirmPassword = (rule, value, callback) => {
-            //     callback()
-            // }
             return {
                 registerForm: {
                     username: '',
                     password: '',
                     confirm_password: "",
-                    role: 1
+                    role: 1,
+                    name:"",
+                    gender: '',
+                    school: "",
+                    college: "",
+                    semester: "",
+                    class:""
+
                 },
-                // registerRules: {
-                //     username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-                //     password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-                //     confirm_password: [{ required: true, trigger: 'blur', validator: validateConfirmPassword }],
-                // },
                 loading: false,
                 passwordType: 'password',
                 redirect: undefined,
             }
         },
         methods: {
+            isStudent() {
+                console.log(this.registerForm.role)
+                return this.registerForm.role === "学生"
+            },
             showPwd() {
                 if (this.passwordType === 'password') {
                     this.passwordType = ''
@@ -116,6 +182,11 @@
                         if (!getToken()) {
                             this.loading = true;
                             console.log(this.loginForm)
+                            if(this.registerForm.gender === 1) {
+                                this.registerForm.gender = "男"
+                            }  else {
+                                this.registerForm.gender = "女"
+                            }
                             this.$store.dispatch('user/Register', this.registerForm).then((data) => {
                                 console.log("data:", data)
 

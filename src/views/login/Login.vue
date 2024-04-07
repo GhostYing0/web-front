@@ -101,7 +101,7 @@
                             this.$store.dispatch('user/Login', this.loginForm).then((data) => {
                                 console.log("data:", data)
 
-                                const redirect = this.$route.query.redirect || '/test';
+                                const redirect = this.$route.query.redirect || '/dashboard';
 
                                 // 登录成功后跳转到登录前的页面
                                 this.$router.push(redirect);
