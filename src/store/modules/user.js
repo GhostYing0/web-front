@@ -43,8 +43,9 @@ const actions = {
                     console.log(response)
                     const {code, message, data} = response
 
-                    if(code != 200) {
+                    if(code !== 200) {
                         reject(message)
+                        return
                     }
 
                     commit("SET_TOKEN", data.token)
@@ -58,9 +59,11 @@ const actions = {
             } else if(role === 1 || role === 2) {
                 userLogin({username: username.trim(), password: password, role: role}).then(response => {
                     const {code, message, data} = response
+                    console.log(response)
 
-                    if(code != 200) {
+                    if(code !== 200) {
                         reject(message)
+                        return
                     }
 
                     commit("SET_TOKEN", data.token)

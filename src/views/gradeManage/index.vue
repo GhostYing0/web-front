@@ -188,7 +188,7 @@
 </template>
 
 <script>
-    import {getGrade, addGrade, deleteGrade, updateGrade,getCount} from '@/api/grade'
+    import {getGrade, addGrade, deleteGrade, updateGrade,getGradeCount} from '@/api/grade'
     import {computed, ref} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
 
@@ -321,7 +321,7 @@
                         if(resp.code === 200) {
                             this.$message.success('添加记录成功')
                             // 跳转到末尾
-                            getCount().then(resp => {
+                            getGradeCount().then(resp => {
                                 console.log("getCount:", resp)
                                 this.recordTotal = resp.data.count
                                 this.page_number = Math.ceil(this.recordTotal / this.page_size)

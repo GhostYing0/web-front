@@ -137,7 +137,7 @@
 </template>
 
 <script>
-    import {getUserEnroll, getCount} from '@/api/enroll'
+    import {getUserEnroll, getEnrollCount} from '@/api/enroll'
     import {computed, ref} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
 
@@ -275,7 +275,7 @@
                         if(resp.code === 200) {
                             this.$message.success('添加记录成功')
                             // 跳转到末尾
-                            getCount().then(resp => {
+                            getEnrollCount().then(resp => {
                                 console.log("getCount:", resp)
                                 this.recordTotal = resp.data.count
                                 this.page_number = Math.ceil(this.recordTotal / this.page_size)

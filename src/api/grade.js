@@ -72,3 +72,11 @@ export function uploadImg(data) {
         data: data
     })
 }
+
+// 获取成绩数量
+export function getGradeCount() {
+    return request({
+        url: '/cms/getGradeCount',
+        method: 'get'
+    })
+}

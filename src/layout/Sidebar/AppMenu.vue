@@ -75,7 +75,8 @@
                         <el-icon><location /></el-icon>
                         <span>用户信息管理</span>
                     </template>
-                        <el-menu-item index="/userManage">进入</el-menu-item>
+                        <el-menu-item index="/studentManage">学生信息</el-menu-item>
+                        <el-menu-item index="/teacherManage">教师信息</el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="4" class="menu-border">
                     <template #title>

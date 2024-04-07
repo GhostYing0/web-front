@@ -33,22 +33,22 @@
                     <el-sub-menu index="3" class="menu-border">
                         <template #title>
                             <el-icon><location /></el-icon>
-                            <span>登录</span>
+                            <span>竞赛信息模块</span>
                         </template>
                         <el-menu-item-group title="Group One">
                             <el-menu-item index="/Login">管理员登陆</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
-                        <el-sub-menu index="4" class="menu-border">
-                            <template #title>
-                                <el-icon><location /></el-icon>
-                                <span>审核信息</span>
-                            </template>
-                            <el-menu-item-group>
-                                <el-menu-item index="processEnroll">审核报名</el-menu-item>
-                                <el-menu-item index="processGrade">审核成绩</el-menu-item>
-                            </el-menu-item-group>
-                        </el-sub-menu>
+                    <el-sub-menu index="4" class="menu-border" v-if="store.getters.roles.includes('teacher')">
+                        <template #title>
+                            <el-icon><location /></el-icon>
+                            <span>审核信息</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="processEnroll">审核报名</el-menu-item>
+                            <el-menu-item index="processGrade">审核成绩</el-menu-item>
+                        </el-menu-item-group>
+                    </el-sub-menu>
                 </el-menu>
             </div>
         </el-col>
@@ -62,6 +62,7 @@
         Location,
         Setting,
     } from '@element-plus/icons-vue'
+    import store from "@/store";
     const handleOpen = (key, keyPath) => {
         console.log(key, keyPath)
     }

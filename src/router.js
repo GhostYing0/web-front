@@ -39,6 +39,16 @@ const asyncRoutes = [
                 roles: ["manager"]
             },
             {
+                path: "/studentManage",
+                component: () => import("@/views/userManage/student/index"),
+                roles: ["manager"]
+            },
+            {
+                path: "/teacherManage",
+                component: () => import("@/views/userManage/teacher/index"),
+                roles: ["manager"]
+            },
+            {
                 path: "/contestManage",
                 component: () => import("@/views/contestManage/index"),
                 roles: ["manager"]

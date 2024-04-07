@@ -19,9 +19,9 @@ export function addEnroll(data) {
 }
 
 // 获取报名信息数量
-export function getCount() {
+export function getEnrollCount() {
     return request({
-        url: '/cms/getCount',
+        url: '/cms/getEnrollCount',
         method: 'get'
     })
 }

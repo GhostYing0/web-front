@@ -71,10 +71,19 @@ export function cmsUpdatePassword(data) {
     })
 }
 
-//查看用户
-export function getUser(param) {
+//查看学生用户
+export function getStudentUser(param) {
     return request({
-        url: "/cms/get_user",
+        url: "/cms/getStudentUser",
+        method: "get",
+        params: param
+    })
+}
+
+//查看教师用户
+export function getTeacherUser(param) {
+    return request({
+        url: "/cms/getTeacherUser",
         method: "get",
         params: param
     })
@@ -83,16 +92,16 @@ export function getUser(param) {
 //添加用户
 export function addUser(data) {
     return request({
-        url: "/cms/add_user",
+        url: "/cms/addUser",
         method: "post",
         data
     })
 }
 
 // 获取用户数量
-export function getCount() {
+export function getUserCount() {
     return request({
-        url: '/cms/getCount',
+        url: '/cms/getUserCount',
         method: 'get'
     })
 }
@@ -100,7 +109,7 @@ export function getCount() {
 // 删除用户
 export function deleteUsers(param) {
     return request({
-        url: '/cms/delete_user',
+        url: '/cms/deleteUSer',
         method: 'delete',
         data: param
     })
@@ -108,7 +117,7 @@ export function deleteUsers(param) {
 
 export function updateUser(data) {
     return request({
-        url: '/cms/update_user',
+        url: '/cms/updateUser',
         method: 'post',
         data
     })

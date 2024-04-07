@@ -44,3 +44,11 @@ export function processContest(data) {
         data: data
     })
 }
+
+// 获取报名信息数量
+export function getContestCount() {
+    return request({
+        url: '/cms/getContestCount',
+        method: 'get'
+    })
+}
