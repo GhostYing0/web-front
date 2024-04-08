@@ -2,9 +2,9 @@
     <div class="app-container">
         <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
-            <el-input v-model="param.username" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.name" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
 <!--            <el-input v-model="param.team_id" placeholder="队伍" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />-->
-            <el-input v-model="param.contest_name" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
             <div class="block">
                 <span class="demonstration"></span>
                 <el-date-picker
@@ -56,11 +56,14 @@
             <el-form-item label="用户名称" prop="username">
                 <el-input v-model="form.username"></el-input>
             </el-form-item>
+            <el-form-item label="姓名" prop="name">
+                <el-input v-model="form.name"></el-input>
+            </el-form-item>
 <!--            <el-form-item label="队伍ID" prop="team_id">-->
 <!--                <el-input v-model="form.team_id"></el-input>-->
 <!--            </el-form-item>-->
             <el-form-item label="报名竞赛" prop="contest">
-                <el-input v-model="form.contest_name"></el-input>
+                <el-input v-model="form.contest"></el-input>
             </el-form-item>
             <el-form-item label="报名时间" prop="create_time">
                 <!--<el-input v-model="form.create_time"></el-input>-->
@@ -257,7 +260,7 @@
                 param: {
                     page_number: 1,
                     page_size: 10,
-                    name,
+                    name:"",
                     //username: '',
                     team_id: '',
                     contest: '',
@@ -275,7 +278,8 @@
 
                 form: {
                     id: -1,
-                    //username: '',
+                    name:"",
+                    username: '',
                     team_id: '',
                     contest: '',
                     create_time: '',
@@ -423,9 +427,10 @@
                 // 将空数据置入form
                 this.form = {
                     id: '',
+                    name: "",
                     username: '',
                     team_id: '',
-                    contest_name: '',
+                    contest: '',
                     create_time: '',
                     school: '',
                     phone: '',
@@ -443,11 +448,13 @@
                 this.formType = 1
                 console.log("handleUpdate")
                 // 将空数据置入form
+                console.log("handleUpdate:",row.create_time)
                 this.form = {
                     id: row.id,
+                    name: row.name,
                     username: row.username,
                     team_id: row.team_id,
-                    contest_name: row.contest,
+                    contest: row.contest,
                     create_time: row.create_time,
                     school: row.school,
                     phone: row.phone,
