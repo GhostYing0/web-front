@@ -2,13 +2,18 @@
     <div class="app-container">
         <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
-            <el-input v-model="param.searchUser" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-            <br><br>
+            <el-input v-model="param.searchUser" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.name" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.class" placeholder="班级" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.school" placeholder="学校" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.college" placeholder="学院" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.semester" placeholder="入学年份" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+          <br><br>
             <!-- 一些按钮 -->
             <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-042" @click="handleFilter">
                 搜索
             </el-button>
-            <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowUser(0)">
+            <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowUser()">
                 显示全部
             </el-button>
             <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="primary" icon="el-icon-a-07" @click="handleCreate">
@@ -17,6 +22,11 @@
             <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="danger" icon="el-icon-a-022" @click="handleDeleteSome">
                 批量删除
             </el-button>
+          <el-form-item label="性别" prop="gender">
+            <el-radio v-model="param.gender" :label="''" @change="handleFilter">全部</el-radio>
+            <el-radio v-model="param.gender" :label="'男'" @change="handleFilter">男</el-radio>
+            <el-radio v-model="param.gender" :label="'女'" @change="handleFilter">女</el-radio>
+          </el-form-item>
         </div>
     </div>
 
@@ -28,21 +38,39 @@
             <el-form-item label="用户名称" prop="username">
                 <el-input v-model="form.username"></el-input>
             </el-form-item>
-
-            <el-form-item label="用户密码" prop="password">
+            <el-form-item label="用户密码" prop="password" v-if="formType === 0">
                 <el-input v-model="form.password"></el-input>
             </el-form-item>
-
-            <el-form-item label="身份" prop="role">
-                <el-radio v-model="form.role" :label="1">学生</el-radio>
-                <el-radio v-model="form.role" :label="2">老师</el-radio>
-            </el-form-item>
+          <el-form-item label="重置密码" prop="password" v-if="formType === 1">
+            <el-input v-model="form.password"></el-input>
+          </el-form-item>
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="性别" prop="gender">
+            <el-radio v-model="form.gender" :label="'男'">男</el-radio>
+            <el-radio v-model="form.gender" :label="'女'">女</el-radio>
+          </el-form-item>
+          <el-form-item label="学校" prop="school">
+            <el-input v-model="form.school"></el-input>
+          </el-form-item>
+          <el-form-item label="入学年份" prop="semester">
+            <el-input v-model="form.semester"></el-input>
+          </el-form-item>
+          <el-form-item label="学院" prop="college">
+            <el-input v-model="form.college"></el-input>
+          </el-form-item>
+          <el-form-item label="班级" prop="class">
+            <el-input v-model="form.class"></el-input>
+          </el-form-item>
         </el-form>
 
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="submitForm">确 定</el-button>
-        </div>
+        <template v-slot:footer>
+          <div class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="submitForm">确 定</el-button>
+          </div>
+        </template>
     </el-dialog>
 
     用户管理界面
@@ -64,21 +92,31 @@
                 label="序号"
                 width="100">
         </el-table-column>
+      <el-table-column
+          prop="name"
+          label="姓名"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="gender"
+          label="性别"
+          show-overflow-tooltip>
+      </el-table-column>
         <el-table-column
                 prop="username"
                 label="用户名称"
                 show-overflow-tooltip>
         </el-table-column>
+      <el-table-column
+          prop="student_id"
+          label="学生id"
+          show-overflow-tooltip>
+      </el-table-column>
         <el-table-column
                 prop="password"
                 label="用户密码"
                 show-overflow-tooltip>
         </el-table-column>
-      <el-table-column
-          prop="name"
-          label="用户密码"
-          show-overflow-tooltip>
-      </el-table-column>
       <el-table-column
           prop="school"
           label="学校"
@@ -90,8 +128,8 @@
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-          prop="gender"
-          label="性别"
+          prop="class"
+          label="班级"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -122,7 +160,7 @@
 </template>
 
 <script>
-    import {getStudentUser, addUser, getUserCount, deleteUsers,updateUser} from '@/api/user'
+    import {getStudent, addStudent, deleteStudent, updateStudent,getStudentCount} from '@/api/user'
     import {computed, ref} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
 
@@ -162,20 +200,30 @@
                     page_number: 1,
                     page_size: 10,
                     searchUser: null,
-                    mode: 0
+                    name:"",
+                    gender: "",
+                    class: "",
+                    school: "",
+                    college: "",
+                    semester: ""
                 },
 
 
                 // 对话框表单显示
                 dialogFormVisible: false,
                 // 表单类型（添加数据:0,修改数据:1）
-                formType: 0,
 
                 form: {
-                    id: '',
-                    username: '',
-                    password: '',
-                    role: 1
+                  id: '',
+                  username: '',
+                  password: '',
+                  role: 1,
+                  name: "",
+                  gender: "",
+                  school: "",
+                  semester: "",
+                  college: "",
+                  class: ""
                 },
 
                 rules: {
@@ -196,8 +244,7 @@
             // 搜索
             handleFilter() {
                 this.param.page_number = 1
-                console.log("asd:",this.param)
-                getStudentUser(this.param).then(resp => {
+                getStudent(this.param).then(resp => {
                     console.log(resp)
                     if(resp.code === 200) {
                         this.tableData = resp.data.list
@@ -215,12 +262,12 @@
             submitForm() {
                 if (this.formType === 0) {  // 添加记录
                     console.log("addUser:", this.form)
-                    addUser(this.form).then(resp => {
+                    addStudent(this.form).then(resp => {
                         console.log("addUser:", resp)
                         if(resp.code === 200) {
                             this.$message.success('添加记录成功')
                             // 跳转到末尾
-                            getUserCount().then(resp => {
+                            getStudentCount().then(resp => {
                                 console.log("getCount:", resp)
                                 this.recordTotal = resp.data.count
                                 this.page_number = Math.ceil(this.recordTotal / this.page_size)
@@ -236,7 +283,7 @@
                     })
                 } else if(this.formType === 1) {  //更新记录
                     console.log("update:",this.form)
-                    updateUser(this.form).then(resp => {
+                    updateStudent(this.form).then(resp => {
                         if(resp.code === 200) {
                             ElMessage({
                                 type: 'success',
@@ -257,7 +304,7 @@
             // 分页大小改变监听
             handleSizeChange(curSize) {
                 this.param.page_size = curSize
-                getStudentUser(this.param).then(resp => {
+                getStudent(this.param).then(resp => {
                     console.log('分页数据获取成功',resp)
                     this.tableData = resp.data.list
                     this.recordTotal = resp.data.total
@@ -267,17 +314,26 @@
             // 点击分页监听方法
             handleCurrentChange(curPage) {
                 this.param.page_number = curPage
-                getStudentUser(this.param).then(resp => {
+                getStudent(this.param).then(resp => {
                     console.log('分页数据获取成功',resp)
                     this.tableData = resp.data.list
                     this.recordTotal = resp.data.total
                 })
             },
 
-            handleShowUser(mode) {
-                this.param.page_number = 1
-                this.param.mode = mode
-                getStudentUser(this.param).then(resp => {
+            handleShowUser() {
+                this.param = {
+                  page_number: 1,
+                  page_size: 10,
+                  searchUser: null,
+                  name:"",
+                  gender: "",
+                  class: "",
+                  school: "",
+                  college: "",
+                  semester: ""
+                }
+                getStudent(this.param).then(resp => {
                     console.log(resp)
                     if(resp.code === 200) {
                         this.tableData = resp.data.list
@@ -308,9 +364,15 @@
                 console.log("handleUpdate")
                 // 将空数据置入form
                 this.form = {
-                    id: row.ID,
-                    username: row.Username,
-                    password: row.Password,
+                  id: row.id,
+                  username: row.username,
+                  password: "",
+                  name: row.name,
+                  gender: row.gender,
+                  school: row.school,
+                  semester: row.semester,
+                  college: row.college,
+                  class: row.class
                 }
                 // 显示表单框
                 this.dialogFormVisible = true
@@ -324,10 +386,10 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    const param = {ids:[row.ID]};
+                    const param = {ids:[row.id]};
                     console.log("index:", index)
                     console.log(param)
-                    deleteUsers(param).then(resp => {
+                    deleteStudent(param).then(resp => {
                         if(resp.code === 200) {
                             ElMessage({
                                 type: 'success',
@@ -361,11 +423,11 @@
                     // 获取选中的对象数组
                     const param = {ids:[]};
                     this.multipleSelection.forEach(row => {
-                        param.ids.push(row.ID)
+                        param.ids.push(row.id)
                     });
                     console.log(param)
 
-                    deleteUsers(param).then(resp => {
+                    deleteStudent(param).then(resp => {
                         console.log("deletes:",resp)
                         if(resp.code === 200) {
                             ElMessage({

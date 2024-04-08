@@ -72,52 +72,88 @@ export function cmsUpdatePassword(data) {
 }
 
 //查看学生用户
-export function getStudentUser(param) {
+export function getStudent(param) {
     return request({
-        url: "/cms/getStudentUser",
+        url: "/cms/getStudent",
         method: "get",
         params: param
     })
 }
 
-//查看教师用户
-export function getTeacherUser(param) {
+//添加学生用户
+export function addStudent(data) {
     return request({
-        url: "/cms/getTeacherUser",
-        method: "get",
-        params: param
-    })
-}
-
-//添加用户
-export function addUser(data) {
-    return request({
-        url: "/cms/addUser",
+        url: "/cms/addStudent",
         method: "post",
         data
     })
 }
 
-// 获取用户数量
-export function getUserCount() {
+// 获取学生数量
+export function getStudentCount() {
     return request({
-        url: '/cms/getUserCount',
+        url: '/cms/getStudentCount',
         method: 'get'
     })
 }
 
-// 删除用户
-export function deleteUsers(param) {
+// 删除学生用户
+export function deleteStudent(param) {
     return request({
-        url: '/cms/deleteUSer',
+        url: '/cms/deleteStudent',
         method: 'delete',
         data: param
     })
 }
 
-export function updateUser(data) {
+// 更改学生用户
+export function updateStudent(data) {
     return request({
-        url: '/cms/updateUser',
+        url: '/cms/updateStudent',
+        method: 'post',
+        data
+    })
+}
+
+//查看教师用户
+export function getTeacher(param) {
+    return request({
+        url: "/cms/getTeacher",
+        method: "get",
+        params: param
+    })
+}
+
+//添加教师用户
+export function addTeacher(data) {
+    return request({
+        url: "/cms/addTeacher",
+        method: "post",
+        data
+    })
+}
+
+// 获取教师数量
+export function getTeacherCount() {
+    return request({
+        url: '/cms/getTeacherCount',
+        method: 'get'
+    })
+}
+
+// 删除教师用户
+export function deleteTeacher(param) {
+    return request({
+        url: '/cms/deleteTeacher',
+        method: 'delete',
+        data: param
+    })
+}
+
+// 更改教师用户
+export function updateTeacher(data) {
+    return request({
+        url: '/cms/updateTeacher',
         method: 'post',
         data
     })
