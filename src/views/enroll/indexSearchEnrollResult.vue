@@ -39,56 +39,73 @@
     </div>
 
 
-    用户管理界面
-    <el-table
-            ref="multipleTable"
-            :data="tableData"
-            border
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-    >
-        <el-table-column
-                prop="contest"
-                label="竞赛"
-                show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-                prop="team_id"
-                label="队伍ID"
-                width="55"
-                show-tooltip>
-        </el-table-column>
-        <el-table-column
-                prop="create_time"
-                label="报名时间"
-                show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-                prop="school"
-                label="学校"
-                show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-                prop="phone"
-                label="电话号码"
-                show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-                prop="email"
-                label="邮箱"
-                show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-                prop="state"
-                label="审核状态"
-                show-overflow-tooltip>
-            <template #default="{ row }">
-                <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
-                <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
-                <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
-            </template>
-        </el-table-column>
-    </el-table>
+  用户管理界面
+  <el-table
+      ref="multipleTable"
+      :data="tableData"
+      border
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
+  >
+<!--    <el-table-column-->
+<!--        fixed-->
+<!--        type="selection"-->
+<!--        width="55">-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--        fixed-->
+<!--        prop="id"-->
+<!--        label="序号"-->
+<!--        width="55">-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--        prop="name"-->
+<!--        label="姓名"-->
+<!--        show-overflow-tooltip>-->
+<!--    </el-table-column>-->
+    <!--        <el-table-column-->
+    <!--                prop="team_id"-->
+    <!--                label="队伍ID"-->
+    <!--                width="55"-->
+    <!--                show-tooltip>-->
+    <!--        </el-table-column>-->
+    <el-table-column
+        prop="contest"
+        label="竞赛"
+        show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+        prop="create_time"
+        label="报名时间"
+        show-overflow-tooltip>
+    </el-table-column>
+    <!--        <el-table-column-->
+    <!--                prop="phone"-->
+    <!--                label="电话号码"-->
+    <!--                show-overflow-tooltip>-->
+    <!--        </el-table-column>-->
+    <!--        <el-table-column-->
+    <!--                prop="email"-->
+    <!--                label="邮箱"-->
+    <!--                show-overflow-tooltip>-->
+    <!--        </el-table-column>-->
+    <el-table-column
+        prop="state"
+        label="审核状态"
+        show-overflow-tooltip>
+      <template #default="{ row }">
+        <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+        <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
+        <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
+      </template>
+    </el-table-column>
+    <el-table-column fixed="right" label="操作" width="150" type="index">
+      <template #default="{ row, $index }">
+        <el-button @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
+        <el-button @click="handleDelete(row, $index)" type="danger" size="small">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 
     <!--分页条-->
     <el-pagination

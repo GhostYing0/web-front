@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 //import HomeApp from './Home/HomeApp.vue';
 import AppLayout from  './layout/AppLayout.vue'
-//import BreadCrumb from "./components/breadc-rumb.vue";
+//import BreadCrumb from "./components/breadcrumb.vue";
 
 const asyncRoutes = [
     {
@@ -77,6 +77,11 @@ const asyncRoutes = [
                 path: "/processGrade",
                 component: () => import("@/views/process/processGrade"),
                 roles: ["teacher"]
+            },
+            {
+                path: "/profile",
+                component: () => import("@/views/profile/index"),
+                roles: ["student","teacher"]
             }
         ]
     }

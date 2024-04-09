@@ -4,27 +4,43 @@
 
         <!--<breadcrumb class="breadcrumb-container" />-->
         <div class="right-menu">
-        <el-dropdown class="avatar-container" trigger="click">
-            <span class="el-dropdown-link">
-              <div class="avatar-wrapper">
-                   <img :src="avatar" class="user-avatar" style="border: 1px solid lightgrey;">
-                  <span class="user-name"> {{name}} </span>
-                    <i class="el-icon-caret-bottom"></i>
-              </div>
-            </span>
+          <el-dropdown>
+            <el-button type="primary">
+              Dropdown List<el-icon class="el-icon--right"><arrow-down /></el-icon>
+            </el-button>
             <template #dropdown>
-                <el-dropdown-menu slot="dropdown" class="user-dropdown" style="padding-bottom: 10px;">
-                    <router-link to="/">
-                        <el-dropdown-item>
-                            首页
-                        </el-dropdown-item>
-                    </router-link>
-                    <el-dropdown-item  @click.native="logout">
-                        <span style="display:block;">退出登录</span>
-                    </el-dropdown-item>
-                </el-dropdown-menu>
+              <el-dropdown-menu class="user-dropdown" style="padding-bottom: 10px;">
+                <el-dropdown-item @click="goToDashBoard">首页</el-dropdown-item>
+                <el-dropdown-item @click="goToProfile">个人信息</el-dropdown-item>
+                <el-dropdown-item @click="logout">
+                  <span style="display:block;">退出登录</span>
+                </el-dropdown-item>
+                <el-dropdown-item>Action 4</el-dropdown-item>
+                <el-dropdown-item>Action 5</el-dropdown-item>
+              </el-dropdown-menu>
             </template>
-        </el-dropdown>
+          </el-dropdown>
+<!--        <el-dropdown class="avatar-container" trigger="click">-->
+<!--            <span class="el-dropdown-link">-->
+<!--              <div class="avatar-wrapper">-->
+<!--                   <img :src="avatar" class="user-avatar" style="border: 1px solid lightgrey;">-->
+<!--                  <span class="user-name"> {{name}} </span>-->
+<!--                    <i class="el-icon-caret-bottom"></i>-->
+<!--              </div>-->
+<!--            </span>-->
+<!--            <template #dropdown>-->
+<!--                <el-dropdown-menu slot="dropdown" class="user-dropdown" style="padding-bottom: 10px;">-->
+<!--                    <router-link to="/">-->
+<!--                        <el-dropdown-item>-->
+<!--                            首页-->
+<!--                        </el-dropdown-item>-->
+<!--                    </router-link>-->
+<!--                    <el-dropdown-item  @click="logout">-->
+<!--                        <span style="display:block;">退出登录</span>-->
+<!--                    </el-dropdown-item>-->
+<!--                </el-dropdown-menu>-->
+<!--            </template>-->
+<!--        </el-dropdown>-->
         </div>
     </div>
 
@@ -33,6 +49,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import Hamburger from '@/components/Hamburger'
+    import {router} from "@/router";
 
     export default {
         components: {
@@ -53,6 +70,12 @@
                 await this.$store.dispatch('user/logout')
                 // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
                 this.$router.push(`/login`)
+            },
+            goToDashBoard() {
+              router.push("/dashboard")
+            },
+            goToProfile() {
+              router.push("/profile")
             }
         }
     }

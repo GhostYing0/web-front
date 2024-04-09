@@ -1,14 +1,14 @@
 <template>
     录入报名信息
         <el-form :model="form" label-width="auto" style="max-width: 600px">
-            <el-form-item label="姓名">
-                <el-input v-model="form.username" />
-            </el-form-item>
-            <el-form-item label="学校">
-                <el-input v-model="form.school" />
-            </el-form-item>
+<!--            <el-form-item label="姓名">-->
+<!--                <el-input v-model="form.username" />-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="学校">-->
+<!--                <el-input v-model="form.school" />-->
+<!--            </el-form-item>-->
             <el-form-item label="报名竞赛">
-                <el-input v-model="form.contest_name" />
+                <el-input v-model="form.contest" />
             </el-form-item>
             <el-form-item label="参赛队伍">
                 <el-input v-model="form.team" />
@@ -55,7 +55,7 @@
                 this.form = {
                     username: '',
                     school: '',
-                    contest_name: '',
+                    contest: '',
                     grade: '',
                     team: '',
                     phone: '',

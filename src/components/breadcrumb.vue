@@ -9,6 +9,13 @@
     </el-breadcrumb>
 </template>
 
+
+<script lang="ts" setup>
+import { ArrowRight } from '@element-plus/icons-vue'
+</script>
+
+
+
 <script>
     import pathToRegexp from 'path-to-regexp'
 

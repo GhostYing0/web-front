@@ -23,7 +23,7 @@
                         :shortcuts="shortcuts"
                 />
             </div>
-<!--            <el-input v-model="param.school" placeholder="学校" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />-->
+            <el-input v-model="param.school" placeholder="学校" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
 <!--            <el-input v-model="param.phone" placeholder="电话号码" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />-->
 <!--            <el-input v-model="param.email" placeholder="邮箱" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />-->
             <el-form-item label="审核状态" prop="state">
@@ -77,9 +77,9 @@
                     />
                 </div>
             </el-form-item>
-<!--            <el-form-item label="所属院校" prop="school">-->
-<!--                <el-input v-model="form.school"></el-input>-->
-<!--            </el-form-item>-->
+            <el-form-item label="学校" prop="school">
+                <el-input v-model="form.school"></el-input>
+            </el-form-item>
 <!--            <el-form-item label="电话号码" prop="phone">-->
 <!--                <el-input v-model="form.phone"></el-input>-->
 <!--            </el-form-item>-->
@@ -145,11 +145,11 @@
                 label="报名时间"
                 show-overflow-tooltip>
         </el-table-column>
-<!--        <el-table-column-->
-<!--                prop="school"-->
-<!--                label="学校"-->
-<!--                show-overflow-tooltip>-->
-<!--        </el-table-column>-->
+        <el-table-column
+                prop="school"
+                label="学校"
+                show-overflow-tooltip>
+        </el-table-column>
 <!--        <el-table-column-->
 <!--                prop="phone"-->
 <!--                label="电话号码"-->
