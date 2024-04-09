@@ -23,6 +23,7 @@
              姓名
           </div>
         </template>
+        {{store.getters.name}}
         {{form.name}}
       </el-descriptions-item>
       <el-descriptions-item>
@@ -96,42 +97,43 @@
 </template>
 
 <script setup>
-import store from '../../store'
-import { computed, ref } from 'vue'
-import {
-    Iphone,
-    Location,
-    OfficeBuilding,
-    Tickets,
-    User,
-    Message,
+  import store from '../../store'
+  import { computed, ref } from 'vue'
+  import {
+      Iphone,
+      Location,
+      OfficeBuilding,
+      Tickets,
+      User,
+      Message,
 
 
-} from '@element-plus/icons-vue'
+  } from '@element-plus/icons-vue'
 
-const form = {
-  name:"sdasa",
-  phone:"",
-  email:"",
-  gender:"",
-  school:"",
-  semester:"",
-  college:"",
-  student_class:"",
-  avatar:""
-}
-
-const size = ref('default')
-const iconStyle = computed(() => {
-  const marginMap = {
-    large: '8px',
-    default: '6px',
-    small: '4px',
+  const form = {
+    name:"",
+    phone:"",
+    email:"",
+    gender:"",
+    school:"",
+    semester:"",
+    college:"",
+    student_class:"",
+    avatar:""
   }
-  return {
-    marginRight: marginMap[size.value] || marginMap.default,
-  }
-})
+
+
+  const size = ref('default')
+  const iconStyle = computed(() => {
+    const marginMap = {
+      large: '8px',
+      default: '6px',
+      small: '4px',
+    }
+    return {
+      marginRight: marginMap[size.value] || marginMap.default,
+    }
+  })
 </script>
 
 <style scoped>

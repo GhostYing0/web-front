@@ -34,11 +34,11 @@ router.beforeEach(async(to, from, next) => {
                 console.log("进行添加路由")
                 try {
                     const { roles } = await store.dispatch("user/getInfo")
-                    if(roles === 1) {
-                        await store.dispatch("user/gerProfile", 1)
-                    } else if (roles === 2) {
-                        await store.dispatch("user/gerProfile", 2)
-                    }
+                    // if(roles === 1) {
+                    //     await store.dispatch("user/gerProfile", 1)
+                    // } else if (roles === 2) {
+                    //     await store.dispatch("user/gerProfile", 2)
+                    // }
 
                     const accessedRoutes = await store.dispatch("permission/generateRoutes", roles)
 
