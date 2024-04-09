@@ -209,6 +209,7 @@ const actions = {
     },
 
     getProfile({ commit }, role) {
+        console.log("Asdasdasdasd")
         if(role === 1) {
             return new Promise((resolve, reject) => {
                 getProfileStudent(state.token).then(response => {

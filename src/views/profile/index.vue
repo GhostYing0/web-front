@@ -23,7 +23,6 @@
              姓名
           </div>
         </template>
-        {{store.getters.name}}
         {{form.name}}
       </el-descriptions-item>
       <el-descriptions-item>
@@ -121,6 +120,10 @@
     student_class:"",
     avatar:""
   }
+
+  form.name = computed(()=>{
+    store.getters.name
+  })
 
 
   const size = ref('default')
