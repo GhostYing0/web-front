@@ -2,7 +2,7 @@
     <div class="app-container">
         <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
-            <el-input v-model="param.contest_name" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             <el-input v-model="param.grade" placeholder="成绩" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             <div class="block">
                 <span class="demonstration"></span>
@@ -40,47 +40,75 @@
     </div>
 
 
-    用户管理界面
-    <el-table
-            ref="multipleTable"
-            :data="tableData"
-            border
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-    >
-        <el-table-column
-                prop="contest"
-                label="竞赛"
-                show-overflow-tooltip>
-        </el-table-column>
+  <el-table
+      ref="multipleTable"
+      :data="tableData"
+      border
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
+  >
+<!--    <el-table-column-->
+<!--        fixed-->
+<!--        type="selection"-->
+<!--        width="55">-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--        fixed-->
+<!--        prop="id"-->
+<!--        label="序号"-->
+<!--        width="55">-->
+<!--    </el-table-column>-->
+    <el-table-column
+        prop="contest"
+        label="竞赛"
+        show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+        prop="create_time"
+        label="报名时间"
+        show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+        prop="grade"
+        label="成绩"
+        show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+        prop="certificate"
+        label="证书"
+        show-overflow-tooltip>
+      <!--<div>-->
+      <!--<el-image style="width: 100px; height: 100px" :src="form.certificate" :fit="fit" />-->
+      <!--</div>-->
+      <!--<template #default="{ row }">-->
+      <!--<el-button @click="handDown(row.certificate)">查看</el-button>-->
+      <!--</template>-->
 
-        <el-table-column
-                prop="create_time"
-                label="报名时间"
-                show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-                prop="grade"
-                label="成绩"
-                show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-                prop="certificate"
-                label="证明材料"
-                show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-                prop="state"
-                label="审核状态"
-                show-overflow-tooltip>
-            <template #default="{ row }">
-                <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
-                <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
-                <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
-            </template>
-        </el-table-column>
-    </el-table>
-
+      <template #default="{row}">
+        <el-popover trigger="hover" placement="top">
+          <template #reference>
+            <el-button type="primary" @click="handDown(row.certificate)">查看</el-button>-->
+          </template>
+          <el-image :src="row.certificate" fit="contain" />
+        </el-popover>
+      </template>
+    </el-table-column>
+    <el-table-column
+        prop="state"
+        label="审核状态"
+        show-overflow-tooltip>
+      <template #default="{ row }">
+        <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+        <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
+        <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
+      </template>
+    </el-table-column>
+    <el-table-column fixed="right" label="操作" width="150" type="index">
+      <template #default="{ row }">
+        <el-button @click="handleUpdate(row)" type="primary" size="small">编辑(雾)</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
     <!--分页条-->
     <el-pagination
             background
@@ -165,7 +193,7 @@
                     page_size: 10,
                     username: '',
                     grade: '',
-                    contest_name: '',
+                    contest: '',
                     start_time: '',
                     end_time: '',
                     state: -1
@@ -186,7 +214,7 @@
             // 搜索
             handleFilter() {
                 this.param.page_number = 1
-                console.log("asda:",this.param.contest_name)
+                console.log("asda:",this.param.contest)
                 console.log("asda:",this.param.state)
                 searchGrade(this.param).then(resp => {
                     console.log(resp)
@@ -240,7 +268,7 @@
                     page_size: 10,
                     username: '',
                     team_id: '',
-                    contest_name: '',
+                  contest: '',
                     start_time: '',
                     end_time: '',
                     school: '',

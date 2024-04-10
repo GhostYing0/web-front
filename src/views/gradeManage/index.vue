@@ -2,8 +2,10 @@
     <div class="app-container">
         <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
-            <el-input v-model="param.username" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-            <el-input v-model="param.contest_name" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            <el-input v-model="param.name" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.username" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.school" placeholder="学校" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
             <div class="block">
                 <span class="demonstration"></span>
                 <el-date-picker
@@ -22,7 +24,7 @@
                         :shortcuts="shortcuts"
                 />
             </div>
-            <el-input v-model="param.grade" placeholder="成绩" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            <el-input v-model="param.grade" placeholder="成绩" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
             <el-form-item label="审核状态" prop="role">
                 <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
                 <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
@@ -38,7 +40,7 @@
                 显示全部
             </el-button>
             <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="primary" icon="el-icon-a-07" @click="handleCreate">
-                添加报名信息
+                添加成绩信息
             </el-button>
             <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="danger" icon="el-icon-a-022" @click="handleDeleteSome">
                 批量删除
@@ -59,11 +61,11 @@
     <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
         <!--普通表单-->
         <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
-            <el-form-item label="用户名称" prop="username">
+            <el-form-item label="用户名" prop="username">
                 <el-input v-model="form.username"></el-input>
             </el-form-item>
             <el-form-item label="竞赛" prop="contest">
-                <el-input v-model="form.contest_name"></el-input>
+                <el-input v-model="form.contest"></el-input>
             </el-form-item>
             <el-form-item label="成绩" prop="grade">
                 <el-input v-model="form.grade"></el-input>
@@ -116,8 +118,13 @@
                 width="55">
         </el-table-column>
         <el-table-column
-                prop="username"
-                label="用户名称"
+            prop="username"
+            label="用户名"
+            show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+                prop="name"
+                label="姓名"
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
@@ -125,6 +132,11 @@
                 label="竞赛"
                 show-overflow-tooltip>
         </el-table-column>
+      <el-table-column
+          prop="school"
+          label="学校"
+          show-overflow-tooltip>
+      </el-table-column>
         <el-table-column
                 prop="create_time"
                 label="报名时间"
@@ -255,8 +267,9 @@
                 param: {
                     page_number: 1,
                     page_size: 10,
-                    username: '',
-                    contest_name: '',
+                    name: '',
+                    school: '',
+                    contest: '',
                     start_time: '',
                     end_time: '',
                     state: -1
@@ -267,12 +280,11 @@
                 dialogPictureVisible: false,
                 dialogFormVisible: false,
                 // 表单类型（添加数据:0,修改数据:1）
-                formType: 0,
 
                 form: {
                     id: '',
                     username: '',
-                    contest_name: '',
+                    contest: '',
                     create_time: '',
                     grade: '',
                     certificate: '',
@@ -280,8 +292,8 @@
                 },
 
                 rules: {
-                    username: [
-                        { required: true, message: '请输入用户名', trigger: 'blur' }
+                    name: [
+                        { required: true, message: '请输入姓名', trigger: 'blur' }
                     ],
                     password: [
                         { required: true, message: '请输入用户密码', trigger: 'blur' }
@@ -392,7 +404,7 @@
                     page_size: 10,
                     username: '',
                     team_id: '',
-                    contest_name: '',
+                    contest: '',
                     start_time: '',
                     end_time:'',
                     school: '',
@@ -418,7 +430,7 @@
                 this.form = {
                     username: '',
                     team_id: '',
-                    contest_name: '',
+                    contest: '',
                     create_time: '',
                     school: '',
                     phone: '',
@@ -440,7 +452,7 @@
                     id: row.id,
                     username: row.username,
                     team_id: row.team_id,
-                    contest_name: row.contest,
+                    contest: row.contest,
                     create_time: row.create_time,
                     grade: row.grade,
                     certificate: row.certificate,

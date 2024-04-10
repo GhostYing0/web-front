@@ -15,7 +15,7 @@
                             <el-icon><location /></el-icon>
                             <span>报名信息模块</span>
                         </template>
-                        <el-menu-item-group title="Group One">
+                        <el-menu-item-group>
                             <el-menu-item index="/enrollContest">报名竞赛</el-menu-item>
                             <el-menu-item index="/searchEnrollResult">查看报名结果</el-menu-item>
                         </el-menu-item-group>
@@ -25,7 +25,7 @@
                             <el-icon><location /></el-icon>
                             <span>成绩信息模块</span>
                         </template>
-                        <el-menu-item-group title="Group One">
+                        <el-menu-item-group>
                             <el-menu-item index="/uploadGrade">上传成绩</el-menu-item>
                             <el-menu-item index="/SearchGrade">查看成绩</el-menu-item>
                         </el-menu-item-group>
@@ -35,8 +35,8 @@
                             <el-icon><location /></el-icon>
                             <span>竞赛信息模块</span>
                         </template>
-                        <el-menu-item-group title="Group One">
-                            <el-menu-item index="/Login">管理员登陆</el-menu-item>
+                        <el-menu-item-group>
+                            <el-menu-item index="/displayContest">查看竞赛信息</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
                     <el-sub-menu index="4" class="menu-border" v-if="store.getters.roles.includes('teacher')">

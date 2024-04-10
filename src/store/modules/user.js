@@ -17,6 +17,8 @@ const getDefaultState = () => {
         college: "",
         semester: "",
         student_class: "",
+        phone: "",
+        email: "",
         avatar: ""
     }
 }
@@ -56,6 +58,12 @@ const mutations = {
     },
     SET_CLASS: (state, student_class) => {
         state.student_class = student_class
+    },
+    SET_PHONE: (state, phone) => {
+        state.phone = phone
+    },
+    SET_EMAIL: (state, email) => {
+        state.email = email
     },
     SET_AVATAR: (state, avatar) => {
         state.avatar = avatar
@@ -208,17 +216,17 @@ const actions = {
         })
     },
 
-    getProfile({ commit }, role) {
-        console.log("Asdasdasdasd")
-        if(role === 1) {
-            return new Promise((resolve, reject) => {
-                getProfileStudent(state.token).then(response => {
+    getProfile({ commit, state}) {
+        return new Promise((resolve, reject) => {
+            if(state.roles.includes("student")) {
+                getProfileStudent().then(response => {
+                    console.log("student:",response)
                     const {data} = response
-                    if(!data) {
+                    if (!data) {
                         reject("验证失败，请重新登录")
                     }
 
-                    const {name, gender, school, semester, college, student_class, avatar} = data
+                    const {name, gender, school, semester, college, student_class, avatar, phone, email} = data
 
 
                     commit('SET_NAME', name)
@@ -228,35 +236,36 @@ const actions = {
                     commit('SET_COLLEGE', college)
                     commit('SET_CLASS', student_class)
                     commit('SET_AVATAR', avatar)
+                    commit('SET_PHONE', phone)
+                    commit('SET_EMAIL', email)
 
                     resolve(data)
                 }).catch(error => {
                     reject(error)
                 })
-            })
-        } else if (role === 2) {
-            return new Promise((resolve, reject) => {
-
+            } else if (state.roles.includes("teacher")) {
                 getProfileTeacher(state.token).then(response => {
                     const {data} = response
                     if(!data) {
                         reject("验证失败，请重新登录")
                     }
 
-                    const {name, gender, school, college, avatar} = data
+                    const {name, gender, school, college, avatar, phone, email} = data
 
                     commit('SET_NAME', name)
                     commit('SET_GENDER', gender)
                     commit('SET_SCHOOL', school)
                     commit('SET_COLLEGE', college)
                     commit('SET_AVATAR', avatar)
+                    commit('SET_PHONE', phone)
+                    commit('SET_EMAIL', email)
 
                     resolve(data)
                 }).catch(error => {
                     reject(error)
                 })
-             })
-        }
+            }
+        })
     }
 }
 

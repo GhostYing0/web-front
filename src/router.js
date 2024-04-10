@@ -9,11 +9,6 @@ const asyncRoutes = [
         component:() => import("@/layout/AppLayout"),
         children:[
             {
-                path: '/display_contest',
-                component:() => import("@/views/my-test-getcontest"),
-                roles: ["manager", "student", "teacher"],
-            },
-            {
                 path: '/add_user',
                 component: () => import("@/views/my-test-adduser"),
                 roles: ["manager","student", "teacher"],
@@ -81,6 +76,11 @@ const asyncRoutes = [
             {
                 path: "/profile",
                 component: () => import("@/views/profile/index"),
+                roles: ["student","teacher"]
+            },
+            {
+                path:"/displayContest",
+                component: () => import("@/views/contest/index"),
                 roles: ["student","teacher"]
             }
         ]

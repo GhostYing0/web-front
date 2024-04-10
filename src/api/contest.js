@@ -18,7 +18,7 @@ export function addContest(data) {
     })
 }
 
-//获取报名信息
+//获取竞赛信息
 export function updateContest(data) {
     return request({
         url: "/cms/updateContest",
@@ -27,7 +27,7 @@ export function updateContest(data) {
     })
 }
 
-//获取报名信息
+//获取竞赛信息
 export function deleteContest(data) {
     return request({
         url: "/cms/deleteContest",
@@ -36,7 +36,7 @@ export function deleteContest(data) {
     })
 }
 
-//获取报名信息
+//获取竞赛信息
 export function processContest(data) {
     return request({
         url: "/cms/processContest",
@@ -45,10 +45,18 @@ export function processContest(data) {
     })
 }
 
-// 获取报名信息数量
+// 获取竞赛数量
 export function getContestCount() {
     return request({
         url: '/cms/getContestCount',
+        method: 'get'
+    })
+}
+
+// 获取竞赛类型
+export function getContestType() {
+    return request({
+        url: '/public/getContestType',
         method: 'get'
     })
 }

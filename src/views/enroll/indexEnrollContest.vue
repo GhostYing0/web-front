@@ -34,15 +34,16 @@
     //import { reactive } from 'vue'
     import { enrollContest} from '@/api/enroll'
     import {ElMessage} from 'element-plus';
+    import store from "@/store";
     export default {
 
         data() {
             return {
                 form: {
-                    username: '',
-                    school: '',
+                    username: store.getters.username,
+                    school: store.getters.school,
                     contest: '',
-                    grade: '',
+                  grade: '',
                     team: '',
                     phone: '',
                     email: '',
@@ -53,8 +54,8 @@
         methods: {
             handleClearForm() {
                 this.form = {
-                    username: '',
-                    school: '',
+                    username: store.getters.username,
+                    school: store.getters.school,
                     contest: '',
                     grade: '',
                     team: '',

@@ -159,19 +159,17 @@ export function updateTeacher(data) {
     })
 }
 
-export function getProfileStudent(token) {
+export function getProfileStudent() {
     return request({
-        url: '/getProfileStudent',
+        url: '/profileStudent',
         method: 'get',
-        params: token
     })
 }
 
-export function getProfileTeacher(token) {
+export function getProfileTeacher() {
     return request({
-        url: '/getProfileTeacher',
+        url: '/profileTeacher',
         method: 'get',
-        params: token
     })
 }
 

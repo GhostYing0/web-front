@@ -2,8 +2,8 @@
     <div class="app-container">
         <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
-            <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-            <el-input v-model="param.contest_type" placeholder="类型" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.contest_type" placeholder="类型" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
             <div class="block">
                 <span class="demonstration"></span>
                 <el-date-picker
@@ -92,7 +92,7 @@
         </div>
     </el-dialog>
 
-    用户管理界面
+    竞赛管理界面
     <el-table
             ref="multipleTable"
             :data="tableData"
@@ -271,7 +271,7 @@
             };
         },
         created() {
-            return this.handleShowUser()
+            return this.handleShowContest()
         },
         methods: {
             // 搜索
@@ -355,7 +355,7 @@
                 })
             },
 
-            handleShowUser() {
+            handleShowContest() {
                 this.param.page_number = 1
                 getContest(this.param).then(resp => {
                     console.log(resp)

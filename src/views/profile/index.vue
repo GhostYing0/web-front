@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-avatar size="large"
-        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+        src=avatar
     />
   </div>
   <el-descriptions
@@ -23,7 +23,7 @@
              姓名
           </div>
         </template>
-        {{form.name}}
+        <el-text v-text=name></el-text>
       </el-descriptions-item>
       <el-descriptions-item>
         <template #label>
@@ -34,7 +34,7 @@
             电话号码
           </div>
         </template>
-        {{form.phone}}
+        <el-text v-text=phone></el-text>
       </el-descriptions-item>
       <el-descriptions-item>
         <template #label>
@@ -45,7 +45,7 @@
             邮箱
           </div>
         </template>
-        {{form.email}}
+        <el-text v-text=email></el-text>
       </el-descriptions-item>
       <el-descriptions-item>
         <template #label>
@@ -56,7 +56,7 @@
             学校
           </div>
         </template>
-        {{form.school}}
+        <el-text v-text=school></el-text>
       </el-descriptions-item>
       <el-descriptions-item>
         <template #label>
@@ -67,7 +67,7 @@
             学院
           </div>
         </template>
-        {{form.college}}
+        <el-text v-text=college></el-text>
         <el-tag size="small">School</el-tag>
       </el-descriptions-item>
       <el-descriptions-item>
@@ -79,9 +79,9 @@
             性别
           </div>
         </template>
-        {{form.gender}}
+        <el-text v-text=gender></el-text>
       </el-descriptions-item>
-      <el-descriptions-item>
+      <el-descriptions-item v-if="store.getters.roles.includes('student')">
         <template #label>
           <div class="cell-item">
             <el-icon :style="iconStyle">
@@ -90,8 +90,19 @@
             班级
           </div>
         </template>
-        {{form.student_class}}
+        <el-text v-text=student_class></el-text>
       </el-descriptions-item>
+    <el-descriptions-item v-if="store.getters.roles.includes('student')">
+      <template #label>
+        <div class="cell-item">
+          <el-icon :style="iconStyle">
+            <office-building />
+          </el-icon>
+          入学年份
+        </div>
+      </template>
+      <el-text v-text=semester></el-text>
+    </el-descriptions-item>
     </el-descriptions>
 </template>
 
@@ -109,22 +120,34 @@
 
   } from '@element-plus/icons-vue'
 
-  const form = {
-    name:"",
-    phone:"",
-    email:"",
-    gender:"",
-    school:"",
-    semester:"",
-    college:"",
-    student_class:"",
-    avatar:""
-  }
 
-  form.name = computed(()=>{
-    store.getters.name
+  const name = computed(()=>{
+    return store.getters.name
   })
-
+  const phone = computed(()=>{
+    return store.getters.phone
+  })
+  const email = computed(()=>{
+    return store.getters.email
+  })
+  const gender = computed(()=>{
+    return store.getters.gender
+  })
+  const school = computed(()=>{
+    return store.getters.school
+  })
+  const semester = computed(()=>{
+    return store.getters.semester
+  })
+  const college = computed(()=>{
+    return store.getters.college
+  })
+  const student_class = computed(()=>{
+    return store.getters.student_class
+  })
+  const avatar = computed(()=>{
+    return store.getters.avatar
+  })
 
   const size = ref('default')
   const iconStyle = computed(() => {

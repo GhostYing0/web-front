@@ -35,10 +35,8 @@ router.beforeEach(async(to, from, next) => {
                 try {
                     const { roles } = await store.dispatch("user/getInfo")
                     // console.log(roles[0])
-                    if(roles.includes("student")) {
-                        console.log("student")
-                    } else {
-                        console.log("else")
+                    if(!roles.includes("manager")) {
+                        await store.dispatch("user/getProfile")
                     }
                         //await store.dispatch("user/getProfile", 1)
                     // } else if (roles.includes("teacher")){
@@ -47,7 +45,7 @@ router.beforeEach(async(to, from, next) => {
 
                     const accessedRoutes = await store.dispatch("permission/generateRoutes", roles)
 
-                     console.log("accessedRoutes:", accessedRoutes)
+                    //console.log("accessedRoutes:", accessedRoutes)
                     //
                     // // dynamically add accessible routes
                     router.addRoute(accessedRoutes)
