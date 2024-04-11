@@ -79,6 +79,9 @@
                 />
               </div>
             </el-form-item>
+            <el-form-item label="上传者用户名" prop="username">
+              <el-input v-model="form.username"></el-input>
+            </el-form-item>
             <el-form-item label="审核状态" prop="state">
                 <el-radio v-model="form.state" :label="3">审核中</el-radio>
                 <el-radio v-model="form.state" :label="1">通过</el-radio>
@@ -136,6 +139,26 @@
                 prop="deadline"
                 label="报名截至时间"
                 show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+            prop="username"
+            label="用户名"
+            show-overflow-tooltip>
+        </el-table-column>
+      <el-table-column
+          prop="name"
+          label="姓名"
+          show-overflow-tooltip>
+      </el-table-column>
+        <el-table-column
+            prop="school"
+            label="学校"
+            show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+            prop="college"
+            label="学院"
+            show-overflow-tooltip>
         </el-table-column>
         <el-table-column
                 prop="state"
@@ -241,6 +264,9 @@
                     type: '',
                     start_time: '',
                     end_time: '',
+                    school: "",
+                    college: "",
+                    name: "",
                     state: -1
                 },
 
@@ -252,10 +278,14 @@
 
                 form: {
                     id: -1,
+                    username:"",
                     contest: '',
                     contest_type: '',
                     create_time: '',
                     deadline: '',
+                    school: "",
+                    college: "",
+                    name: "",
                     state: -1
                 },
 
@@ -367,7 +397,7 @@
             },
 
             handleShowALL() {
-                this.param= {
+                this.param = {
                     page_number: 1,
                     page_size: 10,
                     id: '',
@@ -375,6 +405,9 @@
                     contest_type: '',
                     start_time: '',
                     deadline: '',
+                    school: "",
+                    college: "",
+                    name: "",
                     state: -1
                 }
                 getContest(this.param).then(resp => {
@@ -394,10 +427,14 @@
                 // 将空数据置入form
                 this.form = {
                     id: '',
+                     username:"",
                     contest: '',
                     contest_type: '',
                     start_time: '',
                     deadline: '',
+                    school: "",
+                    college: "",
+                    name: "",
                     state: -1
                 }
                 // 显示表单框
@@ -413,10 +450,14 @@
                 // 将空数据置入form
                 this.form = {
                     id: row.id,
+                    username: row.username,
                     contest: row.contest,
                     contest_type: row.contest_type,
                     start_time: row.start_time,
                     deadline: row.deadline,
+                    // school: row.school,
+                    // college: row.college,
+                    name: row.name,
                     state: row.state
                 }
                 // 显示表单框

@@ -37,6 +37,8 @@
                         </template>
                         <el-menu-item-group>
                             <el-menu-item index="/displayContest">查看竞赛信息</el-menu-item>
+                            <el-menu-item index="/displayMyContest" v-if="store.getters.roles.includes('teacher')">查看上传竞赛</el-menu-item>
+                            <el-menu-item index="/uploadContest" v-if="store.getters.roles.includes('teacher')">上传竞赛</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
                     <el-sub-menu index="4" class="menu-border" v-if="store.getters.roles.includes('teacher')">

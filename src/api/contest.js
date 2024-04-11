@@ -60,3 +60,39 @@ export function getContestType() {
         method: 'get'
     })
 }
+
+// 游览竞赛类型
+export function viewContest(param) {
+    return request({
+        url: '/viewContest',
+        method: 'get',
+        params: param
+    })
+}
+
+// 游览竞赛类型
+export function viewTeacherContest(param) {
+    return request({
+        url: '/viewTeacherContest',
+        method: 'get',
+        params: param
+    })
+}
+
+// 教师修改竞赛
+export function updateTeacherContest(data) {
+    return request({
+        url: '/updateContest',
+        method: 'post',
+        data: data
+    })
+}
+
+// 教师上传竞赛
+export function uploadContest(data) {
+    return request({
+        url: '/uploadContest',
+        method: 'post',
+        data: data
+    })
+}

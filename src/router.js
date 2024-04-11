@@ -82,6 +82,16 @@ const asyncRoutes = [
                 path:"/displayContest",
                 component: () => import("@/views/contest/index"),
                 roles: ["student","teacher"]
+            },
+            {
+                path:"/displayMyContest",
+                component: () => import("@/views/contest/teacher/display/index"),
+                roles: ["teacher"]
+            },
+            {
+                path:"/uploadContest",
+                component: () => import("@/views/contest/teacher/upload/index"),
+                roles: ["teacher"]
             }
         ]
     }

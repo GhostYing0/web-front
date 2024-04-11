@@ -2,20 +2,22 @@
   <div class="m-4">
     <p>竞赛类型</p>
     <el-cascader
-        v-model="param.type"
+        v-model="item"
         :options="options"
         :props="props"
         filterable
-        @change="handleChange"
+        @change="handleFilter"
     />
   </div>
-<!--  <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />-->
-  <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-042" @click="handleFilter">
-    搜索
-  </el-button>
-  <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowALL">
-    显示全部
-  </el-button>
+  <div>
+    <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+    <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-042" @click="handleFilter">
+      搜索
+    </el-button>
+    <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowALL">
+      显示全部
+    </el-button>
+  </div>
   竞赛列表
   <el-table
       ref="multipleTable"
@@ -62,26 +64,24 @@
 </template>
 
 <script setup>
-import { ref , onMounted} from 'vue'
-import {getContest, getContestType} from "@/api/contest";
+import { ref , reactive, onMounted} from 'vue'
+import {viewContest, getContestType} from "@/api/contest";
 import {ElMessage} from "element-plus";
 
-const value = ref([])
 
 const props = {
   expandTrigger: 'hover',
 }
 
-const handleChange = (value) => {
-  console.log(value)
-}
-
-const param = ref({
+const param = reactive({
   page_number: 1,
   page_size: 10,
   contest: "",
   type: "",
+  state: -1,
 })
+
+const item = ref()
 
 const tableData = ref([])
 const recordTotal = ref(0)
@@ -103,30 +103,30 @@ const initOptions = async () => {
       console.error(error)
     }
   })
+}
 
-  const handleFilter = () => {
-    this.param.page_number = 1
-    console.log("asd:",this.param)
-    getContest(this.param).then(resp => {
-      console.log(resp)
-      if(resp.code === 200) {
-        this.tableData = resp.data.list
-        this.recordTotal = resp.data.total
-        if(resp.data.total === 0){
-          ElMessage({
-            type: 'info',
-            message: '未搜索到该用户',
-          })//
-        }
+const handleFilter = () => {
+  param.page_number = 1
+  param.type = item.value[0]
+  viewContest(param).then(resp => {
+    console.log(resp)
+    if(resp.code === 200) {
+      tableData.value = resp.data.list
+      recordTotal.value = resp.data.total
+      if(resp.data.total === 0){
+        ElMessage({
+          type: 'info',
+          message: '未搜索到该用户',
+        })//
       }
-    })
-  }
+    }
+  })
 }
 
 // 分页大小改变监听
 const handleSizeChange = (curSize) => {
-    this.param.page_size = curSize
-    getContest(this.param).then(resp => {
+  param.page_size = curSize
+  viewContest(param).then(resp => {
       console.log('分页数据获取成功',resp)
       this.tableData = resp.data.list
       this.recordTotal = resp.data.total
@@ -135,8 +135,8 @@ const handleSizeChange = (curSize) => {
 
 // 点击分页监听方法
 const handleCurrentChange = async (curPage) => {
-    param.value.page_size = curPage
-    await getContest(this.param).then(resp => {
+    param.page_size = curPage
+    await viewContest(param).then(resp => {
       console.log('分页数据获取成功',resp)
       this.tableData = resp.data.list
       this.recordTotal = resp.data.total
@@ -144,33 +144,51 @@ const handleCurrentChange = async (curPage) => {
   }
 
 const handleShowContest = async () => {
-  param.value.page_number = 1
-  getContest(this.param).then(resp => {
+  param.page_number = 1
+  viewContest(param).then(resp => {
     console.log(resp)
     if(resp.code === 200) {
-      this.tableData = resp.data.list
-      this.recordTotal = resp.data.total
+      tableData.value = resp.data.list
+      recordTotal.value = resp.data.total
     }
   })
 }
 
 const handleShowALL = () => {
-  param.value= {
-    page_number: 1,
-    page_size: 10,
-    contest: '',
-    type: '',
-  }
-  getContest(this.param).then(resp => {
+  param.page_number= 1
+  param.page_size=10
+  param.contest=''
+  param.type=''
+  item.value = ""
+
+  viewContest(param).then(resp => {
     console.log(resp)
     if(resp.code === 200) {
-      this.tableData = resp.data.list
-      this.recordTotal = resp.data.total
+      tableData.value = resp.data.list
+      recordTotal.value = resp.data.total
     }
   })
 }
 
-onMounted(initOptions);
+const handleShowMyContest = () => {
+  param.page_number= 1
+  param.page_size=10
+  param.contest=''
+  param.type=''
+  param.state= -1
+  item.value = ""
+
+  viewContest(param).then(resp => {
+    console.log(resp)
+    if(resp.code === 200) {
+      tableData.value = resp.data.list
+      recordTotal.value = resp.data.total
+    }
+  })
+}
+
+onMounted(initOptions)
+onMounted(handleShowContest)
 </script>
 
 <style scoped>

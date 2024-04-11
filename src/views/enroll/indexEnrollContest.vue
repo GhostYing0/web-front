@@ -43,7 +43,7 @@
                     username: store.getters.username,
                     school: store.getters.school,
                     contest: '',
-                  grade: '',
+                    grade: '',
                     team: '',
                     phone: '',
                     email: '',

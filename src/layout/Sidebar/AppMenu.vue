@@ -68,7 +68,8 @@
                         <el-icon><location /></el-icon>
                         <span>竞赛信息管理</span>
                     </template>
-                        <el-menu-item index="/contestManage">进入</el-menu-item>
+                        <el-menu-item index="/contestManage">竞赛信息展示</el-menu-item>
+                        <el-menu-item index="/contestProcess">竞赛信息审核</el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="3" class="menu-border">
                     <template #title>
@@ -84,6 +85,13 @@
                         <span>成绩信息管理</span>
                     </template>
                         <el-menu-item index="/gradeManage">进入</el-menu-item>
+                </el-sub-menu>
+              <el-sub-menu index="5" class="menu-border">
+                <template #title>
+                    <el-icon><location /></el-icon>
+                    <span>数据统计与分析</span>
+                </template>
+                <el-menu-item index="/gradeManage">进入</el-menu-item>
                 </el-sub-menu>
             </el-menu>
             </div>
