@@ -92,6 +92,21 @@ const asyncRoutes = [
                 path:"/uploadContest",
                 component: () => import("@/views/contest/teacher/upload/index"),
                 roles: ["teacher"]
+            },
+            {
+                path:"/contestProcess",
+                component: () => import("@/views/contestManage/contestProcess/index.vue"),
+                roles: ["manager"]
+            },
+            {
+                path:"/enrollProcess",
+                component: () => import("@/views/enroll/teacherProcessEnroll/index.vue"),
+                roles: ["teacher"]
+            },
+            {
+                path:"/gradeProcess",
+                component: () => import("@/views/grade/teacherProcessGrade/index.vue"),
+                roles: ["teacher"]
             }
         ]
     }

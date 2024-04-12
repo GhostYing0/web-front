@@ -16,8 +16,9 @@
                             <span>报名信息模块</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="/enrollContest">报名竞赛</el-menu-item>
-                            <el-menu-item index="/searchEnrollResult">查看报名结果</el-menu-item>
+                            <el-menu-item index="/enrollContest" v-if="store.getters.roles.includes('student')">报名竞赛</el-menu-item>
+                            <el-menu-item index="/searchEnrollResult" v-if="store.getters.roles.includes('student')">查看报名结果</el-menu-item>
+                            <el-menu-item index="/viewCurTeacherContestEnroll" v-if="store.getters.roles.includes('teacher')">查看报名信息</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
                     <el-sub-menu index="2" class="menu-border">
@@ -26,8 +27,9 @@
                             <span>成绩信息模块</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="/uploadGrade">上传成绩</el-menu-item>
-                            <el-menu-item index="/SearchGrade">查看成绩</el-menu-item>
+                            <el-menu-item index="/uploadGrade" v-if="store.getters.roles.includes('student')">上传成绩</el-menu-item>
+                            <el-menu-item index="/SearchGrade" v-if="store.getters.roles.includes('student')">查看成绩</el-menu-item>
+                            <el-menu-item index="/viewCurTeacherContestGrade" v-if="store.getters.roles.includes('teacher')">查看成绩信息</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
                     <el-sub-menu index="3" class="menu-border">
@@ -47,8 +49,8 @@
                             <span>审核信息</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="processEnroll">审核报名</el-menu-item>
-                            <el-menu-item index="processGrade">审核成绩</el-menu-item>
+                            <el-menu-item index="/enrollProcess">审核报名</el-menu-item>
+                            <el-menu-item index="/gradeProcess">审核成绩</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
                 </el-menu>

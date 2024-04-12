@@ -34,12 +34,12 @@ router.beforeEach(async(to, from, next) => {
                 console.log("进行添加路由")
                 try {
                     const { roles } = await store.dispatch("user/getInfo")
-                    // console.log(roles[0])
+                    console.log(roles[0])
                     if(!roles.includes("manager")) {
                         await store.dispatch("user/getProfile")
                     }
                         //await store.dispatch("user/getProfile", 1)
-                    // } else if (roles.includes("teacher")){
+                    // } else if (roles.includes("teacherProcessEnroll")){
                     //     //await store.dispatch("user/getProfile", 2)
                     // }
 

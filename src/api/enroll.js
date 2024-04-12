@@ -61,3 +61,37 @@ export function getUserEnroll(param) {
         params: param
     })
 }
+
+// 教师上传竞赛
+export function uploadContest(data) {
+    return request({
+        url: "/uploadContest",
+        method: "post",
+        data: data
+    })
+}
+
+// 教师显示自身竞赛报名成绩
+export function teacherSearchEnroll(param) {
+    return request({
+        url: "/teacherSearchEnroll",
+        method: "get",
+        params: param
+    })
+}
+
+export function processPassEnroll(data) {
+    return request({
+        url: "/processPassEnroll",
+        method: "post",
+        data: data
+    })
+}
+
+export function processRejectEnroll(data) {
+    return request({
+        url: "/processRejectEnroll",
+        method: "post",
+        data: data
+    })
+}

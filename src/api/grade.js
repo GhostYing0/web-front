@@ -80,3 +80,30 @@ export function getGradeCount() {
         method: 'get'
     })
 }
+
+// 获取报名信息数量
+export function teacherSearchGrade(param) {
+    return request({
+        url: '/teacherSearchGrade',
+        method: 'get',
+        params:param
+    })
+}
+
+//
+export function processPassGrade(data) {
+    return request({
+        url: '/processPassGrade',
+        method: 'post',
+        data:data
+    })
+}
+
+//
+export function processRejectGrade(data) {
+    return request({
+        url: '/processRejectGrade',
+        method: 'post',
+        data:data
+    })
+}

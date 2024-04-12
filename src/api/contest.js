@@ -96,3 +96,21 @@ export function uploadContest(data) {
         data: data
     })
 }
+
+// 管理员通过竞赛
+export function processPassContest(data) {
+    return request({
+        url: '/cms/processPassContest',
+        method: 'post',
+        data: data
+    })
+}
+
+// 管理员驳回竞赛
+export function processRejectContest(data) {
+    return request({
+        url: '/cms/processRejectContest',
+        method: 'post',
+        data: data
+    })
+}

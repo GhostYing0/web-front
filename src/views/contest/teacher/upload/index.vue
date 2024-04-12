@@ -11,7 +11,7 @@
           :options="options"
           :props="props"
           filterable
-          @change="handleFilter"
+          @change="handleType"
       />
     </div>
 <!--    <el-form-item label="电话号码">-->
@@ -28,6 +28,9 @@
             v-model="form.start_time"
             type="datetime"
             placeholder="Select date and time"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            date-format="YYYY/MM/DD ddd"
+            time-format="HH:mm"
             :shortcuts="shortcuts"
         />
       </div>
@@ -40,6 +43,9 @@
             v-model="form.deadline"
             type="datetime"
             placeholder="Select date and time"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            date-format="YYYY/MM/DD ddd"
+            time-format="HH:mm"
             :shortcuts="shortcuts"
         />
       </div>
@@ -59,12 +65,17 @@
 import {uploadContest} from '@/api/enroll'
 import {ElMessage} from 'element-plus';
 import store from "@/store";
-import {reactive} from "vue";
+import {onMounted, reactive, ref} from "vue";
+import {getContestType} from "@/api/contest";
+
+const item = ref()
+const options = ref([])
 
 const form = reactive({
   username: store.getters.username,
   school: store.getters.school,
   contest: '',
+  contest_type: "",
   phone: '',
   email: '',
   start_time: "",
@@ -73,16 +84,15 @@ const form = reactive({
 })
 
 const handleClearForm = () => {
-  this.form = {
-    username: store.getters.username,
-    school: store.getters.school,
-    contest: '',
-    phone: '',
-    email: '',
-    start_time: "",
-    deadline: "",
-    desc: ''
-  }
+    form.username = store.getters.username
+    form.school= store.getters.school
+    form.contest= ''
+    form.contest_type=""
+    form.phone= ''
+    form.email= ''
+    form.start_time= ""
+    form.deadline=""
+    form.desc= ''
 }
 const handleCreate = () => {
   // 表单是添加状态
@@ -107,6 +117,30 @@ const handleCreate = () => {
     })
   })
 }
+
+const handleType = () => {
+  form.contest_type = item.value[0]
+  console.log(form.contest_type)
+}
+
+const initOptions = async () => {
+  getContestType().then(resp => {
+    try {
+      resp.data.forEach(unit => {
+        console.log(unit.type)
+        options.value.push({
+          value:unit.type,
+          label:unit.type
+        })
+        console.log(options)
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  })
+}
+
+onMounted(initOptions)
 </script>
 
 <style scoped>
