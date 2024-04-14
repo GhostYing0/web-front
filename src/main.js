@@ -6,11 +6,13 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import store from "./store"
 import '@/premission'
+import * as echarts from 'echarts';
 
 const app=createApp(App)
 app.use(router)
 app.use(ElementPlus)
 app.use(store)
+//app.use(echarts)
 
 const debounce = (fn, delay) => {
     let timer
@@ -32,6 +34,7 @@ window.ResizeObserver = class ResizeObserver extends _ResizeObserver{
     }
 }
 
+app.config.globalProperties.$echarts = echarts
 app.config.globalProperties.$http=axios;
 
 app.mount('#app')

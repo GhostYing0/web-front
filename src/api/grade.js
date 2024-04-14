@@ -107,3 +107,11 @@ export function processRejectGrade(data) {
         data:data
     })
 }
+
+export function processRecoverGrade(data) {
+    return request({
+        url: '/processRecoverGrade',
+        method: 'post',
+        data:data
+    })
+}

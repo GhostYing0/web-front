@@ -44,9 +44,9 @@
             </el-form-item>
 
             <!-- 登录按钮 -->
-            <div style="height: 40px; margin-bottom: 30px;">
-                <el-button :loading="loading" type="primary" style="width: 48%; float: left;" @click.prevent="handleLogin">登录</el-button>
-                <el-button :loading="loading" type="success" style="width: 48%; float: right;" @click.prevent="handleRegister">注册</el-button>
+            <div class="login-button">
+                <el-button :loading="loading" type="primary" style="width: 48%; " @click.prevent="handleLogin">登录</el-button>
+                <el-button :loading="loading" type="success" style="width: 48%; " @click.prevent="handleRegister">注册</el-button>
             </div>
         </el-form>
     </div>
@@ -128,6 +128,18 @@
         }
     }
 </script>
-<style scoped>
-
+<style lang="scss">
+    .login-container{
+        border-style: solid;
+        border-width: 5px;
+        display: flex;  
+        justify-content: center; 
+        align-items: center;  
+        height: 10%;
+    }
+    .login-button .el-button {  
+        display: flex; /* 使用 flexbox 布局 */  
+  justify-content: space-between; /* 两端对齐，确保按钮之间有间隔 */  
+        margin: 0 5px; /* 可选：按钮之间的间距 */  
+}  
 </style>

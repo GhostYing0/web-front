@@ -22,7 +22,7 @@
   <el-table
       ref="multipleTable"
       :data="tableData"
-      border
+
       style="width: 100%"
       @selection-change="handleSelectionChange"
   >
@@ -59,7 +59,7 @@
       :page-size="param.page_size"
       layout="total, sizes, prev, pager, next, jumper"
       :total="recordTotal"
-      style="margin-top: 15px"
+      class="pagination_style"
   ></el-pagination>
 </template>
 

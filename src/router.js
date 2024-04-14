@@ -101,13 +101,74 @@ const asyncRoutes = [
             {
                 path:"/enrollProcess",
                 component: () => import("@/views/enroll/teacherProcessEnroll/index.vue"),
-                roles: ["teacher"]
+                roles: ["teacher"],
+                children : [
+                    {
+                        path:"/enrollProcessing",
+                        component: () => import("@/views/enroll/teacherProcessEnroll/processing.vue"),
+                        roles: ["teacher"]
+                    },
+                    {
+                        path:"/enrollRejected",
+                        component: () => import("@/views/enroll/teacherProcessEnroll/rejected.vue"),
+                        roles: ["teacher"]
+                    }
+                ]
             },
             {
                 path:"/gradeProcess",
                 component: () => import("@/views/grade/teacherProcessGrade/index.vue"),
+                roles: ["teacher"],
+                children : [
+                    {
+                        path:"/gradeProcessing",
+                        component: () => import("@/views/grade/teacherProcessGrade/processing.vue"),
+                        roles: ["teacher"]
+                    },
+                    {
+                        path:"/gradeRejected",
+                        component: () => import("@/views/grade/teacherProcessGrade/rejected.vue"),
+                        roles: ["teacher"]
+                    }
+                ]
+            },
+            {
+                path:"/teacherViewEnroll",
+                component: () => import("@/views/enroll/teacherViewEnroll/index.vue"),
                 roles: ["teacher"]
-            }
+            },
+            {
+                path:"/teacherViewGrade",
+                component: () => import("@/views/grade/teacherViewGrade/index.vue"),
+                roles: ["teacher"],
+            },
+            {
+                path:"/analysis",
+                component: () => import("@/views/dataAnalysis/index.vue"),
+                roles: ["manager"],
+                children : [
+                    {
+                        path:"/contestStatistic",
+                        component: () => import("@/views/dataAnalysis/contest/index.vue"),
+                        roles: ["manager"],
+                    },
+                    {
+                        path:"/contestTypeStatistic",
+                        component: () => import("@/views/dataAnalysis/contestType/index.vue"),
+                        roles: ["manager"],
+                    },
+                    {
+                        path:"/enrollStatistic",
+                        component: () => import("@/views/dataAnalysis/enroll/index.vue"),
+                        roles: ["manager"],
+                    },
+                    {
+                        path:"/schoolStatistic",
+                        component: () => import("@/views/dataAnalysis/school/index.vue"),
+                        roles: ["manager"],
+                    }
+                ]
+            },
         ]
     }
 ];

@@ -18,7 +18,8 @@
                         <el-menu-item-group>
                             <el-menu-item index="/enrollContest" v-if="store.getters.roles.includes('student')">报名竞赛</el-menu-item>
                             <el-menu-item index="/searchEnrollResult" v-if="store.getters.roles.includes('student')">查看报名结果</el-menu-item>
-                            <el-menu-item index="/viewCurTeacherContestEnroll" v-if="store.getters.roles.includes('teacher')">查看报名信息</el-menu-item>
+                            <el-menu-item index="/teacherViewEnroll" v-if="store.getters.roles.includes('teacher')">查看报名信息</el-menu-item>
+                            <el-menu-item index="/enrollProcess" v-if="store.getters.roles.includes('teacher')">审核报名</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
                     <el-sub-menu index="2" class="menu-border">
@@ -29,7 +30,8 @@
                         <el-menu-item-group>
                             <el-menu-item index="/uploadGrade" v-if="store.getters.roles.includes('student')">上传成绩</el-menu-item>
                             <el-menu-item index="/SearchGrade" v-if="store.getters.roles.includes('student')">查看成绩</el-menu-item>
-                            <el-menu-item index="/viewCurTeacherContestGrade" v-if="store.getters.roles.includes('teacher')">查看成绩信息</el-menu-item>
+                            <el-menu-item index="/teacherViewGrade" v-if="store.getters.roles.includes('teacher')">查看成绩信息</el-menu-item>
+                            <el-menu-item index="/gradeProcess" v-if="store.getters.roles.includes('teacher')">审核成绩</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
                     <el-sub-menu index="3" class="menu-border">
@@ -43,16 +45,7 @@
                             <el-menu-item index="/uploadContest" v-if="store.getters.roles.includes('teacher')">上传竞赛</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
-                    <el-sub-menu index="4" class="menu-border" v-if="store.getters.roles.includes('teacher')">
-                        <template #title>
-                            <el-icon><location /></el-icon>
-                            <span>审核信息</span>
-                        </template>
-                        <el-menu-item-group>
-                            <el-menu-item index="/enrollProcess">审核报名</el-menu-item>
-                            <el-menu-item index="/gradeProcess">审核成绩</el-menu-item>
-                        </el-menu-item-group>
-                    </el-sub-menu>
+            
                 </el-menu>
             </div>
         </el-col>

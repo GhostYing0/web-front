@@ -92,10 +92,12 @@
             </el-form-item>
         </el-form>
 
-        <div slot="footer" class="dialog-footer">
+        <template #footer>
+            <div class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="submitForm">确 定</el-button>
-        </div>
+            </div>
+        </template>
     </el-dialog>
 
     成绩管理界面
@@ -165,7 +167,7 @@
                 </template>
                 <el-image :src="row.certificate" fit="contain" />
             </el-popover>
-                </template>
+            </template>
         </el-table-column>
         <el-table-column
                 prop="state"
@@ -195,7 +197,7 @@
             :page-size="param.page_size"
             layout="total, sizes, prev, pager, next, jumper"
             :total="recordTotal"
-            style="margin-top: 15px"
+            class="pagination_style"
     ></el-pagination>
 </template>
 

@@ -119,7 +119,7 @@
             :page-size="param.page_size"
             layout="total, sizes, prev, pager, next, jumper"
             :total="recordTotal"
-            style="margin-top: 15px"
+            class="pagination_style"
     ></el-pagination>
 </template>
 

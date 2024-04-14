@@ -77,9 +77,8 @@
     <el-table
             ref="multipleTable"
             :data="tableData"
-            border
-            style="width: 100%"
             @selection-change="handleSelectionChange"
+            border style="width: 100%"
         >
         <el-table-column
                 fixed
@@ -89,8 +88,7 @@
         <el-table-column
                 fixed
                 prop="id"
-                label="序号"
-                width="100">
+                label="序号">
         </el-table-column>
       <el-table-column
           prop="name"
@@ -155,7 +153,7 @@
             :page-size="param.page_size"
             layout="total, sizes, prev, pager, next, jumper"
             :total="recordTotal"
-            style="margin-top: 15px"
+            class="pagination_style"
     ></el-pagination>
 </template>
 

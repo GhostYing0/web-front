@@ -1,49 +1,3 @@
-<!--<template>-->
-    <!--<el-row>-->
-        <!--<el-col :span="12">-->
-            <!--<h5 class="mb-2">导航栏</h5>-->
-    <!--<el-menu-->
-            <!--default-active="2"-->
-            <!--class="el-menu-vertical-demo"-->
-            <!--@open="handleOpen"-->
-            <!--@close="handleClose"-->
-            <!--router-->
-    <!--&gt;-->
-        <!--<el-sub-menu index="1" class="base-menu">-->
-            <!--<template #title>-->
-                <!--<span>报名功能</span>-->
-            <!--</template>-->
-                <!--<el-menu-item index="/enrollContest">报名竞赛</el-menu-item>-->
-                <!--<el-menu-item index="/searchEnrollResult">查看报名结果</el-menu-item>-->
-            <!--</el-sub-menu>-->
-        <!--<el-sub-menu index="2" class="base-menu">-->
-            <!--<template #title>-->
-                <!--<span>测试功能</span>-->
-            <!--</template>-->
-            <!--<el-menu-item index="/display_contest">展示竞赛信息</el-menu-item>-->
-            <!--<el-menu-item index="/add_user">添加用户</el-menu-item>-->
-        <!--</el-sub-menu>-->
-        <!--<el-sub-menu index="3" class="base-menu">-->
-            <!--<template #title>-->
-                <!--<span>登录</span>-->
-            <!--</template>-->
-            <!--<el-menu-item index="/Login">管理员登陆</el-menu-item>-->
-        <!--</el-sub-menu>-->
-    <!--</el-menu>-->
-        <!--</el-col>-->
-    <!--</el-row>-->
-<!--</template>-->
-
-<!--<script setup>-->
-<!--</script>-->
-
-<!--<style>-->
-
-    <!--.base-menu{-->
-        <!--color: white;-->
-    <!--}-->
-<!--</style>-->
-
 <template>
     <el-row class="tac">
         <el-col :span="24">
@@ -91,7 +45,7 @@
                     <el-icon><location /></el-icon>
                     <span>数据统计与分析</span>
                 </template>
-                <el-menu-item index="/gradeManage">进入</el-menu-item>
+                <el-menu-item index="/analysis">进入</el-menu-item>
                 </el-sub-menu>
             </el-menu>
             </div>

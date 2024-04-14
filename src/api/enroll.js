@@ -95,3 +95,11 @@ export function processRejectEnroll(data) {
         data: data
     })
 }
+
+export function processRecoverEnroll(data) {
+    return request({
+        url: "/processRecoverEnroll",
+        method: "post",
+        data: data
+    })
+}
