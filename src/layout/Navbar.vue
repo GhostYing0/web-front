@@ -1,17 +1,15 @@
 <template>
     <div class="navbar">
         <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
-        <!--<breadcrumb class="breadcrumb-container" />-->
         <div class="right-menu">
-          <el-dropdown>
-            <el-button type="primary">
-              Dropdown List<el-icon class="el-icon--right"><arrow-down /></el-icon>
+          <el-dropdown class="dropdown">
+            <el-button type="primary" class="dropdown-button">
+              选项<el-icon><arrow-down /></el-icon>
             </el-button>
             <template #dropdown>
-              <el-dropdown-menu class="user-dropdown" style="padding-bottom: 10px;">
+              <el-dropdown-menu class="user-dropdown">
                 <el-dropdown-item @click="goToDashBoard">首页</el-dropdown-item>
-                <el-dropdown-item @click="goToProfile">个人信息</el-dropdown-item>
+                <el-dropdown-item @click="goToProfile" v-if="store.getters.roles.includes('student') || store.getters.roles.includes('teacher')">个人信息</el-dropdown-item>
                 <el-dropdown-item @click="logout">
                   <span style="display:block;">退出登录</span>
                 </el-dropdown-item>
@@ -20,27 +18,6 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-<!--        <el-dropdown class="avatar-container" trigger="click">-->
-<!--            <span class="el-dropdown-link">-->
-<!--              <div class="avatar-wrapper">-->
-<!--                   <img :src="avatar" class="user-avatar" style="border: 1px solid lightgrey;">-->
-<!--                  <span class="user-name"> {{name}} </span>-->
-<!--                    <i class="el-icon-caret-bottom"></i>-->
-<!--              </div>-->
-<!--            </span>-->
-<!--            <template #dropdown>-->
-<!--                <el-dropdown-menu slot="dropdown" class="user-dropdown" style="padding-bottom: 10px;">-->
-<!--                    <router-link to="/">-->
-<!--                        <el-dropdown-item>-->
-<!--                            首页-->
-<!--                        </el-dropdown-item>-->
-<!--                    </router-link>-->
-<!--                    <el-dropdown-item  @click="logout">-->
-<!--                        <span style="display:block;">退出登录</span>-->
-<!--                    </el-dropdown-item>-->
-<!--                </el-dropdown-menu>-->
-<!--            </template>-->
-<!--        </el-dropdown>-->
         </div>
     </div>
 
@@ -50,12 +27,16 @@
     import { mapGetters } from 'vuex'
     import Hamburger from '@/components/Hamburger'
     import {router} from "@/router";
+    import store from "@/store";
 
     export default {
         components: {
             Hamburger
         },
         computed: {
+          store() {
+            return store
+          },
             ...mapGetters([
                 'sidebar',
                 'avatar',
@@ -89,13 +70,27 @@
         align-items: center;
     }
     .navbar {
-        width: auto;
+        width: 100%;
         height: 80px;
         overflow: hidden;
         position: relative;
         background: #fff;
-        background-color: #a1e9d2;
-        box-shadow: 0 1px 4px rgba(0,21,41,.08);
+        background-color: orange;
+
+
+          .dropdown-button {
+              display: flex;
+             margin-top:25%;
+            margin-right: 20px;
+
+        }
+
+        .el-icon--right {
+          float: right;
+          height: 100%;
+          line-height: 50px;
+
+        }
 
         .hamburger-container {
             line-height: 60px;

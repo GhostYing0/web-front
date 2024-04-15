@@ -1,12 +1,16 @@
 <template>
+  <div class="root-background">
     <div class="login-container">
-        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+        <div class="login-icon">
+        </div>
+        <div class="login-window">
+          <el-form ref="loginForm" :model="loginForm" :rules="loginRules">
             <!-- 标题 -->
             <div class="title-container">
                 <h3 class="title">登录竞赛信息管理系统</h3>
             </div>
             <!-- 用户名 -->
-            <el-form-item prop="username">
+            <el-form-item prop="username" class="login-input" label="用户名" label-width="80px">
                 <el-input
                         class="yuan"
                         ref="username"
@@ -19,7 +23,7 @@
                 />
             </el-form-item>
             <!-- 密码 -->
-            <el-form-item prop="password">
+            <el-form-item prop="password" class="login-input" label="密码" label-width="80px">
                 <el-input
                         class="yuan"
                         :key="passwordType"
@@ -35,7 +39,7 @@
                 <span class="show-pwd" @click="showPwd"></span>
             </el-form-item>
             <!-- 权限 -->
-            <el-form-item prop="authority">
+            <el-form-item prop="authority" class="login-auth" label="身份" label-width="80px">
                 <el-select v-model="loginForm.role" placeholder="请选择" style="width:240px">
                     <el-option :key="0" label="学生" :value=1></el-option>
                     <el-option :key="1" label="教师" :value=2></el-option>
@@ -45,11 +49,13 @@
 
             <!-- 登录按钮 -->
             <div class="login-button">
-                <el-button :loading="loading" type="primary" style="width: 48%; " @click.prevent="handleLogin">登录</el-button>
-                <el-button :loading="loading" type="success" style="width: 48%; " @click.prevent="handleRegister">注册</el-button>
+                <el-button :loading="loading" type="primary" class="login-login-button"  @click.prevent="handleLogin">登录</el-button>
+                <el-button :loading="loading" type="success" class="login-register-button"  @click.prevent="handleRegister">注册</el-button>
             </div>
         </el-form>
+        </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -60,6 +66,7 @@
         name: 'UserLogin',
 
         data() {
+
             const validateUsername = (rule, value, callback) => {
                 callback()
             }
@@ -129,17 +136,61 @@
     }
 </script>
 <style lang="scss">
-    .login-container{
-        border-style: solid;
-        border-width: 5px;
-        display: flex;  
-        justify-content: center; 
-        align-items: center;  
-        height: 10%;
+  .root-background {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #5a5e66;
+    .login-container {
+      background-color: white;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 10%;
+      width: 700px;
+      border-style: solid;
+      border-width: 3px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: 300px;
+
+      .login-icon {
+        flex: 3;
+      }
+
+      .login-window {
+        border-left: 1px solid;
+        flex: 4;
+
+        .login-input {
+          margin-left: 20px;
+          width: 275px;
+        }
+
+        .login-auth {
+          margin-left: 20px;
+          width: 200px;
+        }
+
+        .login-button {
+          flex-direction: row;
+
+          .login-login-button {
+            width: 120px;
+          }
+
+          .login-register-button {
+            margin-left: 30px;
+            width: 50px;
+          }
+        }
+      }
     }
-    .login-button .el-button {  
-        display: flex; /* 使用 flexbox 布局 */  
-  justify-content: space-between; /* 两端对齐，确保按钮之间有间隔 */  
-        margin: 0 5px; /* 可选：按钮之间的间距 */  
-}  
+  }
+//  //  .login-button .el-button {
+//  //      display: flex; /* 使用 flexbox 布局 */
+//  //justify-content: space-between; /* 两端对齐，确保按钮之间有间隔 */
+//  //      margin: 0 5px; /* 可选：按钮之间的间距 */
+//}
 </style>

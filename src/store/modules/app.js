@@ -17,6 +17,7 @@ const mutations = {
         } else {
             Cookies.set('sidebarStatus', 0)
         }
+        console.log( state.sidebar.opened)
     },
     CLOSE_SIDEBAR: (state, withoutAnimation) => {
         Cookies.set('sidebarStatus', 0)

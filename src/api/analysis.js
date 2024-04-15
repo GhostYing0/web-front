@@ -7,3 +7,10 @@ export function totalEnrollCountOfPerYear() {
         method: 'get',
     })
 }
+
+export function preTypeEnrollCountOfPerYear() {
+    return request({
+        url: '/cms/preTypeEnrollCountOfPerYear',
+        method: 'get',
+    })
+}

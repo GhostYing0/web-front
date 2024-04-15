@@ -5,24 +5,18 @@
             <el-input v-model="param.name" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
 <!--            <el-input v-model="param.team_id" placeholder="队伍" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />-->
             <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-            <div class="block">
-                <span class="demonstration"></span>
-                <el-date-picker
-                        v-model="param.start_time"
-                        type="datetime"
-                        placeholder="起始时间"
-                        :shortcuts="shortcuts"
-                />
-            </div>
-            <div class="block">
-                <span class="demonstration"></span>
-                <el-date-picker
-                        v-model="param.end_time"
-                        type="datetime"
-                        placeholder="末尾时间"
-                        :shortcuts="shortcuts"
-                />
-            </div>
+          <div class="block">
+            <el-date-picker
+                v-model="time_range"
+                type="datetimerange"
+                start-placeholder="报名截止时间"
+                end-placeholder="开赛时间"
+                value-format="YYYY-MM-DD HH:mm:ss"
+                date-format="YYYY/MM/DD ddd"
+                time-format="HH:mm"
+                @change="handleTime"
+            />
+          </div>
             <el-input v-model="param.school" placeholder="学校" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
 <!--            <el-input v-model="param.phone" placeholder="电话号码" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />-->
 <!--            <el-input v-model="param.email" placeholder="邮箱" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />-->
@@ -206,6 +200,8 @@
                 return formType.value === 0 ? '添加记录' : '修改记录';
             });
 
+            const time_range = ref([])
+
             const multipleTable = ref()
             const multipleSelection = ref([])
 
@@ -219,6 +215,7 @@
 
             return {
                 value,
+                time_range,
                 defaultTime,
 
                 formType,
@@ -304,6 +301,11 @@
             return this.handleShowUser()
         },
         methods: {
+          handleTime() {
+              // form.start_time = time_range.value[0]
+              this.param.end_time = this.time_range[1]
+              this.param.start_time = this.time_range[0]
+            },
             // 搜索
             handleFilter() {
                 this.param.page_number = 1
@@ -410,6 +412,8 @@
                         email: '',
                         state: -1
                 }
+                this.time_range[0] = ''
+                this.time_range[1] = ''
                 getEnroll(this.param).then(resp => {
                     console.log(resp)
                     if(resp.code === 200) {

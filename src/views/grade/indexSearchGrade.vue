@@ -4,24 +4,18 @@
             <!-- 用户名输入 -->
             <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             <el-input v-model="param.grade" placeholder="成绩" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-            <div class="block">
-                <span class="demonstration"></span>
-                <el-date-picker
-                        v-model="param.start_time"
-                        type="datetime"
-                        placeholder="起始时间"
-                        :shortcuts="shortcuts"
-                />
-            </div>
-            <div class="block">
-                <span class="demonstration"></span>
-                <el-date-picker
-                        v-model="param.end_time"
-                        type="datetime"
-                        placeholder="末尾时间"
-                        :shortcuts="shortcuts"
-                />
-            </div>
+          <div class="block">
+            <el-date-picker
+                v-model="time_range"
+                type="datetimerange"
+                start-placeholder="报名截止时间"
+                end-placeholder="开赛时间"
+                value-format="YYYY-MM-DD HH:mm:ss"
+                date-format="YYYY/MM/DD ddd"
+                time-format="HH:mm"
+                @change="handleTime"
+            />
+          </div>
             <el-form-item label="审核状态" prop="role">
                 <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
                 <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
@@ -137,6 +131,8 @@
                 return formType.value === 0 ? '添加记录' : '修改记录';
             });
 
+            const time_range = ref([])
+
             const multipleTable = ref()
             const multipleSelection = ref([])
 
@@ -150,6 +146,7 @@
 
             return {
                 value,
+                time_range,
                 defaultTime,
 
                 formType,
@@ -203,7 +200,6 @@
                 // 对话框表单显示
                 dialogFormVisible: false,
                 // 表单类型（添加数据:0,修改数据:1）
-                formType: 0,
 
             };
         },
@@ -211,6 +207,11 @@
             return this.handleShowUser()
         },
         methods: {
+          handleTime() {
+            // form.start_time = time_range.value[0]
+            this.param.end_time = this.time_range[1]
+            this.param.start_time = this.time_range[0]
+          },
             // 搜索
             handleFilter() {
                 this.param.page_number = 1
