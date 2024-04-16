@@ -114,3 +114,27 @@ export function processRejectContest(data) {
         data: data
     })
 }
+
+// 获取学校
+export function getSchool() {
+    return request({
+        url: '/public/getSchool',
+        method: 'get'
+    })
+}
+
+// 获取学院
+export function getCollege() {
+    return request({
+        url: '/public/getCollege',
+        method: 'get'
+    })
+}
+
+// 获取学年
+export function getSemester() {
+    return request({
+        url: '/public/getSemester',
+        method: 'get'
+    })
+}

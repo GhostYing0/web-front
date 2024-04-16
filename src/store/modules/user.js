@@ -115,8 +115,8 @@ const actions = {
         })
     },
 
-    Register(userInfo) {
-        const {username, password, confirm_password, role,name,gender,school, college,semester,student_class} = userInfo
+    Register({commit}, registerForm) {
+        const {username, password, confirm_password, role, name,gender,school, college,semester,student_class} = registerForm
         return new Promise((resolve, reject) => {
             if(role === 0){
                 cmsRegister({username: username.trim(), password: password, confirm_password: confirm_password, role: role}).then(response => {

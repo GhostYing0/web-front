@@ -50,8 +50,9 @@ import * as echarts from 'echarts';
 
 
 const perTypeEnrollChart = ref()
-const perTypeEnrollChartDate_ContestType = ref([])
-const perTypeEnrollChartDate_EnrollCount = ref([])
+const perTypeEnrollChartDate_Year = ref([])
+const perTypeEnrollChartDate_Type = ref([])
+const perTypeEnrollChartDate_EnrollCount = reactive({})
 
 const totalEnrollChart = ref()
 const totalEnrollChart_Year = ref([])
@@ -59,22 +60,55 @@ const totalEnrollChart_EnrollCount = ref([])
 
 const initPerTypeEnrollChartDate = () => {
   preTypeEnrollCountOfPerYear().then(resp => {
-    console.log(resp.data)
     let data = resp.data.contest_type_with_enroll_data
     for (const key in data) {
-      console.log(key, data[key])
-      perTypeEnrollChartDate_ContestType.value.push(key)
-      perTypeEnrollChartDate_EnrollCount.value.push(data[key])
+      perTypeEnrollChartDate_Year.value.push(key)
+      perTypeEnrollChartDate_EnrollCount[key] =  {}
+      for (const type in data[key]) {
+        // console.log("ads",type,data[key])
+        perTypeEnrollChartDate_EnrollCount[key][type] = perTypeEnrollChartDate_EnrollCount[key][type] || []
+        perTypeEnrollChartDate_EnrollCount[key][type].push(data[key][type])
+      }
     }
-    console.log(perTypeEnrollChartDate_ContestType)
-    console.log(perTypeEnrollChartDate_EnrollCount)
+    for(const key in data) {
+      for(const type in data[key]) {
+          perTypeEnrollChartDate_Type.value.push(type)
+      }
+      break
+    }
+
+    console.log("type:",perTypeEnrollChartDate_Type.value)
+    initPerTypeEnrollChart()
   }).catch(error => {
     console.error(error)
   })
-  initPerTypeEnrollChart()
 }
 const initPerTypeEnrollChart = () => {
   const Chart = echarts.init(perTypeEnrollChart.value)
+  console.log("ASDSAda",perTypeEnrollChartDate_EnrollCount)
+  const series = ref([])
+  let typeCount = reactive({})
+
+  perTypeEnrollChartDate_Type.value = []
+  for (const key in perTypeEnrollChartDate_EnrollCount) {
+    for (const value in perTypeEnrollChartDate_EnrollCount[key]) {
+      console.log(value)
+      perTypeEnrollChartDate_Type.value.push(value)
+    }
+    break
+  }
+
+  for (const key in perTypeEnrollChartDate_EnrollCount) {
+    for (const value in perTypeEnrollChartDate_EnrollCount[key]) {
+      console.log(value, perTypeEnrollChartDate_EnrollCount[key][value])
+      typeCount[value] = typeCount[value] || []
+      for (const asd in perTypeEnrollChartDate_EnrollCount[key][value]) {
+        //console.log(asd, perTypeEnrollChartDate_EnrollCount[key][value][asd])c
+        typeCount[value].push(perTypeEnrollChartDate_EnrollCount[key][value][asd])
+      }
+    }
+  }
+
   const posList = [
     'left',
     'right',
@@ -90,71 +124,84 @@ const initPerTypeEnrollChart = () => {
     'insideBottomLeft',
     'insideBottomRight'
   ];
-  app.configParameters = {
-    rotate: {
-      min: -90,
-      max: 90
-    },
-    align: {
-      options: {
-        left: 'left',
-        center: 'center',
-        right: 'right'
-      }
-    },
-    verticalAlign: {
-      options: {
-        top: 'top',
-        middle: 'middle',
-        bottom: 'bottom'
-      }
-    },
-    position: {
-      options: posList.reduce(function (map, pos) {
-        map[pos] = pos;
-        return map;
-      }, {})
-    },
-    distance: {
-      min: 0,
-      max: 100
-    }
-  };
-  app.config = {
-    rotate: 90,
-    align: 'left',
-    verticalAlign: 'middle',
-    position: 'insideBottom',
-    distance: 15,
-    onChange: function () {
-      const labelOption = {
-        rotate: app.config.rotate,
-        align: app.config.align,
-        verticalAlign: app.config.verticalAlign,
-        position: app.config.position,
-        distance: app.config.distance
-      };
-      perTypeEnrollChart.value.setOption({
-        series: [
-          {
-            label: labelOption
-          },
-          {
-            label: labelOption
-          },
-          {
-            label: labelOption
-          },
-          {
-            label: labelOption
-          }
-        ]
-      });
-    }
-  };
   const labelOption = {
-    show: false,
+    show: true,
+    formatter: '{c}  {name|{a}}',
+    fontSize: 16,
+    rich: {
+      name: {}
+    }
   };
+  perTypeEnrollChartDate_Type.value.forEach((type) => {
+    series.value.push({
+      name: type,
+      type: 'bar',
+      barGap: 0,
+      label: {
+        show: labelOption,
+      },
+      emphasis: {
+        focus: 'series'
+      },
+    })
+  })
+
+  let index = 0
+  for (const key in typeCount) {
+    series.value[index].data = typeCount[key]
+    index++
+  }
+  console.log("series:", series.value)
+
+  // app.configParameters = {
+  //   rotate: {
+  //     min: -90,
+  //     max: 90
+  //   },
+  //   align: {
+  //     options: {
+  //       left: 'left',
+  //       center: 'center',
+  //       right: 'right'
+  //     }
+  //   },
+  //   verticalAlign: {
+  //     options: {
+  //       top: 'top',
+  //       middle: 'middle',
+  //       bottom: 'bottom'
+  //     }
+  //   },
+  //   position: {
+  //     options: posList.reduce(function (map, pos) {
+  //       map[pos] = pos;
+  //       return map;
+  //     }, {})
+  //   },
+  //   distance: {
+  //     min: 0,
+  //     max: 100
+  //   }
+  // };
+  // app.config = {
+  //   rotate: 90,
+  //   align: 'left',
+  //   verticalAlign: 'middle',
+  //   position: 'insideBottom',
+  //   distance: 15,
+  //   onChange: function () {
+  //     const labelOption = {
+  //       rotate: app.config.rotate,
+  //       align: app.config.align,
+  //       verticalAlign: app.config.verticalAlign,
+  //       position: app.config.position,
+  //       distance: app.config.distance
+  //     };
+  //     Chart.setOption({
+  //       series: series.value
+  //     });
+  //   }
+  // };
   const option = {
     tooltip: {
       trigger: 'axis',
@@ -163,7 +210,7 @@ const initPerTypeEnrollChart = () => {
       }
     },
     legend: {
-      data: ['Forest', 'Steppe', 'Desert', 'Wetland']
+      data: perTypeEnrollChartDate_Type.value
     },
     toolbox: {
       show: true,
@@ -173,7 +220,7 @@ const initPerTypeEnrollChart = () => {
       feature: {
         mark: { show: true },
         dataView: { show: true, readOnly: false },
-        magicType: { show: true, type: ['line', 'bar', 'stack'] },
+        magicType: { show: true, type: ['line', 'bar'] },
         restore: { show: true },
         saveAsImage: { show: true }
       }
@@ -182,7 +229,7 @@ const initPerTypeEnrollChart = () => {
       {
         type: 'category',
         axisTick: { show: false },
-        data: ['2012', '2013', '2014', '2015', '2016']
+        data: perTypeEnrollChartDate_Year.value
       }
     ],
     yAxis: [
@@ -190,61 +237,25 @@ const initPerTypeEnrollChart = () => {
         type: 'value'
       }
     ],
-    series: [
-      {
-        name: 'Forest',
-        type: 'bar',
-        barGap: 0,
-        label: labelOption,
-        emphasis: {
-          focus: 'series'
-        },
-        data: [320, 332, 301, 334, 390]
-      },
-      {
-        name: 'Steppe',
-        type: 'bar',
-        label: labelOption,
-        emphasis: {
-          focus: 'series'
-        },
-        data: [220, 182, 191, 234, 290]
-      },
-      {
-        name: 'Desert',
-        type: 'bar',
-        label: labelOption,
-        emphasis: {
-          focus: 'series'
-        },
-        data: [150, 232, 201, 154, 190]
-      },
-      {
-        name: 'Wetland',
-        type: 'bar',
-        label: labelOption,
-        emphasis: {
-          focus: 'series'
-        },
-        data: [98, 77, 101, 99, 40]
-      }
-    ]
+    series:series.value
   };
 
+  console.log("done:", option.series.value)
   Chart.setOption(option)
-  return  Chart}
+  return Chart
+}
 
 const initTotalEnrollChartDate = () => {
   totalEnrollCountOfPerYear().then(resp => {
-    console.log(resp)
+    // console.log(resp)
     let data = resp.data.enroll_data
     for (const key in data) {
-      console.log(key)
+      // console.log(key, data[key])
       totalEnrollChart_Year.value.push(key)
       totalEnrollChart_EnrollCount.value.push(data[key])
     }
-    console.log(totalEnrollChart_Year)
-    console.log(totalEnrollChart_EnrollCount)
+    // console.log(totalEnrollChart_Year)
+    // console.log(totalEnrollChart_EnrollCount)
     initTotalEnrollChart()
   }).catch(error => {
     console.error(error)

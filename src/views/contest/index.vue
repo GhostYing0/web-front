@@ -22,7 +22,7 @@
   <el-table
       ref="multipleTable"
       :data="tableData"
-
+      border
       style="width: 100%"
       @selection-change="handleSelectionChange"
   >
