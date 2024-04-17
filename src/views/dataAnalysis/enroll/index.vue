@@ -2,7 +2,9 @@ import { onMounted } from 'vue';
 <template>
   <div class="basic-chart-table">
     <div class="basic-chart-table-item">
-      最近五年总报名数
+      <div class="chart-title">
+        最近五年总报名数
+      </div>
       <div
           class="basic-chart-table-chart"
           ref="totalEnrollChart"
@@ -11,7 +13,9 @@ import { onMounted } from 'vue';
       ></div>
     </div>
     <div class="basic-chart-table-item">
-      今年各类竞赛报名数
+      <div class="chart-title">
+        最近五年各类竞赛报名总览
+      </div>
       <div
           class="basic-chart-table-chart"
           ref="perTypeEnrollChart"
@@ -20,20 +24,37 @@ import { onMounted } from 'vue';
       ></div>
     </div>
     <div class="basic-chart-table-item">
-      往年各类竞赛报名数
+      <div class="title-item">
+        <div class="chart-title">
+          最近五年各类竞赛报名单年查看
+        </div>
+        <el-form-item class="form-item" prop="school" label="年份" label-width="80px" style="width:180px">
+        <div class="m-4">
+          <el-cascader
+              v-model="item_year"
+              :options="yearOptions"
+              :props="props"
+              filterable
+              @change="handleYear"
+          />
+        </div>
+       </el-form-item>
+    </div>
       <div
           class="basic-chart-table-chart"
-          ref="testChart"
-          id="testChart"
+          ref="prevEnrollTypeChart"
+          id="prevEnrollTypeChart"
           :style="{ width: '500px', height: '350px' }"
       ></div>
     </div>
     <div class="basic-chart-table-item">
-      各类竞赛报名数与往年对比
+      <div class="chart-title">
+        各类竞赛报名数与往年对比[(今年-往年)/往年]
+      </div>
       <div
           class="basic-chart-table-chart"
-          ref="testChart"
-          id="testChart"
+          ref="compareEnrollChart"
+          id="compareEnrollChart"
           :style="{ width: '500px', height: '350px' }"
       ></div>
     </div>
@@ -44,10 +65,15 @@ import { onMounted } from 'vue';
 
 <script setup>
 import {onMounted, ref, reactive} from "vue"
-import {preTypeEnrollCountOfPerYear, totalEnrollCountOfPerYear} from "@/api/analysis"
+import {preTypeEnrollCountOfPerYear, totalEnrollCountOfPerYear, compareEnrollCount} from "@/api/analysis"
 import * as echarts from 'echarts';
 
+const yearOptions = ref([])
+const item_year = ref()
 
+const handleYear = () => {
+  initPrevEnrollTypeChart(item_year.value[0])
+}
 
 const perTypeEnrollChart = ref()
 const perTypeEnrollChartDate_Year = ref([])
@@ -58,7 +84,131 @@ const totalEnrollChart = ref()
 const totalEnrollChart_Year = ref([])
 const totalEnrollChart_EnrollCount = ref([])
 
-const initPerTypeEnrollChartDate = () => {
+const prevEnrollTypeChart = ref()
+const prevTypeEnrollData = reactive({})
+
+const compareEnrollData = reactive({})
+const compareEnrollChart = ref()
+const compareEnrollType = ref()
+const compareEnrollChartData = reactive([])
+
+const initCompareEnrollChartData = () => {
+  compareEnrollCount().then(resp => {
+    let data = resp.data.enroll_compare
+    for(const key in data) {
+      compareEnrollChartData.push({value: data[key], label: key})
+    }
+    compareEnrollType.value = perTypeEnrollChartDate_Type.value
+    compareEnrollType.value.push("总和")
+    initCompareEnrollChart()
+  }).catch(error => {
+    console.error(error)
+  })
+}
+const initCompareEnrollChart = () => {
+  const Chart = echarts.init(compareEnrollChart.value);
+  const labelRight = {
+    position: 'left'
+  };
+  const option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    grid: {
+      top: 80,
+      bottom: 30
+    },
+    xAxis: {
+      type: 'category',
+      axisLine: { show: false },
+      axisLabel: { show: false },
+      axisTick: { show: false },
+      splitLine: { show: false },
+      data: compareEnrollType.value
+    },
+    yAxis: {
+      type: 'value',
+      position: 'top',
+      splitLine: {
+        lineStyle: {
+          type: 'dashed'
+        }
+      }
+    },
+    series: [
+      {
+        name: '增长比率',
+        type: 'bar',
+        stack: 'Total',
+        label: {
+          show: true,
+          formatter: '{b}'
+        },
+        data: compareEnrollChartData
+      }
+    ]
+  };
+  Chart.setOption(option)
+  return Chart
+}
+
+const initPrevEnrollTypeChartData = () => {
+  preTypeEnrollCountOfPerYear().then(resp => {
+    let data = resp.data.contest_type_with_enroll_data
+    for (const key in data) {
+        prevTypeEnrollData[key] = []
+      for (const type in data[key]) {
+        prevTypeEnrollData[key].push({value: data[key][type], name: type})
+      }
+    }
+    console.log("====:",prevTypeEnrollData)
+    initPrevEnrollTypeChart(item_year.value[0])
+  }).catch(error => {
+    console.error(error)
+  })
+
+}
+const initPrevEnrollTypeChart = (year) => {
+  const Chart = echarts.init(prevEnrollTypeChart.value);
+  const option = {
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      top: '5%',
+      left: 'center'
+    },
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        label: {
+          show: false,
+          position: 'center'
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 40,
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: prevTypeEnrollData[year]
+      }
+    ]
+  };
+  Chart.setOption(option)
+  return Chart
+}
+
+const initPerTypeEnrollChartData = () => {
   preTypeEnrollCountOfPerYear().then(resp => {
     let data = resp.data.contest_type_with_enroll_data
     for (const key in data) {
@@ -76,8 +226,6 @@ const initPerTypeEnrollChartDate = () => {
       }
       break
     }
-
-    console.log("type:",perTypeEnrollChartDate_Type.value)
     initPerTypeEnrollChart()
   }).catch(error => {
     console.error(error)
@@ -92,7 +240,6 @@ const initPerTypeEnrollChart = () => {
   perTypeEnrollChartDate_Type.value = []
   for (const key in perTypeEnrollChartDate_EnrollCount) {
     for (const value in perTypeEnrollChartDate_EnrollCount[key]) {
-      console.log(value)
       perTypeEnrollChartDate_Type.value.push(value)
     }
     break
@@ -100,7 +247,6 @@ const initPerTypeEnrollChart = () => {
 
   for (const key in perTypeEnrollChartDate_EnrollCount) {
     for (const value in perTypeEnrollChartDate_EnrollCount[key]) {
-      console.log(value, perTypeEnrollChartDate_EnrollCount[key][value])
       typeCount[value] = typeCount[value] || []
       for (const asd in perTypeEnrollChartDate_EnrollCount[key][value]) {
         //console.log(asd, perTypeEnrollChartDate_EnrollCount[key][value][asd])c
@@ -153,55 +299,6 @@ const initPerTypeEnrollChart = () => {
   }
   console.log("series:", series.value)
 
-  // app.configParameters = {
-  //   rotate: {
-  //     min: -90,
-  //     max: 90
-  //   },
-  //   align: {
-  //     options: {
-  //       left: 'left',
-  //       center: 'center',
-  //       right: 'right'
-  //     }
-  //   },
-  //   verticalAlign: {
-  //     options: {
-  //       top: 'top',
-  //       middle: 'middle',
-  //       bottom: 'bottom'
-  //     }
-  //   },
-  //   position: {
-  //     options: posList.reduce(function (map, pos) {
-  //       map[pos] = pos;
-  //       return map;
-  //     }, {})
-  //   },
-  //   distance: {
-  //     min: 0,
-  //     max: 100
-  //   }
-  // };
-  // app.config = {
-  //   rotate: 90,
-  //   align: 'left',
-  //   verticalAlign: 'middle',
-  //   position: 'insideBottom',
-  //   distance: 15,
-  //   onChange: function () {
-  //     const labelOption = {
-  //       rotate: app.config.rotate,
-  //       align: app.config.align,
-  //       verticalAlign: app.config.verticalAlign,
-  //       position: app.config.position,
-  //       distance: app.config.distance
-  //     };
-  //     Chart.setOption({
-  //       series: series.value
-  //     });
-  //   }
-  // };
   const option = {
     tooltip: {
       trigger: 'axis',
@@ -245,7 +342,7 @@ const initPerTypeEnrollChart = () => {
   return Chart
 }
 
-const initTotalEnrollChartDate = () => {
+const initTotalEnrollChartData = () => {
   totalEnrollCountOfPerYear().then(resp => {
     // console.log(resp)
     let data = resp.data.enroll_data
@@ -253,9 +350,15 @@ const initTotalEnrollChartDate = () => {
       // console.log(key, data[key])
       totalEnrollChart_Year.value.push(key)
       totalEnrollChart_EnrollCount.value.push(data[key])
+      yearOptions.value.push({
+        value:key,
+        label:key
+      })
     }
+    console.log("item:", item_year.value)
     // console.log(totalEnrollChart_Year)
     // console.log(totalEnrollChart_EnrollCount)
+    item_year.value = yearOptions.value[0]
     initTotalEnrollChart()
   }).catch(error => {
     console.error(error)
@@ -300,10 +403,12 @@ const initTotalEnrollChart = () => {
   }
   Chart.setOption(option)
   return Chart
-} 
+}
 
-onMounted(initPerTypeEnrollChartDate)
-onMounted(initTotalEnrollChartDate)
+onMounted(initTotalEnrollChartData)
+onMounted(initPerTypeEnrollChartData)
+onMounted(initPrevEnrollTypeChartData)
+onMounted(initCompareEnrollChartData)
 </script>
 
 <style lang="scss">
@@ -320,6 +425,18 @@ onMounted(initTotalEnrollChartDate)
     box-sizing: border-box;
     .basic-chart-table-chart {
       margin: auto auto;
+    }
+    .title-item {
+      display: flex;
+      flex-direction: row;
+      .form-item {
+        float: left;
+        margin-right: 25px;
+      }
+      .chart-title {
+        margin-left: 70px;
+        margin-right: auto;
+      }
     }
   }
 }

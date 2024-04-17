@@ -14,3 +14,10 @@ export function preTypeEnrollCountOfPerYear() {
         method: 'get',
     })
 }
+
+export function compareEnrollCount() {
+    return request({
+        url: '/cms/compareEnrollCount',
+        method: 'get',
+    })
+}

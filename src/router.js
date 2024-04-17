@@ -9,11 +9,6 @@ const asyncRoutes = [
         component:() => import("@/layout/AppLayout"),
         children:[
             {
-                path: '/add_user',
-                component: () => import("@/views/my-test-adduser"),
-                roles: ["manager","student", "teacher"],
-            },
-            {
                 path: "/enrollContest",
                 component: () => import("@/views/enroll/indexEnrollContest"),
                 roles: ["student"]
