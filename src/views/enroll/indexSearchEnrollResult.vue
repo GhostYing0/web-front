@@ -41,28 +41,6 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
   >
-<!--    <el-table-column-->
-<!--        fixed-->
-<!--        type="selection"-->
-<!--        width="55">-->
-<!--    </el-table-column>-->
-<!--    <el-table-column-->
-<!--        fixed-->
-<!--        prop="id"-->
-<!--        label="序号"-->
-<!--        width="55">-->
-<!--    </el-table-column>-->
-<!--    <el-table-column-->
-<!--        prop="name"-->
-<!--        label="姓名"-->
-<!--        show-overflow-tooltip>-->
-<!--    </el-table-column>-->
-    <!--        <el-table-column-->
-    <!--                prop="team_id"-->
-    <!--                label="队伍ID"-->
-    <!--                width="55"-->
-    <!--                show-tooltip>-->
-    <!--        </el-table-column>-->
     <el-table-column
         prop="contest"
         label="竞赛"
@@ -73,30 +51,21 @@
         label="报名时间"
         show-overflow-tooltip>
     </el-table-column>
-    <!--        <el-table-column-->
-    <!--                prop="phone"-->
-    <!--                label="电话号码"-->
-    <!--                show-overflow-tooltip>-->
-    <!--        </el-table-column>-->
-    <!--        <el-table-column-->
-    <!--                prop="email"-->
-    <!--                label="邮箱"-->
-    <!--                show-overflow-tooltip>-->
-    <!--        </el-table-column>-->
     <el-table-column
         prop="state"
         label="审核状态"
         show-overflow-tooltip>
       <template #default="{ row }">
         <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+        <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
         <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
         <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
       </template>
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="150" type="index">
-      <template #default="{ row, $index }">
-        <el-button @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
-        <el-button @click="handleDelete(row, $index)" type="danger" size="small">删除</el-button>
+      <template #default="{ row }">
+        <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state !== 3" plain disabled>撤回</el-button>
+        <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state === 3">撤回</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -116,7 +85,7 @@
 </template>
 
 <script>
-    import {getUserEnroll} from '@/api/enroll'
+    import {getUserEnroll, revokeEnroll} from '@/api/enroll'
     import {computed, ref} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
 
@@ -181,6 +150,9 @@
                 tableData: [],
                 // 记录总数
                 recordTotal: 0,
+                form : {
+                  state: ""
+                },
                 // 查询参数
                 param: {
                     page_number: 1,
@@ -197,7 +169,6 @@
                 // 对话框表单显示
                 dialogFormVisible: false,
                 // 表单类型（添加数据:0,修改数据:1）
-                formType: 0,
 
             };
         },
@@ -286,6 +257,20 @@
                     }
                 })
             },
+          handleCancel(row) {
+            this.form.state = 1
+            this.form.id = row.id
+            console.log( row.id)
+            revokeEnroll(this.form).then(resp => {
+              if(resp.code === 200) {
+                ElMessage({
+                  type: 'success',
+                  message: '更新成功',
+                })//
+                this.handleCurrentChange(this.param.page_number)
+              }
+            })
+          }
         }
     };
 </script>

@@ -116,7 +116,7 @@ const actions = {
     },
 
     Register({commit}, registerForm) {
-        const {username, password, confirm_password, role, name,gender,school, college,semester,student_class} = registerForm
+        const {username, password, confirm_password, role, name,gender,school, college,semester,student_class, phone, email} = registerForm
         return new Promise((resolve, reject) => {
             if(role === 0){
                 cmsRegister({username: username.trim(), password: password, confirm_password: confirm_password, role: role}).then(response => {
@@ -134,7 +134,7 @@ const actions = {
                 })
             } else if(role === 1 || role === 2) {
                 register({username: username.trim(), password: password, confirm_password: confirm_password, role: role,
-                    name:name, gender:gender, school:school, college:college, semester:semester, class:student_class}).then(response => {
+                    name:name, gender:gender, school:school, college:college, semester:semester, class:student_class, phone:phone, email:email}).then(response => {
                     const {code, message, data} = response
 
                     if(code != 200) {

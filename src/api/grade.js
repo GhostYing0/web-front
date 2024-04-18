@@ -115,3 +115,19 @@ export function processRecoverGrade(data) {
         data:data
     })
 }
+
+export function revokeGrade(data) {
+    return request({
+        url: '/revokeGrade',
+        method: 'post',
+        data:data
+    })
+}
+
+export function studentUpdateGrade(data) {
+    return request({
+        url: '/studentUpdateGrade',
+        method: 'post',
+        data:data
+    })
+}

@@ -11,6 +11,8 @@ const getters = {
     college: state => state.user.college,
     semester: state => state.user.semester,
     student_class: state => state.user.student_class,
+    phone: state => state.user.phone,
+    email: state => state.user.email,
     avatar: state => state.user.avatar,
 }
 export default getters

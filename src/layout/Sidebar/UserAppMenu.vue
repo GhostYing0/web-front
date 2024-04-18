@@ -2,7 +2,7 @@
     <el-row class="tac">
         <el-col :span="24">
             <div class="content">
-                <h5 class="mb-2">导航栏</h5>
+                <h2 class="mb-2" style="background-color: orange">导航栏</h2>
                 <el-menu
                         default-active="2"
                         class="el-menu-vertical-demo"

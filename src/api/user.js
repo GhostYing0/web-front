@@ -173,3 +173,27 @@ export function getProfileTeacher() {
     })
 }
 
+export function updateAvatar(data) {
+    return request({
+        url: '/updateAvatar',
+        method: 'post',
+        data: data
+    })
+}
+
+export function updateProfile(data) {
+    return request({
+        url: '/updateProfile',
+        method: 'post',
+        data: data
+    })
+}
+
+export  function updateTeacherProfile(data) {
+    return request({
+        url: '/updateTeacherProfile',
+        method: 'post',
+        data: data
+    })
+}
+

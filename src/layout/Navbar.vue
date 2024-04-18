@@ -1,6 +1,11 @@
 <template>
     <div class="navbar">
         <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+      <el-avatar size="large"
+                   :src=avatar
+                  class="avatar-container"
+                 v-if="store.getters.roles.includes('student') || store.getters.roles.includes('teacher')"
+        />
         <div class="right-menu">
           <el-dropdown class="dropdown">
             <el-button type="primary" class="dropdown-button">
@@ -137,35 +142,10 @@
                     }
                 }
             }
-
-            .avatar-container {
-                margin-right: 30px;
-
-                .avatar-wrapper {
-                    margin-top: 5px;
-                    position: relative;
-
-                    .user-avatar {
-                        cursor: pointer;
-                        width: 50px;
-                        height: 50px;
-                        border-radius: 5px;
-                    }
-
-                    .user-name {
-                        cursor: pointer;
-                        font-size: 22px;
-                    }
-
-                    .el-icon-caret-bottom {
-                        cursor: pointer;
-                        position: absolute;
-                        right: -20px;
-                        top: 35px;
-                        font-size: 12px;
-                    }
-                }
-            }
         }
+      .avatar-container {
+        margin-top: 10px;
+        margin-right: -1150px;
+      }
     }
 </style>

@@ -93,13 +93,17 @@
         show-overflow-tooltip>
       <template #default="{ row }">
         <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+        <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
         <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
         <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
       </template>
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="150" type="index">
       <template #default="{ row }">
-        <el-button @click="handleUpdate(row)" type="primary" size="small">编辑(雾)</el-button>
+        <el-button @click="handleUpdate(row)" type="primary" size="small" v-if="row.state === 3">编辑</el-button>
+        <el-button @click="handleUpdate(row)" type="primary" size="small" v-if="row.state !== 3" plain disabled>编辑</el-button>
+        <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state !== 3" plain disabled>撤回</el-button>
+        <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state === 3">撤回</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -115,20 +119,85 @@
             :total="recordTotal"
             class="pagination_style"
     ></el-pagination>
+
+  <!--查看图片-->
+  <el-dialog v-model="dialogPictureVisible" width="30%">
+    <!--普通表单-->
+    <div>
+      <el-image :src="picture" />
+    </div>
+  </el-dialog>
+
+  <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
+    <el-form-item label="证明材料">
+      <el-upload
+          ref="uploadRef"
+          class="upload-demo"
+          drag
+          action="http://localhost:9006/api/public/v1/upload"
+          :on-change="handleChange"
+          :auto-upload="false"
+          name="file"
+      >
+        <el-icon class="esl-icon--upload"><upload-filled /></el-icon>
+        <div class="el-upload__text">
+          Drop file here or <em>click to upload</em>
+        </div>
+        <template #tip>
+          <div class="el-upload__tip">
+            jpg/png files with a size less than 500kb
+          </div>
+        </template>
+      </el-upload>
+    </el-form-item>
+    <el-form-item label="成绩" label-width="80px">
+      <el-input v-model="form.grade"></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="Submit">提交</el-button>
+      <el-button type="info" @click="Cancel">取消</el-button>
+    </el-form-item>
+  </el-dialog>
 </template>
 
 <script>
-    import {searchGrade} from '@/api/grade'
-    import {computed, ref} from "vue"
+    import {searchGrade, studentUpdateGrade} from '@/api/grade'
+    import {computed, reactive, ref} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
+    import {revokeGrade} from "@/api/grade";
+    import axios from "axios";
+    import {getToken} from "@/utils/auth";
+    import store from "@/store";
+    import {updateAvatar, updateProfile} from "@/api/user";
 
     export default {
         //创建后
         setup() {
+            const uploadRef = ref(null) // 上传组件的引用，需要是 null，因为组件可能还没有挂载
+            // 创建Axios实例，用于特定的请求配置
+            const uploadAxios = axios.create({
+              baseURL: "http://localhost:9006/api/",
+              timeout: 5000
+            })
+
+            // 为这个特定的Axios实例设置请求拦截器
+            uploadAxios.interceptors.request.use(config => {
+              // 这里可以添加或覆盖头部信息
+              config.headers["Content-Type"] = 'multipart/form-data'
+              config.headers["BackServer-token"] = getToken()
+              return config;
+            }, error => {
+              return Promise.reject(error);
+            });
+
+            const formPic = reactive({
+              file: '',
+            })
+
             const formType = ref(0);
             const formTitle = computed(() => {
                 console.log("computed")
-                return formType.value === 0 ? '添加记录' : '修改记录';
+                return "编辑成绩";
             });
 
             const time_range = ref([])
@@ -148,6 +217,9 @@
                 value,
                 time_range,
                 defaultTime,
+                formPic,
+                uploadAxios,
+                uploadRef,
 
                 formType,
                 formTitle,
@@ -158,6 +230,8 @@
         },
         data() {
             return {
+                picture: "",
+                dialogPictureVisible : false,
                 shortcuts: [
                     {
                         text: 'Today',
@@ -185,6 +259,13 @@
                 // 记录总数
                 recordTotal: 0,
                 // 查询参数
+                form : {
+                  id: -1,
+                  state: -1,
+                  grade: "",
+                  certificate: ""
+                },
+
                 param: {
                     page_number: 1,
                     page_size: 10,
@@ -285,6 +366,100 @@
                     }
                 })
             },
+            submitCancel(row) {
+              this.form.state = 4
+              this.form.id = row.id
+              revokeGrade(this.form).then(resp => {
+                if(resp.code === 200) {
+                  ElMessage({
+                    type: 'success',
+                    message: '撤回成功',
+                  })
+                  this.form = {
+                    id: -1,
+                    state: -1,
+                    certificate: "",
+                    grade: "",
+                  }
+                  this.handleCurrentChange(this.param.page_number)
+                }
+              }).catch(error => {
+                console.error(error)
+              })
+            },
+            handleCancel(row) {
+              ElMessageBox.confirm(
+                  '确定要撤回吗？',
+                  'Warning',
+                  {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                  }
+              ).then(() => {
+                this.submitCancel(row)
+              })
+              .catch(() => {
+                ElMessage({
+                  type: 'info',
+                  message: '取消',
+                })
+              })
+            },
+            async Submit() {
+              if(store.getters.roles.includes("student") || store.getters.roles.includes("teacher")) {
+                  console.log("(((((((^^^^^^^^^^^^^^^^^^^676")
+                  this.formPic.file = this.uploadRef
+                  //发送请求到后端接口
+                  const resp = await this.uploadAxios.post('public/v1/upload', this.formPic)
+                  console.log("resp:",resp)
+                  if(resp.data.code === 200) {
+                    this.form.certificate = resp.data.data.imageurl
+                    console.log("asdasd",this.form.certificate)
+                  }
+
+
+                studentUpdateGrade(this.form).then(resp => {
+                  if(resp.data.code === 200) {
+                    this.route.value.go(0)
+                  }
+                }).catch(error => {
+                  ElMessage({
+                    type: 'fail',
+                    message: '更新失败',
+                  })
+                  console.error(error)
+                })
+              }
+              this.handleCurrentChange(this.param.page_number)
+              this.dialogFormVisible = false
+            },
+            Cancel() {
+              this.form = {
+                id: -1,
+                state: -1,
+                certificate: "",
+                grade: "",
+              }
+              this.dialogFormVisible = false
+            },
+            handleUpdate(row) {
+              this.form.id = row.id
+              this.dialogFormVisible = true
+            },
+
+            // 处理文件变化
+          handleChange(file) {
+              console.log("文件变化：", file);
+              this.uploadRef = file
+              // 如果这里是要引用某个上传组件的实例，请确保该组件正确传递了引用
+              // uploadRef.value = file; // 这一步取决于你的上传组件API，可能需要的是文件对象，而不是组件实例
+            },
+          handDown(url) {
+            // this.downloadPicture(url, "pic")
+            this.picture = url
+            this.dialogPictureVisible = true
+          }
         }
     };
 </script>

@@ -61,7 +61,6 @@
               name="confirm_password"
               tabindex="2"
               auto-complete="on"
-              @keyup.enter="handleRegister"
           />
         </el-form-item>
         <el-form-item prop="phone" label="手机号码" label-width="80px">
@@ -268,15 +267,19 @@ const next = () => {
 
   if(active.value === 3) {
     let res = handleRegister()
-    if (res === true) {
-      const redirect = route.value.query.redirect || "/login"
-      console.log("redirect:", redirect)
-      setTimeout(() => {
-        router.push(redirect)
-      }, 3000)
-    } else {
-      active.value = 0
-    }
+    console.log("Res:", res)
+    res.then(value =>  {
+      if (value === true) {
+        const redirect = route.value.query.redirect || "/login"
+        console.log("redirect:", redirect)
+        setTimeout(() => {
+          router.push(redirect)
+        }, 3000)
+      } else {
+        console.log("redirectDDDDDDDDDDD:")
+        active.value = 0
+      }
+    })
   }
 }
 
@@ -336,12 +339,10 @@ const initOptions = async () => {
   getSchool().then(resp => {
     try {
       resp.data.forEach(unit => {
-        console.log(unit.School)
         schoolOptions.value.push({
           value:unit.School,
           label:unit.School
         })
-        console.log(schoolOptions)
       })
     } catch (error) {
       console.error(error)
@@ -350,12 +351,10 @@ const initOptions = async () => {
   getCollege().then(resp => {
     try {
       resp.data.forEach(unit => {
-        console.log(unit.College)
         collegeOptions.value.push({
           value:unit.College,
           label:unit.College
         })
-        console.log(collegeOptions)
       })
     } catch (error) {
       console.error(error)
@@ -364,12 +363,10 @@ const initOptions = async () => {
   getSemester().then(resp => {
     try {
       resp.data.forEach(unit => {
-        console.log(unit.semester)
         semesterOptions.value.push({
           value:unit.Semester,
           label:unit.Semester
         })
-        console.log(semesterOptions)
       })
     } catch (error) {
       console.error(error)

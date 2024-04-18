@@ -103,3 +103,11 @@ export function processRecoverEnroll(data) {
         data: data
     })
 }
+
+export function revokeEnroll(data) {
+    return request({
+        url: "/revokeEnroll",
+        method: "post",
+        data: data
+    })
+}

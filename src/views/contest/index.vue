@@ -128,20 +128,22 @@ const handleSizeChange = (curSize) => {
   param.page_size = curSize
   viewContest(param).then(resp => {
       console.log('分页数据获取成功',resp)
-      this.tableData = resp.data.list
-      this.recordTotal = resp.data.total
+      tableData.value = resp.data.list
+      recordTotal.value = resp.data.total
     })
   }
 
 // 点击分页监听方法
 const handleCurrentChange = async (curPage) => {
-    param.page_size = curPage
-    await viewContest(param).then(resp => {
-      console.log('分页数据获取成功',resp)
-      this.tableData = resp.data.list
-      this.recordTotal = resp.data.total
-    })
-  }
+  param.page_number = curPage
+  await viewContest(param).then(resp => {
+    console.log('分页数据获取成功', resp)
+    if(resp.code === 200){
+      tableData.value = resp.data.list
+      recordTotal.value = resp.data.total
+    }
+  })
+}
 
 const handleShowContest = async () => {
   param.page_number = 1

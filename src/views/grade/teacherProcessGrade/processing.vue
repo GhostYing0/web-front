@@ -61,11 +61,11 @@
       <!--        label="报名截至时间"-->
       <!--        show-overflow-tooltip>-->
       <!--    </el-table-column>-->
-      <el-table-column
-          prop="username"
-          label="用户名"
-          show-overflow-tooltip>
-      </el-table-column>
+<!--      <el-table-column-->
+<!--          prop="username"-->
+<!--          label="用户名"-->
+<!--          show-overflow-tooltip>-->
+<!--      </el-table-column>-->
       <el-table-column
           prop="name"
           label="姓名"
@@ -76,16 +76,16 @@
           label="学校"
           show-overflow-tooltip>
       </el-table-column>
-      <el-table-column
-          prop="phone"
-          label="电话"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="email"
-          label="邮箱"
-          show-overflow-tooltip>
-      </el-table-column>
+<!--      <el-table-column-->
+<!--          prop="phone"-->
+<!--          label="电话"-->
+<!--          show-overflow-tooltip>-->
+<!--      </el-table-column>-->
+<!--      <el-table-column-->
+<!--          prop="email"-->
+<!--          label="邮箱"-->
+<!--          show-overflow-tooltip>-->
+<!--      </el-table-column>-->
       <el-table-column
           prop="certificate"
           label="证明材料"
