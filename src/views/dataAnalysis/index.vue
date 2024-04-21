@@ -8,7 +8,7 @@
   router
   >
   <el-menu-item index="/contestStatistic">竞赛分析</el-menu-item>
-  <el-menu-item index="/contestTypeStatistic">竞赛类型统计</el-menu-item>
+  <!--<el-menu-item index="/contestTypeStatistic">竞赛类型统计</el-menu-item>-->
   <el-menu-item index="/enrollStatistic">报名统计</el-menu-item>
   <el-menu-item index="/schoolStatistic">学校报名成绩统计</el-menu-item>
   </el-menu>

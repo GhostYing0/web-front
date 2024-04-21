@@ -45,3 +45,10 @@ export function studentRewardRate(param) {
         params:param
     })
 }
+
+export function getContest() {
+    return request({
+        url: '/public/getContest',
+        method: 'get'
+    })
+}

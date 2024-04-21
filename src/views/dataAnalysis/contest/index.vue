@@ -10,7 +10,7 @@
               :options="contestOptions"
               :props="props"
               filterable
-              @change="initStudentContestSemesterChartData"
+              @change="handleGetData"
           />
         </div>
       </el-form-item>
@@ -45,7 +45,8 @@
 <script setup>
 import {onMounted, ref, reactive} from "vue"
 import * as echarts from 'echarts';
-import {studentContestSemester ,studentRewardRate} from "@/api/analysis";
+import {studentContestSemester ,studentRewardRate, getContest} from "@/api/analysis";
+import {getContestType} from "@/api/contest"
 
 
 const contestOptions = ref([])
@@ -54,16 +55,51 @@ const param = reactive({
   contest: "演讲竞赛"
 })
 
+const contestType = reactive({})
+
 const rewardRateChart = ref()
-const rewardRateChartData = ref()
+const rewardRateChartData = ref([])
+const rewardRateChartRate = reactive({})
 
 const studentContestSemesterChart = ref()
 const SemesterCountData = ref([])
 
-const initStudentContestSemesterChartData = () => {
-  if(contest.value) {
-    param.contest = contest.value
+const handleGetData = () => {
+  if(contest.value[1]) {
+    param.contest = contest.value[1]
   }
+  SemesterCountData.value = []
+  rewardRateChartData.value = []
+  initStudentContestSemesterChartData()
+  initRewardRateChartData()
+}
+
+const getContestAndType = () => {
+  getContestType().then(resp => {
+    let data = resp.data
+    data.forEach(element => {
+      contestType[element.type] = {value: element.type, label: element.type, children:[]}
+    })
+  }).catch(error => {
+    console.error(error)
+  })
+
+  getContest().then(resp => {
+    let data = resp.data
+    data.forEach(element => {
+      contestType[element.type].children.push({value:element.contest, label:element.contest})
+    })
+
+    for (const key in contestType) {
+      let value = contestType[key]
+      contestOptions.value.push(value)
+    }
+  }).catch(error => {
+    console.error(error)
+  })
+}
+
+const initStudentContestSemesterChartData = () => {
   studentContestSemester(param).then(resp => {
      console.log(resp)
     let data = resp.data.data
@@ -108,18 +144,22 @@ const initStudentContestSemesterChart = () => {
 }
 
 const initRewardRateChartData = () => {
-  if(contest.value) {
-    param.contest = contest.value
-  }
   studentRewardRate(param).then(resp => {
     console.log(resp)
+    rewardRateChartRate["rate"] = resp.data.rate
+    if(resp.data.reward_count > 0) {
+      rewardRateChartData.value.push({value: resp.data.reward_count, name: "获奖"})
+    }
+    if(resp.data.enroll_count - resp.data.reward_count > 0) {
+      rewardRateChartData.value.push({value: resp.data.enroll_count - resp.data.reward_count, name: "未获奖"})
+    }
     initRewardRateChart()
   }).catch(error => {
     console.error(error)
   })
 }
 const initRewardRateChart = () => {
-  const Chart = echarts.init(studentContestSemesterChart.value)
+  const Chart = echarts.init(rewardRateChart.value)
   let option = {
     title: {
       left: 'center'
@@ -134,7 +174,7 @@ const initRewardRateChart = () => {
         radius: '65%',
         center: ['50%', '50%'],
         selectedMode: 'single',
-        data: SemesterCountData.value,
+        data: rewardRateChartData.value,
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -151,6 +191,7 @@ const initRewardRateChart = () => {
 }
 
 
+onMounted(getContestAndType)
 onMounted(initStudentContestSemesterChartData)
 onMounted(initRewardRateChartData)
 </script>
