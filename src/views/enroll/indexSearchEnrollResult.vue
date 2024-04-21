@@ -2,7 +2,7 @@
     <div class="app-container">
         <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
-            <el-input v-model="param.contest_name" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            <el-input v-model="param.contest_name" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
             <div class="block">
               <el-date-picker
                   v-model="time_range"
@@ -32,12 +32,10 @@
         </div>
     </div>
 
-
-  用户管理界面
   <el-table
       ref="multipleTable"
       :data="tableData"
-      border
+      border=true
       style="width: 100%"
       @selection-change="handleSelectionChange"
   >
@@ -98,7 +96,7 @@
                 return formType.value === 0 ? '添加记录' : '修改记录';
             });
 
-            const time_range = ref()
+            const time_range = ref([])
             const multipleTable = ref()
             const multipleSelection = ref([])
 

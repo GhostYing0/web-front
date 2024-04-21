@@ -47,6 +47,20 @@
         label="报名截至时间"
         show-overflow-tooltip>
     </el-table-column>
+    <el-table-column
+        prop="desc"
+        label="竞赛简介"
+        show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+        prop="contest_state"
+        label="报名"
+        show-overflow-tooltip>
+        <template #default="{ row }">
+          <el-button v-if="row.contest_state === 1" @click="copyTextToClipboard(row)" type="success" size="small">点击报名</el-button>
+          <el-button v-else @click="handleUpdate(row)" type="info" size="small" disabled>不可报名</el-button>
+        </template>
+      </el-table-column>
   </el-table>
 
   <!--分页条-->
@@ -67,7 +81,7 @@
 import { ref , reactive, onMounted} from 'vue'
 import {viewContest, getContestType} from "@/api/contest";
 import {ElMessage} from "element-plus";
-
+import {router} from "@/router"
 
 const props = {
   expandTrigger: 'hover',
@@ -188,6 +202,17 @@ const handleShowMyContest = () => {
     }
   })
 }
+
+const copyTextToClipboard = async (row) => {  
+      try {  
+        const textToCopy = '这是要复制的文本';  
+        await navigator.clipboard.writeText(row.contest);  
+        alert('文本已复制到剪贴板！');  
+      } catch (err) {  
+        console.error('无法复制文本: ', err);  
+        alert('复制文本时出错，请检查浏览器权限。');  
+      }  
+    };  
 
 onMounted(initOptions)
 onMounted(handleShowContest)

@@ -87,7 +87,14 @@
                     })
                 })
             },
-        }
+            recvContest(contest) {
+                console.log(contest)
+                this.form.contest = contest
+                console.log(this.form.contest)
+                /*this.form.phone = this.$store.getters.phone
+                this.form.email = this.$store.getters.email*/
+            }
+        },
     }
 </script>
 
