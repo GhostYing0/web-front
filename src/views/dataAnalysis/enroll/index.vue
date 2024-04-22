@@ -418,6 +418,7 @@ onMounted(initCompareEnrollChartData)
   justify-content: space-between;
   align-items: stretch;
   .basic-chart-table-item {
+    box-shadow: 2px 2px 2px grey;
     flex: 0 0 calc(50% - 10px);
     margin-bottom: 20px;
     background-color: #f5f5f5;

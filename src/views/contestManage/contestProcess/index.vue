@@ -2,19 +2,23 @@
   <div class="app-container">
     <div class="filter-container" style="margin-bottom: 15px">
       <!-- 用户名输入 -->
-      <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-      <el-input v-model="param.contest_type" placeholder="类型" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+      <div class="filter">
+        <div class="input-container">
+          <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.contest_type" placeholder="类型" class="filter-item" @keyup.enter="handleFilter" />
+        </div>
+      </div>
     </div>
   </div>
 
-  竞赛管理界面
   <el-table
       ref="multipleTable"
       :data="tableData"
       border
-      style="width: 100%"
+      class="table"
       @selection-change="handleSelectionChange"
   >
+    <el-table-column label="待审核竞赛表">
     <el-table-column
         fixed
         type="selection"
@@ -92,6 +96,7 @@
         <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
         <el-button @click="handleReject(row, $index)" type="danger" size="small">驳回</el-button>
       </template>
+    </el-table-column>
     </el-table-column>
   </el-table>
 

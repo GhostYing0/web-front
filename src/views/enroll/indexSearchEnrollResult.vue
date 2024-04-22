@@ -2,9 +2,11 @@
     <div class="app-container">
         <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
-            <el-input v-model="param.contest_name" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-            <div class="block">
+          <div class="filter">
+            <div class="input-container">
+            <el-input v-model="param.contest_name" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
               <el-date-picker
+                  class="block"
                   v-model="time_range"
                   type="datetimerange"
                   start-placeholder="报名截止时间"
@@ -14,31 +16,36 @@
                   time-format="HH:mm"
                   @change="handleTime"
               />
-            </div>
-            <el-form-item label="审核状态" prop="role">
-                <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
-                <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
-                <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
-                <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
+              <div class="filter-button-container">
+                <el-button class="filter-button" type="primary" @click="handleFilter">
+                  搜索
+                </el-button>
+              </div>            </div>
+            <el-form-item label="审核状态" prop="role" class="filter-check">
+              <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
+              <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
+              <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
+              <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
             </el-form-item>
-            <br><br>
-            <!-- 一些按钮 -->
-            <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-042" @click="handleFilter">
-                搜索
-            </el-button>
-            <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowALL">
-                显示全部
-            </el-button>
+          </div>
         </div>
+      <div class="handle-container">
+      <!-- 一些按钮 -->
+        <el-button class="handle-button" type="primary" @click="handleShowALL">
+          显示全部
+        </el-button>
+      </div>
     </div>
 
   <el-table
+      class="table"
       ref="multipleTable"
       :data="tableData"
       border=true
       style="width: 100%"
       @selection-change="handleSelectionChange"
   >
+    <el-table-column label="我的报名">
     <el-table-column
         prop="contest"
         label="竞赛"
@@ -60,11 +67,20 @@
         <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
       </template>
     </el-table-column>
+    <el-table-column
+        label="上传成绩"
+        show-overflow-tooltip>
+      <template #default="{ row }">
+        <el-button  type="success" size="small" v-if="row.do_upload === true">上传</el-button>
+        <el-button  type="info" size="small" v-else plain disabled>不可上传</el-button>
+      </template>
+    </el-table-column>
     <el-table-column fixed="right" label="操作" width="150" type="index">
       <template #default="{ row }">
         <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state !== 3" plain disabled>撤回</el-button>
         <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state === 3">撤回</el-button>
       </template>
+    </el-table-column>
     </el-table-column>
   </el-table>
 

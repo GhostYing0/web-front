@@ -1,5 +1,5 @@
 <template>
-  <div class="basic-chart-table-item">
+  <div>
     <div class="title-item">
       <div class="chart-title">
       </div>
@@ -196,13 +196,14 @@ onMounted(initStudentContestSemesterChartData)
 onMounted(initRewardRateChartData)
 </script>
 
-<style>
+<style lang="scss">
 .basic-chart-table {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: stretch;
   .basic-chart-table-item {
+    box-shadow: 2px 2px 2px grey;
     flex: 0 0 calc(50% - 10px);
     margin-bottom: 20px;
     background-color: #f5f5f5;

@@ -1,45 +1,52 @@
 <template>
     <div class="app-container">
-        <div class="filter-container" style="margin-bottom: 15px">
+      <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
-            <el-input v-model="param.name" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-            <el-input v-model="param.username" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-            <el-input v-model="param.school" placeholder="学校" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-            <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-            <div class="block">
-              <el-date-picker
-                  v-model="time_range"
-                  type="datetimerange"
-                  start-placeholder="报名截止时间"
-                  end-placeholder="开赛时间"
-                  value-format="YYYY-MM-DD HH:mm:ss"
-                  date-format="YYYY/MM/DD ddd"
-                  time-format="HH:mm"
-                  @change="handleTime"
-              />
-            </div>
-            <el-input v-model="param.grade" placeholder="成绩" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-            <el-form-item label="审核状态" prop="role">
+          <div class="filter">
+            <div class="input-container">
+              <el-input v-model="param.name" placeholder="姓名" class="filter-item" @keyup.enter="handleFilter" />
+              <el-input v-model="param.username" placeholder="用户名"  class="filter-item" @keyup.enter="handleFilter" />
+              <el-input v-model="param.school" placeholder="学校" class="filter-item" @keyup.enter="handleFilter" />
+              <el-input v-model="param.contest" placeholder="竞赛名称"  class="filter-item" @keyup.enter="handleFilter" />
+                <!--<el-input v-model="param.grade" placeholder="成绩" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />-->
+              <div>
+                <el-date-picker
+                    class="block"
+                    v-model="time_range"
+                    type="datetimerange"
+                    start-placeholder="报名截止时间"
+                    end-placeholder="开赛时间"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    date-format="YYYY/MM/DD ddd"
+                    time-format="HH:mm"
+                    @change="handleTime"
+                />
+              </div>
+              <div class="filter-button-container">
+                <el-button class="filter-button" type="primary" @click="handleFilter">
+                  搜索
+                </el-button>
+              </div>
+              </div>
+              <el-form-item label="审核状态" prop="role" class="filter-check">
                 <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
                 <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
                 <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
                 <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
-            </el-form-item>
-            <br><br>
-            <!-- 一些按钮 -->
-            <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-042" @click="handleFilter">
-                搜索
-            </el-button>
-            <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowALL">
-                显示全部
-            </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="primary" icon="el-icon-a-07" @click="handleCreate">
-                添加成绩信息
-            </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="danger" icon="el-icon-a-022" @click="handleDeleteSome">
-                批量删除
-            </el-button>
+              </el-form-item>
+          </div>
         </div>
+      <div class="handle-container">
+        <el-button class="handle-button" type="primary" @click="handleShowALL">
+          显示全部
+        </el-button>
+        <el-button class="handle-button" type="primary" @click="handleCreate">
+          添加成绩信息
+        </el-button>
+        <el-button class="handle-delete-button" type="danger" @click="handleDeleteSome">
+          批量删除
+        </el-button>
+      </div>
     </div>
 
 
@@ -94,14 +101,15 @@
         </template>
     </el-dialog>
 
-    成绩管理界面
     <el-table
+            class="table"
             ref="multipleTable"
             :data="tableData"
             border
             style="width: 100%"
             @selection-change="handleSelectionChange"
     >
+      <el-table-column label="成绩管理界面">
         <el-table-column
                 fixed
                 type="selection"
@@ -179,6 +187,7 @@
                 <el-button @click="handleDelete(row, $index)" type="danger" size="small">删除</el-button>
             </template>
         </el-table-column>
+      </el-table-column>
     </el-table>
 
     <!--分页条-->

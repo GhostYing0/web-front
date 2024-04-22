@@ -2,31 +2,57 @@
   <div class="app-container">
     <div class="filter-container" style="margin-bottom: 15px">
       <!-- 用户名输入 -->
-      <el-input v-model="param.searchUser" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-      <el-input v-model="param.name" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-      <el-input v-model="param.school" placeholder="学校" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-      <el-input v-model="param.college" placeholder="学院" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-      <br><br>
+      <div class="filter">
+        <div class="input-container">
+          <el-input v-model="param.name" placeholder="用户名"  class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.school" placeholder="学校" class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.searchUser" placeholder="用户名"  class="filter-item" @keyup.enter="handleFilter" />
+          <div class="filter-button-container">
+            <el-button class="filter-button" type="primary" @click="handleFilter">
+              搜索
+            </el-button>
+          </div>
+        </div>
+        <div class="input-container">
+          <el-input v-model="param.name" placeholder="姓名"  class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.school" placeholder="学校"  class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.college" placeholder="学院"  class="filter-item" @keyup.enter="handleFilter" />
+          <el-date-picker
+              class="block"
+              v-model="time_range"
+              type="datetimerange"
+              start-placeholder="报名截止时间"
+              end-placeholder="开赛时间"
+              value-format="YYYY-MM-DD HH:mm:ss"
+              date-format="YYYY/MM/DD ddd"
+              time-format="HH:mm"
+              @change="handleTime"
+          />
+        </div>
+        <el-form-item label="性别" prop="gender" class="filter-check">
+            <el-radio v-model="param.gender" :label="''" @change="handleFilter">全部</el-radio>
+            <el-radio v-model="param.gender" :label="'男'" @change="handleFilter">男</el-radio>
+            <el-radio v-model="param.gender" :label="'女'" @change="handleFilter">女</el-radio>
+          </el-form-item>
+        </div>
+      </div>
+    </div>
+    <div class="handle-container">
       <!-- 一些按钮 -->
-      <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-042" @click="handleFilter">
+      <el-button class="handle-button" type="primary" @click="handleFilter">
         搜索
       </el-button>
-      <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowUser()">
+      <el-button class="handle-button" type="primary" @click="handleShowUser()">
         显示全部
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="primary" icon="el-icon-a-07" @click="handleCreate">
+      <el-button class="handle-button"  type="primary"  @click="handleCreate">
         添加用户
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="danger" icon="el-icon-a-022" @click="handleDeleteSome">
+      <el-button class="handle-delete-button"  type="danger" @click="handleDeleteSome">
         批量删除
       </el-button>
-      <el-form-item label="性别" prop="gender">
-        <el-radio v-model="param.gender" :label="''" @change="handleFilter">全部</el-radio>
-        <el-radio v-model="param.gender" :label="'男'" @change="handleFilter">男</el-radio>
-        <el-radio v-model="param.gender" :label="'女'" @change="handleFilter">女</el-radio>
-      </el-form-item>
     </div>
-  </div>
 
   <!--弹出框-->
   <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
@@ -65,13 +91,14 @@
     </template>
   </el-dialog>
 
-  用户管理界面
   <el-table
+      class="table"
       ref="multipleTable"
       :data="tableData"
       border style="width: 100%"
       @selection-change="handleSelectionChange"
   >
+    <el-table-column label="教师用户管理界面">
     <el-table-column
         fixed
         type="selection"
@@ -128,6 +155,7 @@
         <el-button @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
         <el-button @click="handleDelete(row, $index)" type="danger" size="small">删除</el-button>
       </template>
+    </el-table-column>
     </el-table-column>
   </el-table>
 

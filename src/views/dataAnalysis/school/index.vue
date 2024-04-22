@@ -14,11 +14,13 @@ import { onMounted } from 'vue';
     />
   </div>
   </div>
+  <div class="basic-chart-table-item">
     <div
     ref="schoolEnrollCountChart"
     id="schoolEnrollCountChart"
     :style="{ width: '1050px', height: '560px' }"
   ></div>
+  </div>
 </template>
 
 <script setup>
@@ -116,5 +118,12 @@ onMounted(initSchoolEnrollCountChartData)
     .block {
       margin-left: 100px;
     }
+  }
+  .basic-chart-table-item {
+    flex: 0 0 calc(50% - 10px);
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    padding: 10px;
+    box-sizing: border-box;
   }
 </style>

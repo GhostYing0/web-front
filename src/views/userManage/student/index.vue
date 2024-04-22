@@ -2,32 +2,41 @@
     <div class="app-container">
         <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
+          <div class="filter">
+            <div class="input-container">
             <el-input v-model="param.searchUser" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
             <el-input v-model="param.name" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
             <el-input v-model="param.class" placeholder="班级" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            </div>
+            <div class="input-container">
             <el-input v-model="param.school" placeholder="学校" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
             <el-input v-model="param.college" placeholder="学院" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
             <el-input v-model="param.semester" placeholder="入学年份" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-          <br><br>
-            <!-- 一些按钮 -->
-            <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-042" @click="handleFilter">
-                搜索
-            </el-button>
-            <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowUser()">
-                显示全部
-            </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="primary" icon="el-icon-a-07" @click="handleCreate">
-                添加用户
-            </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;font-size: 20px;" type="danger" icon="el-icon-a-022" @click="handleDeleteSome">
-                批量删除
-            </el-button>
-          <el-form-item label="性别" prop="gender">
-            <el-radio v-model="param.gender" :label="''" @change="handleFilter">全部</el-radio>
-            <el-radio v-model="param.gender" :label="'男'" @change="handleFilter">男</el-radio>
-            <el-radio v-model="param.gender" :label="'女'" @change="handleFilter">女</el-radio>
-          </el-form-item>
+              <div class="filter-button-container">
+                <el-button class="filter-button" type="primary"  @click="handleFilter">
+                  搜索
+                </el-button>
+              </div>
+            </div>
+            <el-form-item label="性别" prop="gender" class="filter-check">
+              <el-radio v-model="param.gender" :label="''" @change="handleFilter">全部</el-radio>
+              <el-radio v-model="param.gender" :label="'男'" @change="handleFilter">男</el-radio>
+              <el-radio v-model="param.gender" :label="'女'" @change="handleFilter">女</el-radio>
+            </el-form-item>
+          </div>
         </div>
+      <div class="handle-container">
+        <!-- 一些按钮 -->
+        <el-button  class="handle-button" type="primary"  @click="handleShowUser()">
+          显示全部
+        </el-button>
+        <el-button class="handle-button"  type="primary"  @click="handleCreate">
+          添加用户
+        </el-button>
+        <el-button class="handle-delete-button"  type="danger" @click="handleDeleteSome">
+          批量删除
+        </el-button>
+      </div>
     </div>
 
     <!--弹出框-->
@@ -73,13 +82,14 @@
         </template>
     </el-dialog>
 
-    用户管理界面
     <el-table
+            class="table"
             ref="multipleTable"
             :data="tableData"
             @selection-change="handleSelectionChange"
-            border style="width: 100%"
+            border
         >
+      <el-table-column label="学生用户管理界面">
         <el-table-column
                 fixed
                 type="selection"
@@ -141,6 +151,7 @@
                 <el-button @click="handleDelete(row, $index)" type="danger" size="small">删除</el-button>
             </template>
         </el-table-column>
+      </el-table-column>
     </el-table>
 
     <!--分页条-->

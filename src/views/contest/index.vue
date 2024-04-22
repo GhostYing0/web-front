@@ -1,23 +1,32 @@
 <template>
-  <div class="m-4">
+  <div class="filter-container" style="margin-bottom: 15px">
+    <div class="filter">
+      <div class="input-container">
     <p>竞赛类型</p>
     <el-cascader
+        class="filter-item"
         v-model="item"
         :options="options"
         :props="props"
         filterable
         @change="handleFilter"
     />
+        <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+        <div class="filter-button-container">
+        <el-button class="filter-button" type="primary"  @click="handleFilter">
+          搜索
+        </el-button>
+        </div>
   </div>
-  <div>
-    <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-    <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-042" @click="handleFilter">
-      搜索
-    </el-button>
-    <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowALL">
-      显示全部
-    </el-button>
+    </div>
   </div>
+  <div class="handle-container">
+  <!-- 一些按钮 -->
+  <el-button class="handle-button" type="primary" @click="handleShowALL">
+    显示全部
+  </el-button>
+  </div>
+
   竞赛列表
   <el-table
       ref="multipleTable"
