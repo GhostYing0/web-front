@@ -39,6 +39,11 @@ const asyncRoutes = [
                 roles: ["manager"]
             },
             {
+                path: "/managerManage",
+                component: () => import("@/views/userManage/index"),
+                roles: ["manager"]
+            },
+            {
                 path: "/contestManage",
                 component: () => import("@/views/contestManage/index"),
                 roles: ["manager"]
@@ -172,6 +177,7 @@ const constantRoutes= [
     {
         path: '/',
         redirect: '/dashboard',
+        component:() => import("@/layout/AppLayout"),
         children: [
             {
                 title: "系统",

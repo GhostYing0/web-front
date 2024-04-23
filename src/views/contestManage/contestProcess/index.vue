@@ -16,6 +16,7 @@
       :data="tableData"
       border
       class="table"
+      height="435px"
       @selection-change="handleSelectionChange"
   >
     <el-table-column label="待审核竞赛表">

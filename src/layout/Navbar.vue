@@ -80,7 +80,7 @@
         overflow: hidden;
         position: relative;
         background: #fff;
-        background-color: orange;
+        background-color: darkorange;
 
 
           .dropdown-button {
@@ -145,7 +145,7 @@
         }
       .avatar-container {
         margin-top: 10px;
-        margin-right: -1150px;
+        margin-right: -83vw;
       }
     }
 </style>

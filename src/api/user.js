@@ -189,7 +189,15 @@ export function updateProfile(data) {
     })
 }
 
-export  function updateTeacherProfile(data) {
+export function updateTeacherProfile(data) {
+    return request({
+        url: '/updateTeacherProfile',
+        method: 'post',
+        data: data
+    })
+}
+
+export function updateTeacherProfile(data) {
     return request({
         url: '/updateTeacherProfile',
         method: 'post',

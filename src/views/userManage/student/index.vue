@@ -88,6 +88,7 @@
             :data="tableData"
             @selection-change="handleSelectionChange"
             border
+            height="435px"
         >
       <el-table-column label="学生用户管理界面">
         <el-table-column

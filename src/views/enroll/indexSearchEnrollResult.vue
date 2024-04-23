@@ -38,6 +38,7 @@
     </div>
 
   <el-table
+      height="54vh"
       class="table"
       ref="multipleTable"
       :data="tableData"

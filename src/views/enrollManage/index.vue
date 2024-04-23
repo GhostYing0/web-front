@@ -103,6 +103,7 @@
             border
             style="width: 100%"
             header-align="center"
+            height="435px"
             @selection-change="handleSelectionChange"
     >
       <el-table-column label="报名信息管理界面">

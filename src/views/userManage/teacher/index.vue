@@ -92,6 +92,7 @@
   </el-dialog>
 
   <el-table
+      height="435px"
       class="table"
       ref="multipleTable"
       :data="tableData"

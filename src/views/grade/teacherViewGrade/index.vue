@@ -1,26 +1,33 @@
 <template>
     <div class="app-container">
       <div class="filter-container" style="margin-bottom: 15px">
+        <div class="filter">
+          <div class="input-container">
+            <el-cascader
+                v-model="item"
+                :options="options"
+                :props="props"
+                filterable
+                @change="handleFilter"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <div>
-      <el-cascader
-          v-model="item"
-          :options="options"
-          :props="props"
-          filterable
-          @change="handleFilter"
-      />
     </div>
-    <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowContest">
+  <div class="handle-container">
+    <el-button class="handle-button" type="primary" @click="handleShowContest">
       显示全部
     </el-button>
-  
-    审核报名
+  </div>
+
     <el-table
+        class="table"
         ref="multipleTable"
         :data="tableData"
         border
+        height="435px"
         style="width: 100%"
         @selection-change="handleSelectionChange"
     >
@@ -29,6 +36,7 @@
       <!--        type="selection"-->
       <!--        width="55">-->
       <!--    </el-table-column>-->
+      <el-table-column label="成绩信息表">
       <el-table-column
           fixed
           prop="id"
@@ -113,6 +121,7 @@
         <template #default="{ row, $index}">
           <el-button @click="handleRecover(row, $index)" type="primary" size="small"> 重新审核</el-button>
         </template>
+      </el-table-column>
       </el-table-column>
     </el-table>
   

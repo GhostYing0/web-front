@@ -4,7 +4,7 @@
             <!--<AppMenu/>-->
           <el-header class="header"><Navbar/></el-header>
             <el-container class="container">
-              <el-aside class="aside" v-show="store.getters.sidebar.opened">
+              <el-aside class="aside" v-if="store.getters.sidebar.opened">
                 <template v-if="store.getters.roles.includes('manager')">
                   <AppMenu/>
                 </template>
@@ -37,23 +37,22 @@
         background: #a1e9d2;
         height: 80px;
         padding: 0;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        border-radius: 7px;
       }
 
       .container {
         display: flex;
 
-        main {
+        .main {
           flex: 5;
         }
 
-        aside {
-          background: white;
-          flex: 1;
-          transition: all 0.3s ease;
-        }
 
-        aside[v-show="false"] {
-          transform: translateX(-100%);
+        .aside {
+          flex: 1;
+          border: solid 1px;
+          background-color: #2c3e50;
         }
       }
     }

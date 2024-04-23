@@ -137,23 +137,19 @@
 </script>
 <style lang="scss">
   .root-background {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
     background-color: #5a5e66;
     .login-container {
       background-color: white;
       margin-left: auto;
       margin-right: auto;
-      margin-top: 10%;
-      width: 700px;
+      margin-top: 20vh;
+      width: 90vh;
       border-style: solid;
       border-width: 3px;
       display: flex;
       flex-direction: row;
       align-items: center;
-      height: 300px;
+      height: 40vh;
 
       .login-icon {
         flex: 3;
@@ -188,9 +184,4 @@
       }
     }
   }
-//  //  .login-button .el-button {
-//  //      display: flex; /* 使用 flexbox 布局 */
-//  //justify-content: space-between; /* 两端对齐，确保按钮之间有间隔 */
-//  //      margin: 0 5px; /* 可选：按钮之间的间距 */
-//}
 </style>

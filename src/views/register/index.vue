@@ -159,8 +159,9 @@
       <div class="register-step-form" v-if="active === 3">注册成功,3秒后跳转到登陆界面</div>
     </el-form>
     <div class="register-step-button">
-      <el-button  v-if="active > 0" @click="prev">上一步</el-button>
-      <el-button  v-if="active < 2" @click="next">下一步</el-button>
+      <el-button class="register-return-button" type="warning" @click="returnToLogin">返回登陆</el-button>
+      <el-button type="primary" v-if="active > 0" @click="prev">上一步</el-button>
+      <el-button type="primary" v-if="active < 2" @click="next">下一步</el-button>
     </div>
   </div>
   </div>
@@ -183,6 +184,10 @@ const semesterOptions = ref([])
 const item_school = ref()
 const item_college = ref()
 const item_semester = ref()
+
+const returnToLogin = () => {
+  router.push("login")
+}
 
 const validateUsername = (rule, value, callback) => {
   if (!value) {

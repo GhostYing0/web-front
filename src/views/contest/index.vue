@@ -27,14 +27,16 @@
   </el-button>
   </div>
 
-  竞赛列表
   <el-table
+      class="table"
       ref="multipleTable"
       :data="tableData"
       border
+      height="435px"
       style="width: 100%"
       @selection-change="handleSelectionChange"
   >
+    <el-table-column label="竞赛列表">
     <el-table-column
         prop="contest"
         label="竞赛名称"
@@ -70,6 +72,7 @@
           <el-button v-else @click="handleUpdate(row)" type="info" size="small" disabled>不可报名</el-button>
         </template>
       </el-table-column>
+    </el-table-column>
   </el-table>
 
   <!--分页条-->

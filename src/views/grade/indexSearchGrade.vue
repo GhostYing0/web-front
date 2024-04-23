@@ -45,6 +45,7 @@
       ref="multipleTable"
       :data="tableData"
       border
+      height="435px"
       style="width: 100%"
       @selection-change="handleSelectionChange"
   >

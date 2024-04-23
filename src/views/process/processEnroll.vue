@@ -49,6 +49,7 @@
             :data="tableData"
             border
             style="width: 100%"
+            height="435px"
             @selection-change="handleSelectionChange"
     >
         <el-table-column

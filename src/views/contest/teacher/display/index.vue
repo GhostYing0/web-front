@@ -1,31 +1,40 @@
 <template>
-  <div class="m-4">
-    <p>竞赛类型</p>
-    <el-cascader
-        v-model="item"
-        :options="options"
-        :props="props"
-        filterable
-        @change="handleFilter"
-    />
+  <div class="filter-container" style="margin-bottom: 15px">
+    <div class="filter">
+      <div class="input-container">
+        竞赛类型
+        <el-cascader
+            class="filter-item"
+            v-model="item"
+            :options="options"
+            :props="props"
+            filterable
+            @change="handleFilter"
+        />
+        <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+        <el-button class="filter-button" type="primary" @click="handleFilter">
+          搜索
+        </el-button>
+      </div>
+    </div>
   </div>
   <div>
-    <el-input v-model="param.contest" placeholder="竞赛名称" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-    <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-042" @click="handleFilter">
-      搜索
-    </el-button>
-    <el-button v-waves class="filter-item" type="primary" style="font-size: 20px;" icon="el-icon-a-041" @click="handleShowMyContest">
-      显示全部
-    </el-button>
+    <div class="handle-container">
+      <el-button class="handle-button" type="primary" @click="handleShowMyContest">
+        显示全部
+      </el-button>
+    </div>
   </div>
-  竞赛列表
   <el-table
+      class="table"
       ref="multipleTable"
       :data="tableData"
       border
       style="width: 100%"
+      height="435px"
       @selection-change="handleSelectionChange"
   >
+    <el-table-column label="上传竞赛表">
     <el-table-column
         prop="id"
         label="id"
@@ -78,6 +87,7 @@
         <el-button type="warning">关闭报名</el-button>
         <el-button @click="handleRevoke(row, $index)" type="danger" size="small">撤销</el-button>
       </template>
+    </el-table-column>
     </el-table-column>
   </el-table>
 
