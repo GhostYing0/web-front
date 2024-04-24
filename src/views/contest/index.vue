@@ -66,10 +66,12 @@
     <el-table-column
         prop="contest_state"
         label="报名"
-        show-overflow-tooltip>
+        show-overflow-tooltip
+        v-if="store.getters.roles.includes('student')">
         <template #default="{ row }">
-          <el-button v-if="row.contest_state === 1" @click="copyTextToClipboard(row)" type="success" size="small">点击报名</el-button>
-          <el-button v-else @click="handleUpdate(row)" type="info" size="small" disabled>不可报名</el-button>
+          <el-button v-if="row.contest_state === 1 && row.state === 1" @click="copyTextToClipboard(row)" type="success" size="small">点击报名</el-button>
+          <el-button v-else type="info" size="small" disabled>不可报名</el-button>
+
         </template>
       </el-table-column>
     </el-table-column>
@@ -94,6 +96,7 @@ import { ref , reactive, onMounted} from 'vue'
 import {viewContest, getContestType} from "@/api/contest";
 import {ElMessage} from "element-plus";
 import {router} from "@/router"
+import store from "@/store";
 
 const props = {
   expandTrigger: 'hover',

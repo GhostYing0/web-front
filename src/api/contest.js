@@ -138,3 +138,26 @@ export function getSemester() {
         method: 'get'
     })
 }
+
+export function getContestForTeacher() {
+    return request({
+        url: '/getContestForTeacher',
+        method: 'get'
+    })
+}
+
+export function transformState(data) {
+    return request({
+        url: '/transformState',
+        method: 'post',
+        data:data
+    })
+}
+
+export function cancelContest(data) {
+    return request({
+        url: '/cancelContest',
+        method: 'post',
+        data:data
+    })
+}

@@ -197,11 +197,44 @@ export function updateTeacherProfile(data) {
     })
 }
 
-export function updateTeacherProfile(data) {
+export function getManager(param) {
     return request({
-        url: '/updateTeacherProfile',
+        url: '/cms/getManager',
+        method: 'get',
+        params: param
+    })
+}
+
+export function addManager(data) {
+    return request({
+        url: '/cms/addManager',
         method: 'post',
         data: data
     })
 }
+
+export function updateManager(data) {
+    return request({
+        url: '/cms/updateManager',
+        method: 'post',
+        data: data
+    })
+}
+
+export function deleteManager(data) {
+    return request({
+        url: '/cms/deleteManager',
+        method: 'delete',
+        data: data
+    })
+}
+
+export function getManagerCount() {
+    return request({
+        url: '/cms/getManager',
+        method: 'get',
+    })
+}
+
+
 

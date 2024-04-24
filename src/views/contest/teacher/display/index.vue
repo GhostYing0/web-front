@@ -2,19 +2,30 @@
   <div class="filter-container" style="margin-bottom: 15px">
     <div class="filter">
       <div class="input-container">
-        竞赛类型
         <el-cascader
             class="filter-item"
             v-model="item"
             :options="options"
             :props="props"
+            placeholder="竞赛类型"
             filterable
             @change="handleFilter"
         />
-        <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
-        <el-button class="filter-button" type="primary" @click="handleFilter">
-          搜索
-        </el-button>
+        <el-cascader
+            class="filter-item"
+            v-model="item_contest"
+            :options="contestOptions"
+            :props="props"
+            placeholder="竞赛名称"
+            filterable
+            @change="handleFilter"
+        />
+<!--        <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />-->
+        <div class="filter-button-container">
+          <el-button class="filter-button" type="primary" @click="handleFilter">
+            搜索
+          </el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -31,7 +42,7 @@
       :data="tableData"
       border
       style="width: 100%"
-      height="435px"
+      height="61vh"
       @selection-change="handleSelectionChange"
   >
     <el-table-column label="上传竞赛表">
@@ -40,39 +51,56 @@
         label="id"
         show-overflow-tooltip v-if="store.getters.roles.includes('manager')">
     </el-table-column>
+      <el-table-column type="expand"
+                       label="简介"
+                       width="70px">
+        <template #default="props">
+          <div m="4">
+            <el-text>{{props.row.desc}}</el-text>
+          </div>
+        </template>
+      </el-table-column>
     <el-table-column
         prop="contest"
         label="竞赛名称"
+        width="100px"
         show-overflow-tooltip>
     </el-table-column>
     <el-table-column
         prop="contest_type"
         label="竞赛类型"
-        width="55"
+        width="100px"
         show-overflow-tooltip>
     </el-table-column>
     <el-table-column
+        sortable
         prop="deadline"
         label="报名截至时间"
+        width="200px"
         show-overflow-tooltip>
     </el-table-column>
     <el-table-column
         prop="start_time"
+        sortable
         label="开赛时间"
+        width="200px"
         show-overflow-tooltip>
     </el-table-column>
     <el-table-column
         prop="contest_state"
         label="竞赛状态"
+        width="100px"
         show-overflow-tooltip>
       <template #default="{ row }">
-        <el-tag v-if="row.contest_state === 1" type="success">可报名</el-tag>
+        <el-tag v-if="row.contest_state === 1 && row.state === 1" type="success">可报名</el-tag>
         <el-tag v-else-if="row.contest_state === 2" type="info">不可报名</el-tag>
+        <el-tag v-else type="info">不可报名</el-tag>
       </template>
     </el-table-column>
     <el-table-column
         prop="state"
         label="审核状态"
+        width="100px"
         show-overflow-tooltip>
       <template #default="{ row }">
         <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
@@ -81,11 +109,20 @@
         <el-tag v-else-if="row.state === 4" type="danger">已撤回</el-tag>
       </template>
     </el-table-column>
-    <el-table-column fixed="right" label="操作" width="150" type="index">
+    <el-table-column fixed="right" label="操作" width="270px" type="index">
       <template #default="{ row, $index }">
-        <el-button @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
-        <el-button type="warning">关闭报名</el-button>
-        <el-button @click="handleRevoke(row, $index)" type="danger" size="small">撤销</el-button>
+        <el-button v-if="row.state === 3" @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
+        <el-button v-else type="primary" size="small" disabled>编辑</el-button>
+        <template v-if="row.state === 1">
+        <el-button v-if="row.contest_state === 1" size="small" @click="transformContestState(row)" type="warning">关闭报名</el-button>
+        <el-button v-if="row.contest_state === 2" size="small" @click="transformContestState(row)" type="success">打开报名</el-button>
+        </template>
+        <template v-else>
+          <el-button size="small"  type="success" disabled>打开报名</el-button>
+        </template>
+        <el-button v-if="row.state === 3" @click="handleRevoke(row, $index)" type="danger" size="small">撤销</el-button>
+        <el-button v-else  type="danger" size="small" disabled>撤销</el-button>
+
       </template>
     </el-table-column>
     </el-table-column>
@@ -147,10 +184,11 @@ import {
   updateTeacherContest,
   addContest,
   getContestCount,
-  updateContest
+  updateContest, cancelContest
 } from "@/api/contest";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 import store from "@/store";
+import {getContestForTeacher, transformState} from "@/api/contest";
 
 
 const props = {
@@ -179,6 +217,7 @@ const form = reactive({
 })
 
 const item = ref()
+const item_contest = ref('')
 const form_item = ref("")
 
 const time_range = ref()
@@ -186,6 +225,9 @@ const tableData = ref([])
 const recordTotal = ref(0)
 
 const options = ref([])
+const contestOptions = ref([])
+
+const contestType = reactive({})
 
 // 对话框表单显示
 const dialogFormVisible = ref(false)
@@ -199,17 +241,37 @@ const initOptions = async () => {
           value:unit.type,
           label:unit.type
         })
+        contestType[unit.type] = {value: unit.type, label: unit.type, children:[]}
         console.log(options)
       })
     } catch (error) {
       console.error(error)
     }
   })
+
+  getContestForTeacher().then(resp => {
+    let data = resp.data
+    data.forEach(element => {
+      contestType[element.type].children.push({value:element.contest, label:element.contest})
+    })
+
+    for (const key in contestType) {
+      let value = contestType[key]
+      contestOptions.value.push(value)
+    }
+  }).catch(error => {
+    console.error(error)
+  })
 }
 
 const handleFilter = () => {
   param.page_number = 1
-  param.type = item.value[0]
+  if(item.value) {
+    param.type = item.value[0]
+  }
+  if(item_contest.value[1]) {
+    param.contest = item_contest.value[1]
+  }
   viewTeacherContest(param).then(resp => {
     console.log(resp)
     if(resp.code === 200) {
@@ -267,6 +329,7 @@ const handleShowMyContest = () => {
   param.type=''
   param.state= -1
   item.value = ""
+  item_contest.value = ""
 
   viewTeacherContest(param).then(resp => {
     console.log(resp)
@@ -278,7 +341,7 @@ const handleShowMyContest = () => {
 }
 
 const handleType = () => {
-  form.contest_type = form_item.value[0]
+  form.type = form_item.value[0]
 }
 
 const handleTime = () => {
@@ -288,13 +351,22 @@ const handleTime = () => {
 }
 
 const handleRevoke = (row) => {
-  form.state = 4
   form.id = row.id
-  form.contest =  row.contest
-  form_item.value = row.contest_type
-  form.contest_type = form_item.value
-  time_range.value = [row.deadline,row.start_time]
-  submitForm()
+  cancelContest(form).then(resp => {
+    if(resp.code === 200) {
+      ElMessage({
+        type: 'success',
+        message: '更新成功',
+      })//
+      handleCurrentChange(param.page_number)
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '更新失败',
+      })//
+    }
+    dialogFormVisible.value = false  // 关闭对话框
+  })
 }
 
 // 点击修改竞赛信息
@@ -303,10 +375,10 @@ const handleUpdate = (row) => {
   console.log("handleUpdate")
   // 将空数据置入form
   form.id= row.id
-  form.contest=  row.contest
-  form_item.value = row.contest_type
-  form.contest_type = form_item.value
-  time_range.value = [row.deadline,row.start_time]
+  // form.contest=  row.contest
+  // form_item.value = row.contest_type
+  // form.type = form_item.value
+  // time_range.value = [row.deadline,row.start_time]
   // form.start_time=  row.start_time
   // form.deadline=  row.deadline
   // 显示表单框
@@ -331,6 +403,46 @@ const submitForm = () => {
       }
       dialogFormVisible.value = false  // 关闭对话框
     })
+}
+
+const transformContestState = (row) => {
+  form.id = row.id
+  if(row.contest_state === 1) {
+    form.contest_state = 2
+  } else {
+    form.contest_state = 1
+  }
+  if(form.contest_state === 2) {
+    //ElMessageBox.confirm('确定关闭该竞赛报名?').then(() => {
+         ElMessageBox({
+           message:'确定关闭该竞赛报名?',
+           confirmButtonText: '确定',
+           cancelButtonText: '取消',
+         }).then(() => {
+      transformState(form).then(resp => {
+        if (resp.code === 200) {
+          handleCurrentChange(param.page_number)
+        }
+      }).catch(error => {
+        console.error(error)
+      })
+    }).catch(() => {
+      console.log("取消")
+    })
+  } else {
+    ElMessageBox.confirm('确定开启该竞赛报名?').then(() => {
+      transformState(form).then(resp => {
+        if (resp.code === 200) {
+          console.log("asdasd")
+          handleCurrentChange(param.page_number)
+        }
+      }).catch(error => {
+        console.error(error)
+      })
+    }).catch(() => {
+      console.log("取消")
+    })
+  }
 }
 
 onMounted(initOptions)
