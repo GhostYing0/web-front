@@ -20,6 +20,21 @@
     </el-button>
   </div>
 
+  <!--弹出框-->
+  <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
+    <!--普通表单-->
+    <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
+      <el-form-item label="驳回原因" prop="reject_reason">
+        <el-input v-model="form.reject_reason"></el-input>
+      </el-form-item>
+    </el-form>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="cancel">取 消</el-button>
+      <el-button type="primary" @click="handleReject">确 定</el-button>
+    </div>
+  </el-dialog>
+
     <el-table
         class="table"
         ref="multipleTable"
@@ -120,7 +135,7 @@
       <el-table-column fixed="right" label="操作" width="150" type="index">
         <template #default="{ row, $index}">
           <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
-          <el-button @click="handleReject(row, $index)" type="danger" size="small">驳回</el-button>
+          <el-button @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>
         </template>
       </el-table-column>
       </el-table-column>
@@ -162,10 +177,14 @@
     multipleSelection.value = selection
     console.log(multipleSelection.value)
   }
-  
+
+  const delete_index = ref()
+
   const item = ref()
   const form_item = ref("")
   const options = ref([])
+
+  const dialogFormVisible = ref(false)
   
   // 表格数据
   const tableData = ref([])
@@ -181,6 +200,7 @@
     end_time: '',
     school: "",
     college: "",
+    reject_reason: "",
     name: "",
     state: -1
   })
@@ -277,17 +297,30 @@
       }
     })
   }
-  
-  const handleReject = (row, index) => {
+
+
+  const writeRejectReason = (row, index) => {
     form.state = 2
     form.id = row.id
+    delete_index.value = index
+    dialogFormVisible.value = true
+  }
+
+  const cancel = () => {
+    form.state = -1
+    form.id = 0
+    delete_index.value = 0
+    dialogFormVisible.value = false
+  }
+
+  const handleReject = () => {
     processRejectEnroll(form).then(resp => {
       if(resp.code === 200) {
         ElMessage({
           type: 'success',
           message: '更新成功',
         })//
-        tableData.value.splice(index, 1)
+        tableData.value.splice(delete_index.value, 1)
         // 如果删完了，获取上一页
         if(tableData.value.length === 0) {
           param.page_number = handleCurrentChange - 1
@@ -300,6 +333,7 @@
         })//
       }
     })
+    dialogFormVisible.value = false
   }
   
   const initOptions = async () => {

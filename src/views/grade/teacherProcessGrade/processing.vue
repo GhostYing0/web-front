@@ -20,6 +20,20 @@
     </el-button>
   </div>
 
+  <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
+    <!--普通表单-->
+    <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
+      <el-form-item label="驳回原因" prop="reject_reason">
+        <el-input v-model="form.reject_reason"></el-input>
+      </el-form-item>
+    </el-form>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="cancel">取 消</el-button>
+      <el-button type="primary" @click="handleReject">确 定</el-button>
+    </div>
+  </el-dialog>
+
     <el-table
         class="table"
         ref="multipleTable"
@@ -41,6 +55,15 @@
           label="序号"
           width="55" v-if="store.getters.roles.includes('manager')">
       </el-table-column>
+        <el-table-column type="expand"
+                         label="备注"
+                         width="70px">
+          <template #default="props">
+            <div>
+              <el-text>{{props.row.ps}}</el-text>
+            </div>
+          </template>
+        </el-table-column>
       <el-table-column
           prop="contest"
           label="竞赛名称"

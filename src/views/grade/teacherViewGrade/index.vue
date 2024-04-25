@@ -43,6 +43,15 @@
           label="序号"
           width="55" v-if="store.getters.roles.includes('manager')">
       </el-table-column>
+        <el-table-column type="expand"
+                         label="备注"
+                         width="70px">
+          <template #default="props">
+            <div>
+              <el-text>{{props.row.ps}}</el-text>
+            </div>
+          </template>
+        </el-table-column>
       <el-table-column
           prop="contest"
           label="竞赛名称"

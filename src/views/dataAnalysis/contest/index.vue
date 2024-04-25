@@ -3,16 +3,15 @@
     <div class="title-item">
       <div class="chart-title">
       </div>
-      <el-form-item class="form-item" prop="school" label="竞赛" label-width="80px" style="width:180px">
-        <div class="m-4">
+      <el-form-item class="form-item" prop="school" label="竞赛" label-width="80px" style="width:500px">
           <el-cascader
+              style="width: 300px;"
               v-model="contest"
               :options="contestOptions"
               :props="props"
               filterable
               @change="handleGetData"
           />
-        </div>
       </el-form-item>
     </div>
   </div>
@@ -197,6 +196,9 @@ onMounted(initRewardRateChartData)
 </script>
 
 <style lang="scss">
+.select {
+  width: 1000px;
+}
 .basic-chart-table {
   display: flex;
   flex-wrap: wrap;

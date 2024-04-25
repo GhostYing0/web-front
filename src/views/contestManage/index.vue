@@ -110,6 +110,15 @@
                 type="selection"
                 width="55">
         </el-table-column>
+        <el-table-column type="expand"
+                         label="简介"
+                         width="70px">
+          <template #default="props">
+            <div>
+              <el-text>{{props.row.desc}}</el-text>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column
                 fixed
                 prop="id"

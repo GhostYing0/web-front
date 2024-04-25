@@ -40,9 +40,6 @@
     </div>
     <div class="handle-container">
       <!-- 一些按钮 -->
-      <el-button class="handle-button" type="primary" @click="handleFilter">
-        搜索
-      </el-button>
       <el-button class="handle-button" type="primary" @click="handleShowUser()">
         显示全部
       </el-button>

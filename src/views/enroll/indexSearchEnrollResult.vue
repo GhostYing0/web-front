@@ -34,8 +34,54 @@
         <el-button class="handle-button" type="primary" @click="handleShowALL">
           显示全部
         </el-button>
+        <el-text>将光标悬停在未通过标签上查看驳回原因</el-text>
+
       </div>
     </div>
+
+  <!--弹出框-->
+  <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
+    <!--普通表单-->
+    <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
+      <el-form-item label="竞赛名称" prop="name">
+        <el-input v-model="form.contest" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="成绩">
+        <el-input v-model="form.grade" />
+      </el-form-item>
+      <el-form-item label="证明材料">
+        <el-upload
+            ref="uploadRef"
+            class="upload-demo"
+            drag
+            action="http://localhost:9006/api/public/v1/upload"
+            :on-change="handleChange"
+            :limit="1"
+            :on-exceed="handleChange"
+            :auto-upload="false"
+            name="file"
+        >
+          <el-icon class="esl-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            Drop file here or <em>click to upload</em>
+          </div>
+          <template #tip>
+            <div class="el-upload__tip">
+              jpg/png files with a size less than 500kb
+            </div>
+          </template>
+        </el-upload>
+      </el-form-item>
+      <el-form-item label="备注">
+        <el-input v-model="form.ps" type="textarea" />
+      </el-form-item>
+    </el-form>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="handleClearForm">取 消</el-button>
+      <el-button type="primary" @click="handleCreate">提交</el-button>
+    </div>
+  </el-dialog>
 
   <el-table
       height="54vh"
@@ -52,6 +98,11 @@
         label="竞赛"
         show-overflow-tooltip>
     </el-table-column>
+      <el-table-column
+          prop="start_time"
+          label="开赛时间"
+          show-overflow-tooltip>
+      </el-table-column>
     <el-table-column
         prop="create_time"
         label="报名时间"
@@ -62,17 +113,23 @@
         label="审核状态"
         show-overflow-tooltip>
       <template #default="{ row }">
+        <el-tooltip
+            class="box-item"
+            effect="dark"
+            :content="row.reject_reason"
+            placement="top-start"
+        ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+        </el-tooltip>
         <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
-        <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
         <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
-        <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
+        <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
       </template>
     </el-table-column>
     <el-table-column
         label="上传成绩"
         show-overflow-tooltip>
       <template #default="{ row }">
-        <el-button  type="success" size="small" v-if="row.do_upload === true">上传</el-button>
+        <el-button  type="success" size="small" v-if="row.do_upload === true" @click="openUploadGrade(row)">上传</el-button>
         <el-button  type="info" size="small" v-else plain disabled>不可上传</el-button>
       </template>
     </el-table-column>
@@ -101,8 +158,12 @@
 
 <script>
     import {getUserEnroll, revokeEnroll} from '@/api/enroll'
-    import {computed, ref} from "vue"
+    import {computed, reactive, ref} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
+    import {uploadGrade} from "@/api/grade";
+    import { getToken } from '@/utils/auth'
+    import axios from "axios";
+    import store from "@/store";
 
     export default {
         //创建后
@@ -122,13 +183,106 @@
                 console.log(multipleSelection.value)
             }
 
+           const form = reactive({
+                  state: -1,
+                  contest: "",
+                  certificate: "",
+                  grade: "",
+                  ps: "",
+            })
+
             const value = ref('');
             const defaultTime = new Date(2000, 1, 1, 12, 0, 0);
 
+            const formPic = reactive({
+              file: '',
+            })
+
+            const uploadRef = ref(null); // 上传组件的引用，需要是 null，因为组件可能还没有挂载
+            // 处理文件变化
+            const handleChange = (file) => {
+              console.log("文件变化：", file);
+              uploadRef.value = file
+              // 如果这里是要引用某个上传组件的实例，请确保该组件正确传递了引用
+              // uploadRef.value = file; // 这一步取决于你的上传组件API，可能需要的是文件对象，而不是组件实例
+            };
+
+            // 创建Axios实例，用于特定的请求配置
+            const uploadAxios = axios.create({
+              baseURL: "http://localhost:9006/api/",
+              timeout: 5000
+            })
+
+            // 为这个特定的Axios实例设置请求拦截器
+            uploadAxios.interceptors.request.use(config => {
+              // 这里可以添加或覆盖头部信息
+              config.headers["Content-Type"] = 'multipart/form-data'
+              config.headers["BackServer-token"] = getToken()
+              return config;
+            }, error => {
+              return Promise.reject(error);
+            });
+
+          const handleClearForm = () => {
+            dialogFormVisible.value = false
+            form.state = -1;
+            form.contest = '';
+            form.grade = '';
+            form.certificate = '';
+            form.ps = '';
+            uploadRef.value = null
+          }
+
+          // 创建表单
+          const handleCreate = async () => {
+            // 假设 uploadRef.value 是一个具有 submit 方法的上传组件实例
+            //if (uploadRef.value && typeof uploadRef.value.submit === 'function') {
+            if (uploadRef.value) {
+              console.log("(((((((^^^^^^^^^^^^^^^^^^^676")
+              formPic.file = uploadRef.value
+              //发送请求到后端接口
+              const resp = await uploadAxios.post('public/v1/upload', formPic)
+              console.log("resp:",resp)
+              if(resp.data.code === 200) {
+                form.certificate = resp.data.data.imageurl
+              }
+            }
+
+            try {
+              const resp = await uploadGrade(form);
+              console.log("addUser:", resp);
+              if (resp.code === 200) {
+                ElMessage({
+                  type: 'success',
+                  message: '提交成功',
+                });
+              } else {
+                ElMessage({
+                  type: 'error',
+                  message: '提交失败',
+                });
+              }
+            } catch (error) {
+              ElMessage({
+                type: 'error',
+                message: '提交失败',
+              });
+            }
+            dialogFormVisible.value = false
+            handleClearForm()
+          };
+
+          const dialogFormVisible = ref(false)
+
             return {
                 value,
+                form,
                 time_range,
                 defaultTime,
+              handleClearForm,
+                handleCreate,
+                handleChange,
+              dialogFormVisible,
 
                 formType,
                 formTitle,
@@ -165,9 +319,7 @@
                 tableData: [],
                 // 记录总数
                 recordTotal: 0,
-                form : {
-                  state: ""
-                },
+
                 // 查询参数
                 param: {
                     page_number: 1,
@@ -182,8 +334,7 @@
 
 
                 // 对话框表单显示
-                dialogFormVisible: false,
-                // 表单类型（添加数据:0,修改数据:1）
+                //dialogFormVisible: false,
 
             };
         },
@@ -191,6 +342,10 @@
             return this.handleShowUser()
         },
         methods: {
+            openUploadGrade(row) {
+              this.form.contest = row.contest
+              this.dialogFormVisible = true
+            },
 
              handleTime() {
               // form.start_time = time_range.value[0]

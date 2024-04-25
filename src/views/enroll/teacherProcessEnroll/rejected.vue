@@ -21,8 +21,7 @@
       显示全部
     </el-button>
   </div>
-  
-    审核报名
+
     <el-table
         class="table"
         ref="multipleTable"
@@ -115,9 +114,15 @@
           label="审核状态"
           show-overflow-tooltip>
         <template #default="{ row }">
+          <el-tooltip
+              class="box-item"
+              effect="dark"
+              :content="row.reject_reason"
+              placement="top-start"
+          ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+          </el-tooltip>
           <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
           <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
-          <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="150" type="index">
@@ -196,6 +201,7 @@
     deadline: '',
     school: "",
     college: "",
+    reject_reason: "",
     name: "",
     state: -1
   })

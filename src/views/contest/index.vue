@@ -37,6 +37,15 @@
       @selection-change="handleSelectionChange"
   >
     <el-table-column label="竞赛列表">
+      <el-table-column type="expand"
+                       label="简介"
+                       width="70px">
+        <template #default="props">
+          <div>
+            <el-text>{{props.row.desc}}</el-text>
+          </div>
+        </template>
+      </el-table-column>
     <el-table-column
         prop="contest"
         label="竞赛名称"
@@ -59,17 +68,12 @@
         show-overflow-tooltip>
     </el-table-column>
     <el-table-column
-        prop="desc"
-        label="竞赛简介"
-        show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
         prop="contest_state"
         label="报名"
         show-overflow-tooltip
         v-if="store.getters.roles.includes('student')">
         <template #default="{ row }">
-          <el-button v-if="row.contest_state === 1 && row.state === 1" @click="copyTextToClipboard(row)" type="success" size="small">点击报名</el-button>
+          <el-button v-if="row.contest_state === 1" @click="copyTextToClipboard(row)" type="success" size="small">点击报名</el-button>
           <el-button v-else type="info" size="small" disabled>不可报名</el-button>
 
         </template>
@@ -97,6 +101,7 @@ import {viewContest, getContestType} from "@/api/contest";
 import {ElMessage} from "element-plus";
 import {router} from "@/router"
 import store from "@/store";
+import {enrollContest} from "@/api/enroll";
 
 const props = {
   expandTrigger: 'hover',
@@ -116,6 +121,15 @@ const tableData = ref([])
 const recordTotal = ref(0)
 
 const options = ref([])
+
+const form = reactive({
+  contest: "",
+  name: "",
+  school: "",
+  phone: "",
+  email: "",
+  team_id: "",
+})
 
 const initOptions = async () => {
   getContestType().then(resp => {
@@ -218,16 +232,33 @@ const handleShowMyContest = () => {
   })
 }
 
-const copyTextToClipboard = async (row) => {  
-      try {  
-        const textToCopy = '这是要复制的文本';  
-        await navigator.clipboard.writeText(row.contest);  
-        alert('文本已复制到剪贴板！');  
-      } catch (err) {  
-        console.error('无法复制文本: ', err);  
-        alert('复制文本时出错，请检查浏览器权限。');  
-      }  
-    };  
+const copyTextToClipboard = (row) => {
+  form.contest = row.contest
+  form.name = store.getters.name
+  form.school = store.getters.school
+  form.phone = store.getters.phone
+  form.email = store.getters.email
+
+  enrollContest(form).then(resp => {
+    console.log("addUser:", resp)
+    if(resp.code === 200) {
+      ElMessage({
+        type: 'success',
+        message: '报名成功',
+      })
+    } else {
+      ElMessage({
+        type: 'error',
+        message: resp.message,
+      })
+    }
+  }).catch(() => {
+    ElMessage({
+      type: 'error',
+      message: '报名失败',
+    })
+  })
+}
 
 onMounted(initOptions)
 onMounted(handleShowContest)

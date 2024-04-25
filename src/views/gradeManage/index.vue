@@ -116,6 +116,15 @@
                 type="selection"
                 width="55">
         </el-table-column>
+        <el-table-column type="expand"
+                         label="备注"
+                         width="70px">
+          <template #default="props">
+            <div>
+              <el-text>{{props.row.ps}}</el-text>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column
                 fixed
                 prop="id"

@@ -427,7 +427,7 @@
                 console.log("handleCreate")
                 // 将空数据置入form
                 this.form = {
-                    id: '',
+                    id: -1,
                     name: "",
                     username: '',
                     team_id: '',

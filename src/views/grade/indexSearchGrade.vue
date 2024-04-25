@@ -61,6 +61,15 @@
 <!--        width="55">-->
 <!--    </el-table-column>-->
     <el-table-column label="我的成绩">
+      <el-table-column type="expand"
+                       label="备注"
+                       width="70px">
+        <template #default="props">
+          <div>
+            <el-text>{{props.row.ps}}</el-text>
+          </div>
+        </template>
+      </el-table-column>
     <el-table-column
         prop="contest"
         label="竞赛"
@@ -101,10 +110,16 @@
         label="审核状态"
         show-overflow-tooltip>
       <template #default="{ row }">
+        <el-tooltip
+            class="box-item"
+            effect="dark"
+            :content="row.reject_reason"
+            placement="top-start"
+        ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+        </el-tooltip>
         <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
         <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
         <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
-        <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
       </template>
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="150" type="index">

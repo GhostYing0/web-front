@@ -55,7 +55,7 @@
                        label="简介"
                        width="70px">
         <template #default="props">
-          <div m="4">
+          <div>
             <el-text>{{props.row.desc}}</el-text>
           </div>
         </template>
