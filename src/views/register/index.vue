@@ -17,6 +17,7 @@
           <el-select v-model="registerForm.role" placeholder="请选择" style="width:200px" >
             <el-option :key="0" label="学生" :value=1></el-option>
             <el-option :key="1" label="教师" :value=2></el-option>
+            <el-option :key="2" label="系部管理员" :value=3></el-option>
             <!--<el-option :key="2" label="管理员" :value=0></el-option>-->
           </el-select>
         </el-form-item>
@@ -101,7 +102,7 @@
               @keyup.enter="handleRegister"
           />
         </el-form-item>
-        <el-form-item label="性别" prop="gender">
+        <el-form-item label="性别" prop="gender" v-if="registerForm.role !== 3">
           <el-radio v-model="registerForm.gender" :label="1">男</el-radio>
           <el-radio v-model="registerForm.gender" :label="2">女</el-radio>
         </el-form-item>
@@ -126,6 +127,19 @@
                 @change="handleCollege"
             />
           </div>
+        </el-form-item>
+        <el-form-item prop="college" v-if="registerForm.role === 3" label="所属院系" label-width="80px" style="width:300px">
+          <el-input
+              class="register-form-text"
+              ref="name"
+              v-model="registerForm.department"
+              :type="text"
+              placeholder="请输入院系"
+              name="name"
+              tabindex="2"
+              auto-complete="on"
+              @keyup.enter="handleRegister"
+          />
         </el-form-item>
         <el-form-item prop="semester" v-if="registerForm.role === 1" label="入学年份" label-width="80px" style="width:300px">
           <div class="m-4">
@@ -304,6 +318,7 @@ const registerForm = reactive({
     semester: "",
     phone: "",
     email: "",
+    department: "",
     class:""
 })
 const loading = ref(false)

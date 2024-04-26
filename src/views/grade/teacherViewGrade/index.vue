@@ -123,12 +123,24 @@
         <template #default="{ row }">
           <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
           <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
-          <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
+          <el-tag v-else-if="row.state === 4" type="warning">已撤回</el-tag>
+          <el-tooltip
+              class="box-item"
+              effect="dark"
+              :content="row.reject_reason"
+              placement="top-start"
+          ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="150" type="index">
+<!--        <template #default="{ row, $index}">-->
+<!--          <el-button @click="handleRecover(row, $index)" type="primary" size="small"> 重新审核</el-button>-->
+<!--        </template>-->
+
         <template #default="{ row, $index}">
-          <el-button @click="handleRecover(row, $index)" type="primary" size="small"> 重新审核</el-button>
+        <el-button v-if="row.state === 3" @click="handleRevoke(row, $index)" type="warning" size="small">撤销</el-button>
+        <el-button v-else  type="danger" size="small" disabled>撤销</el-button>
         </template>
       </el-table-column>
       </el-table-column>
@@ -157,16 +169,17 @@
   </template>
   
   <script setup>
-  
+
   import {
+    cancelContest,
     getContestType,
   } from '@/api/contest'
-  
+
   import {
     processPassGrade,
     processRejectGrade,
     teacherSearchGrade,
-    processRecoverGrade
+    processRecoverGrade, revokeGrade
   } from '@/api/grade'
   
   import {computed, onMounted, reactive, ref} from "vue"
@@ -263,7 +276,7 @@
   
   const handleShowContest = async () => {
     param.page_number = 1
-    param.state = 1
+    param.state = -1
     param.type = ""
     item.value = ""
     teacherSearchGrade(param).then(resp => {
@@ -274,32 +287,26 @@
       }
     })
   }
-  
-  const handleRecover = (row, index) => {
-    form.state = 1
+
+  const handleRevoke = (row) => {
     form.id = row.id
-    console.log( row.id)
-    processRecoverGrade(form).then(resp => {
+    revokeGrade(form).then(resp => {
       if(resp.code === 200) {
         ElMessage({
           type: 'success',
           message: '更新成功',
         })//
-        tableData.value.splice(index, 1)
-        // 如果删完了，获取上一页
-        if(tableData.value.length === 0) {
-          param.page_number = handleCurrentChange - 1
-          handleCurrentChange(param.page_number)
-        }
+        handleCurrentChange(param.page_number)
       } else {
         ElMessage({
           type: 'error',
           message: '更新失败',
         })//
       }
+      //dialogFormVisible.value = false  // 关闭对话框
     })
   }
-  
+
   const initOptions = async () => {
     getContestType().then(resp => {
       try {

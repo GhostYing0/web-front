@@ -97,19 +97,37 @@ export function uploadContest(data) {
     })
 }
 
-// 管理员通过竞赛
+// // 管理员通过竞赛
+// export function processPassContest(data) {
+//     return request({
+//         url: '/cms/processPassContest',
+//         method: 'post',
+//         data: data
+//     })
+// }
+//
+// // 管理员驳回竞赛
+// export function processRejectContest(data) {
+//     return request({
+//         url: '/cms/processRejectContest',
+//         method: 'post',
+//         data: data
+//     })
+// }
+
+// 系部管理员通过竞赛
 export function processPassContest(data) {
     return request({
-        url: '/cms/processPassContest',
+        url: '/processPassContest',
         method: 'post',
         data: data
     })
 }
 
-// 管理员驳回竞赛
+// 系部管理员驳回竞赛
 export function processRejectContest(data) {
     return request({
-        url: '/cms/processRejectContest',
+        url: '/processRejectContest',
         method: 'post',
         data: data
     })
@@ -161,3 +179,20 @@ export function cancelContest(data) {
         data:data
     })
 }
+
+export function getDepartmentContest(param) {
+    return request({
+        url: '/getDepartmentContest',
+        method: 'get',
+        params:param
+    })
+}
+
+export function departmentManagerSearchEnroll(param) {
+    return request({
+        url: '/departmentManagerSearchEnroll',
+        method: 'get',
+        params:param
+    })
+}
+

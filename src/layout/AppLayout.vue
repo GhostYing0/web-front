@@ -8,7 +8,7 @@
                 <template v-if="store.getters.roles.includes('manager')">
                   <AppMenu/>
                 </template>
-                <template v-else-if="store.getters.roles.includes('student') || store.getters.roles.includes('teacher')">
+                <template v-else-if="store.getters.roles.includes('student') || store.getters.roles.includes('teacher')|| store.getters.roles.includes('department_manager')" >
                   <UserAppMenu/>
                 </template>
               </el-aside>

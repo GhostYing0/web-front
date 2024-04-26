@@ -152,8 +152,9 @@
     teacherSearchEnroll,
     processRecoverEnroll
   } from '@/api/enroll'
-  
+
   import {
+    departmentManagerSearchEnroll,
     getContestType
   } from '@/api/contest'
   
@@ -211,7 +212,7 @@
     param.page_number = 1
     param.type = item.value[0]
     console.log("asd:")
-    teacherSearchEnroll(param).then(resp => {
+    departmentManagerSearchEnroll(param).then(resp => {
       console.log(resp)
       if (resp.code === 200) {
         tableData.value = resp.data.list
@@ -229,7 +230,7 @@
   // 分页大小改变监听
   const handleSizeChange = (curSize) => {
     param.page_size = curSize
-    teacherSearchEnroll(param).then(resp => {
+    departmentManagerSearchEnroll(param).then(resp => {
       console.log('分页数据获取成功',resp)
       tableData.value = resp.data.list
       recordTotal.value = resp.data.total
@@ -251,7 +252,7 @@
     param.state = 2
     param.type = ""
     item.value = ""
-    teacherSearchEnroll(param).then(resp => {
+    departmentManagerSearchEnroll(param).then(resp => {
       console.log(resp)
       if(resp.code === 200) {
         tableData.value = resp.data.list

@@ -1,5 +1,15 @@
 // import {login, register, updatePassword, getUser} from "@/api/manager";
-import {login as userLogin, getInfo, cmsLogin, logout, cmsRegister, register, getProfileStudent, getProfileTeacher} from "@/api/user";
+import {
+    login as userLogin,
+    getInfo,
+    cmsLogin,
+    logout,
+    cmsRegister,
+    register,
+    getProfileStudent,
+    getProfileTeacher,
+    departmentLogin, departmentRegister
+} from "@/api/user";
 // import {getToken, setToken, removeToken} from "../../utils/auth";
 import {getToken, setToken, removeToken} from "../../utils/auth";
 import {resetRouter} from "../../router";
@@ -109,6 +119,23 @@ const actions = {
                     console.log("error!")
                     reject(error)
                 })
+            } else if(role === 3) {
+                departmentLogin({username: username.trim(), password: password, role: role}).then(response => {
+                    const {code, message, data} = response
+                    console.log(response)
+
+                    if(code !== 200) {
+                        reject(message)
+                        return
+                    }
+
+                    commit("SET_TOKEN", data.token)
+                    setToken(data.token)
+                    resolve(data)
+                }).catch(error => {
+                    console.log("error!")
+                    reject(error)
+                })
             } else {
                 reject("非法role")
             }
@@ -116,7 +143,7 @@ const actions = {
     },
 
     Register({commit}, registerForm) {
-        const {username, password, confirm_password, role, name,gender,school, college,semester,student_class, phone, email} = registerForm
+        const {username, password, confirm_password, role, name,gender,school, college,semester, phone, email, department, student_class} = registerForm
         return new Promise((resolve, reject) => {
             if(role === 0){
                 cmsRegister({username: username.trim(), password: password, confirm_password: confirm_password, role: role}).then(response => {
@@ -135,6 +162,20 @@ const actions = {
             } else if(role === 1 || role === 2) {
                 register({username: username.trim(), password: password, confirm_password: confirm_password, role: role,
                     name:name, gender:gender, school:school, college:college, semester:semester, class:student_class, phone:phone, email:email}).then(response => {
+                    const {code, message, data} = response
+
+                    if(code != 200) {
+                        reject(message)
+                    }
+
+                    resolve(data)
+                }).catch(error => {
+                    console.log("error!")
+                    reject(error)
+                })
+            } else if(role === 3 ){
+                departmentRegister({username: username.trim(), password: password, confirm_password: confirm_password, role: role,
+                    name:name, school:school, college:college, department:department, phone:phone, email:email}).then(response => {
                     const {code, message, data} = response
 
                     if(code != 200) {
@@ -167,6 +208,8 @@ const actions = {
                 data["roles"] = ["student"]
             } else if(data.role === 2) {
                 data["roles"] = ["teacher"]
+            } else if(data.role === 3) {
+                data["roles"] = ["department_manager"]
             } else {
                 reject("非法用户身份!")
             }

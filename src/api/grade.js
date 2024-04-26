@@ -131,3 +131,11 @@ export function studentUpdateGrade(data) {
         data:data
     })
 }
+
+export function departmentManagerSearchGrade(param) {
+    return request({
+        url: '/departmentManagerSearchGrade',
+        method: 'get',
+        params:param
+    })
+}

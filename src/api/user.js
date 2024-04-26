@@ -236,5 +236,21 @@ export function getManagerCount() {
     })
 }
 
+export function departmentLogin(data) {
+    return request({
+        url: '/department_login',
+        method: 'post',
+        data: data
+    })
+}
+
+export function departmentRegister(data) {
+    return request({
+        url: '/department_register',
+        method: 'post',
+        data: data
+    })
+}
+
 
 

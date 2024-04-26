@@ -39,49 +39,49 @@
       </div>
     </div>
 
-  <!--弹出框-->
-  <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
-    <!--普通表单-->
-    <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
-      <el-form-item label="竞赛名称" prop="name">
-        <el-input v-model="form.contest" disabled></el-input>
-      </el-form-item>
-      <el-form-item label="成绩">
-        <el-input v-model="form.grade" />
-      </el-form-item>
-      <el-form-item label="证明材料">
-        <el-upload
-            ref="uploadRef"
-            class="upload-demo"
-            drag
-            action="http://localhost:9006/api/public/v1/upload"
-            :on-change="handleChange"
-            :limit="1"
-            :on-exceed="handleChange"
-            :auto-upload="false"
-            name="file"
-        >
-          <el-icon class="esl-icon--upload"><upload-filled /></el-icon>
-          <div class="el-upload__text">
-            Drop file here or <em>click to upload</em>
-          </div>
-          <template #tip>
-            <div class="el-upload__tip">
-              jpg/png files with a size less than 500kb
-            </div>
-          </template>
-        </el-upload>
-      </el-form-item>
-      <el-form-item label="备注">
-        <el-input v-model="form.ps" type="textarea" />
-      </el-form-item>
-    </el-form>
+<!--  &lt;!&ndash;弹出框&ndash;&gt;-->
+<!--  <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">-->
+<!--    &lt;!&ndash;普通表单&ndash;&gt;-->
+<!--    <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">-->
+<!--      <el-form-item label="竞赛名称" prop="name">-->
+<!--        <el-input v-model="form.contest" disabled></el-input>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="成绩">-->
+<!--        <el-input v-model="form.grade" />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="证明材料">-->
+<!--        <el-upload-->
+<!--            ref="uploadRef"-->
+<!--            class="upload-demo"-->
+<!--            drag-->
+<!--            action="http://localhost:9006/api/public/v1/upload"-->
+<!--            :on-change="handleChange"-->
+<!--            :limit="1"-->
+<!--            :on-exceed="handleChange"-->
+<!--            :auto-upload="false"-->
+<!--            name="file"-->
+<!--        >-->
+<!--          <el-icon class="esl-icon&#45;&#45;upload"><upload-filled /></el-icon>-->
+<!--          <div class="el-upload__text">-->
+<!--            Drop file here or <em>click to upload</em>-->
+<!--          </div>-->
+<!--          <template #tip>-->
+<!--            <div class="el-upload__tip">-->
+<!--              jpg/png files with a size less than 500kb-->
+<!--            </div>-->
+<!--          </template>-->
+<!--        </el-upload>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="备注">-->
+<!--        <el-input v-model="form.ps" type="textarea" />-->
+<!--      </el-form-item>-->
+<!--    </el-form>-->
 
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="handleClearForm">取 消</el-button>
-      <el-button type="primary" @click="handleCreate">提交</el-button>
-    </div>
-  </el-dialog>
+<!--    <div slot="footer" class="dialog-footer">-->
+<!--      <el-button @click="handleClearForm">取 消</el-button>-->
+<!--      <el-button type="primary" @click="handleCreate">提交</el-button>-->
+<!--    </div>-->
+<!--  </el-dialog>-->
 
   <el-table
       height="54vh"
@@ -125,14 +125,14 @@
         <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
       </template>
     </el-table-column>
-    <el-table-column
-        label="上传成绩"
-        show-overflow-tooltip>
-      <template #default="{ row }">
-        <el-button  type="success" size="small" v-if="row.do_upload === true" @click="openUploadGrade(row)">上传</el-button>
-        <el-button  type="info" size="small" v-else plain disabled>不可上传</el-button>
-      </template>
-    </el-table-column>
+<!--    <el-table-column-->
+<!--        label="上传成绩"-->
+<!--        show-overflow-tooltip>-->
+<!--      <template #default="{ row }">-->
+<!--        <el-button  type="success" size="small" v-if="row.do_upload === true" @click="openUploadGrade(row)">上传</el-button>-->
+<!--        <el-button  type="info" size="small" v-else plain disabled>不可上传</el-button>-->
+<!--      </template>-->
+<!--    </el-table-column>-->
     <el-table-column fixed="right" label="操作" width="150" type="index">
       <template #default="{ row }">
         <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state !== 3" plain disabled>撤回</el-button>

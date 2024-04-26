@@ -82,11 +82,11 @@
   <!--        label="报名截至时间"-->
   <!--        show-overflow-tooltip>-->
   <!--    </el-table-column>-->
-      <el-table-column
-          prop="username"
-          label="用户名"
-          show-overflow-tooltip>
-      </el-table-column>
+<!--      <el-table-column-->
+<!--          prop="username"-->
+<!--          label="用户名"-->
+<!--          show-overflow-tooltip>-->
+<!--      </el-table-column>-->
       <el-table-column
           prop="name"
           label="姓名"
@@ -161,8 +161,9 @@
     processPassEnroll,
     processRejectEnroll
   } from '@/api/enroll'
-  
+
   import {
+    departmentManagerSearchEnroll,
     getContestType
   } from '@/api/contest'
   
@@ -224,7 +225,7 @@
     param.page_number = 1
     param.type = item.value[0]
     console.log("asd:")
-    teacherSearchEnroll(param).then(resp => {
+    departmentManagerSearchEnroll(param).then(resp => {
       console.log(resp)
       if (resp.code === 200) {
         tableData.value = resp.data.list
@@ -242,7 +243,7 @@
   // 分页大小改变监听
   const handleSizeChange = (curSize) => {
     param.page_size = curSize
-    teacherSearchEnroll(param).then(resp => {
+    departmentManagerSearchEnroll(param).then(resp => {
       console.log('分页数据获取成功',resp)
       tableData.value = resp.data.list
       recordTotal.value = resp.data.total
@@ -252,7 +253,7 @@
   // 点击分页监听方法
   const handleCurrentChange = async (curPage) => {
     param.page_number = curPage
-    await teacherSearchEnroll(param).then(resp => {
+    await departmentManagerSearchEnroll(param).then(resp => {
       console.log('分页数据获取成功',resp)
       tableData.value = resp.data.list
       recordTotal.value = resp.data.total
@@ -264,7 +265,7 @@
     param.state = 3
     param.type = ""
     item.value = ""
-    teacherSearchEnroll(param).then(resp => {
+    departmentManagerSearchEnroll(param).then(resp => {
       console.log(resp)
       if(resp.code === 200) {
         tableData.value = resp.data.list

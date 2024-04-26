@@ -56,8 +56,23 @@ const asyncRoutes = [
             {
                 path: "/uploadGrade",
                 component: () => import("@/views/grade/indexUploadGrade"),
-                roles: ["student"]
+                roles: ["teacher"]
             },
+            {
+                path: "/departmentDisplayGrade",
+                component: () => import("@/views/grade/departmentDisplayGrade/index"),
+                roles: ["department_manager"]
+            },
+            {
+                path: "/departmentDisplayEnroll",
+                component: () => import("@/views/enroll/departmentDisplayEnroll/index"),
+                roles: ["department_manager"]
+            },
+            // {
+            //     path: "/uploadGrade",
+            //     component: () => import("@/views/grade/indexUploadGrade"),
+            //     roles: ["student"]
+            // },
             {
                 path: "/searchGrade",
                 component: () => import("@/views/grade/indexSearchGrade"),
@@ -96,39 +111,39 @@ const asyncRoutes = [
             {
                 path:"/contestProcess",
                 component: () => import("@/views/contestManage/contestProcess/index.vue"),
-                roles: ["manager"]
+                roles: ["department_manager"]
             },
             {
                 path:"/enrollProcess",
                 component: () => import("@/views/enroll/teacherProcessEnroll/index.vue"),
-                roles: ["teacher"],
+                roles: ["department_manager"],
                 children : [
                     {
                         path:"/enrollProcessing",
                         component: () => import("@/views/enroll/teacherProcessEnroll/processing.vue"),
-                        roles: ["teacher"]
+                        roles: ["department_manager"]
                     },
                     {
                         path:"/enrollRejected",
                         component: () => import("@/views/enroll/teacherProcessEnroll/rejected.vue"),
-                        roles: ["teacher"]
+                        roles: ["department_manager"]
                     }
                 ]
             },
             {
                 path:"/gradeProcess",
                 component: () => import("@/views/grade/teacherProcessGrade/index.vue"),
-                roles: ["teacher"],
+                roles: ["department_manager"],
                 children : [
                     {
                         path:"/gradeProcessing",
                         component: () => import("@/views/grade/teacherProcessGrade/processing.vue"),
-                        roles: ["teacher"]
+                        roles: ["department_manager"]
                     },
                     {
                         path:"/gradeRejected",
                         component: () => import("@/views/grade/teacherProcessGrade/rejected.vue"),
-                        roles: ["teacher"]
+                        roles: ["department_manager"]
                     }
                 ]
             },

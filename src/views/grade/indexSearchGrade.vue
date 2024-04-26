@@ -122,14 +122,14 @@
         <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
       </template>
     </el-table-column>
-    <el-table-column fixed="right" label="操作" width="150" type="index">
-      <template #default="{ row }">
-        <el-button @click="handleUpdate(row)" type="primary" size="small" v-if="row.state === 3">编辑</el-button>
-        <el-button @click="handleUpdate(row)" type="primary" size="small" v-if="row.state !== 3" plain disabled>编辑</el-button>
-        <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state !== 3" plain disabled>撤回</el-button>
-        <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state === 3">撤回</el-button>
-      </template>
-    </el-table-column>
+<!--    <el-table-column fixed="right" label="操作" width="150" type="index">-->
+<!--      <template #default="{ row }">-->
+<!--        <el-button @click="handleUpdate(row)" type="primary" size="small" v-if="row.state === 3">编辑</el-button>-->
+<!--        <el-button @click="handleUpdate(row)" type="primary" size="small" v-if="row.state !== 3" plain disabled>编辑</el-button>-->
+<!--        <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state !== 3" plain disabled>撤回</el-button>-->
+<!--        <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state === 3">撤回</el-button>-->
+<!--      </template>-->
+<!--    </el-table-column>-->
     </el-table-column>
   </el-table>
     <!--分页条-->

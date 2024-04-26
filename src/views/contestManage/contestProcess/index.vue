@@ -11,6 +11,21 @@
     </div>
   </div>
 
+  <!--弹出框-->
+  <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
+    <!--普通表单-->
+    <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
+      <el-form-item label="驳回原因" prop="reject_reason">
+        <el-input v-model="form.reject_reason"></el-input>
+      </el-form-item>
+    </el-form>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="cancel">取 消</el-button>
+      <el-button type="primary" @click="handleReject">确 定</el-button>
+    </div>
+  </el-dialog>
+
   <el-table
       ref="multipleTable"
       :data="tableData"
@@ -66,26 +81,26 @@
         label="报名截至时间"
         show-overflow-tooltip>
     </el-table-column>
-    <el-table-column
-        prop="username"
-        label="用户名"
-        show-overflow-tooltip>
-    </el-table-column>
+<!--    <el-table-column-->
+<!--        prop="username"-->
+<!--        label="用户名"-->
+<!--        show-overflow-tooltip>-->
+<!--    </el-table-column>-->
     <el-table-column
         prop="name"
         label="姓名"
         show-overflow-tooltip>
     </el-table-column>
-    <el-table-column
-        prop="school"
-        label="学校"
-        show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
-        prop="college"
-        label="学院"
-        show-overflow-tooltip>
-    </el-table-column>
+<!--    <el-table-column-->
+<!--        prop="school"-->
+<!--        label="学校"-->
+<!--        show-overflow-tooltip>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--        prop="college"-->
+<!--        label="学院"-->
+<!--        show-overflow-tooltip>-->
+<!--    </el-table-column>-->
     <el-table-column
         prop="desc"
         label="简介"
@@ -104,7 +119,7 @@
     <el-table-column fixed="right" label="操作" width="150" type="index">
       <template #default="{ row, $index}">
         <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
-        <el-button @click="handleReject(row, $index)" type="danger" size="small">驳回</el-button>
+        <el-button @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>
       </template>
     </el-table-column>
     </el-table-column>
@@ -132,7 +147,7 @@ import {
   updateContest,
   getContestCount,
   viewTeacherContest,
-  updateTeacherContest
+  updateTeacherContest, getDepartmentContest
 } from '@/api/contest'
 import {computed, onMounted, reactive, ref} from "vue"
 import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
@@ -165,6 +180,9 @@ const param = reactive( {
   name: "",
   state: -1
 })
+
+const delete_index = ref()
+const dialogFormVisible = ref(false)
 
 
 const form = reactive( {
@@ -222,7 +240,7 @@ const handleCurrentChange = async (curPage) => {
 const handleShowContest = async () => {
   param.page_number = 1
   param.state = 3
-  getContest(param).then(resp => {
+  getDepartmentContest(param).then(resp => {
     console.log(resp)
     if(resp.code === 200) {
       tableData.value = resp.data.list
@@ -255,16 +273,14 @@ const handlePass = (row, index) => {
   })
 }
 
-const handleReject = (row, index) => {
-  form.state = 2
-  form.id = row.id
+const handleReject = () => {
   processRejectContest(form).then(resp => {
     if(resp.code === 200) {
       ElMessage({
         type: 'success',
         message: '更新成功',
       })//
-      tableData.value.splice(index, 1)
+      tableData.value.splice(delete_index.value, 1)
       // 如果删完了，获取上一页
       if(tableData.value.length === 0) {
         param.page_number = handleCurrentChange - 1
@@ -277,6 +293,20 @@ const handleReject = (row, index) => {
       })//
     }
   })
+}
+
+const writeRejectReason = (row, index) => {
+  form.state = 2
+  form.id = row.id
+  delete_index.value = index
+  dialogFormVisible.value = true
+}
+
+const cancel = () => {
+  form.state = -1
+  form.id = 0
+  delete_index.value = 0
+  dialogFormVisible.value = false
 }
 
 onMounted(handleShowContest)

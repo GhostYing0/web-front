@@ -20,6 +20,7 @@
     </el-button>
   </div>
 
+  <!--弹出框-->
   <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
     <!--普通表单-->
     <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
@@ -141,7 +142,7 @@
       <el-table-column fixed="right" label="操作" width="150" type="index">
         <template #default="{ row, $index}">
           <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
-          <el-button @click="handleReject(row, $index)" type="danger" size="small">驳回</el-button>
+          <el-button @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>
         </template>
       </el-table-column>
       </el-table-column>
@@ -174,12 +175,12 @@
   import {
     getContestType,
   } from '@/api/contest'
-  
+
   import {
     processPassGrade,
     processRejectGrade,
     teacherSearchGrade,
-    processRecoverGrade
+    processRecoverGrade, departmentManagerSearchGrade
   } from '@/api/grade'
   
   import {computed, onMounted, reactive, ref} from "vue"
@@ -200,8 +201,11 @@
   const form_item = ref("")
   const options = ref([])
   const picture = ref()
-  
-  
+
+  const delete_index = ref()
+
+  const dialogFormVisible = ref(false)
+
   // 表格数据
   const tableData = ref([])
   // 记录总数
@@ -239,7 +243,7 @@
     param.page_number = 1
     param.type = item.value[0]
     console.log("asd:")
-    teacherSearchGrade(param).then(resp => {
+    departmentManagerSearchGrade(param).then(resp => {
       console.log(resp)
       if (resp.code === 200) {
         tableData.value = resp.data.list
@@ -257,7 +261,7 @@
   // 分页大小改变监听
   const handleSizeChange = (curSize) => {
     param.page_size = curSize
-    teacherSearchGrade(param).then(resp => {
+    departmentManagerSearchGrade(param).then(resp => {
       console.log('分页数据获取成功',resp)
       tableData.value = resp.data.list
       recordTotal.value = resp.data.total
@@ -267,7 +271,7 @@
   // 点击分页监听方法
   const handleCurrentChange = async (curPage) => {
     param.page_number = curPage
-    await teacherSearchGrade(param).then(resp => {
+    await departmentManagerSearchGrade(param).then(resp => {
       console.log('分页数据获取成功',resp)
       tableData.value = resp.data.list
       recordTotal.value = resp.data.total
@@ -279,7 +283,7 @@
     param.state = 3
     param.type = ""
     item.value = ""
-    teacherSearchGrade(param).then(resp => {
+    departmentManagerSearchGrade(param).then(resp => {
       console.log(resp)
       if(resp.code === 200) {
         tableData.value = resp.data.list
@@ -313,17 +317,14 @@
     })
   }
 
-  const handleReject = (row, index) => {
-    form.state = 2
-    form.id = row.id
-    console.log( row.id)
+  const handleReject = () => {
     processRejectGrade(form).then(resp => {
       if(resp.code === 200) {
         ElMessage({
           type: 'success',
           message: '更新成功',
         })//
-        tableData.value.splice(index, 1)
+        tableData.value.splice(delete_index, 1)
         // 如果删完了，获取上一页
         if(tableData.value.length === 0) {
           param.page_number = handleCurrentChange - 1
@@ -336,6 +337,7 @@
         })//
       }
     })
+    dialogFormVisible.value = false
   }
   
   const initOptions = async () => {
@@ -358,6 +360,20 @@
   const handDown = (url) => {
       picture.value = url
       dialogPictureVisible.value = true
+  }
+
+  const writeRejectReason = (row, index) => {
+    form.state = 2
+    form.id = row.id
+    delete_index.value = index
+    dialogFormVisible.value = true
+  }
+
+  const cancel = () => {
+    form.state = -1
+    form.id = 0
+    delete_index.value = 0
+    dialogFormVisible.value = false
   }
   
   onMounted(initOptions)

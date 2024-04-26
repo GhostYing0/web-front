@@ -105,8 +105,14 @@
       <template #default="{ row }">
         <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
         <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
-        <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
         <el-tag v-else-if="row.state === 4" type="danger">已撤回</el-tag>
+        <el-tooltip
+            class="box-item"
+            effect="dark"
+            :content="row.reject_reason"
+            placement="top-start"
+        ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+        </el-tooltip>
       </template>
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="270px" type="index">

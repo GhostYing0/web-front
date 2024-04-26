@@ -23,7 +23,7 @@
                         <span class="text">竞赛信息管理</span>
                     </template>
                         <el-menu-item class="menu-item" index="/contestManage"><span class="text">竞赛信息展示</span></el-menu-item>
-                        <el-menu-item class="menu-item" index="/contestProcess"><span class="text">竞赛信息审核</span></el-menu-item>
+                        <!--<el-menu-item class="menu-item" index="/contestProcess"><span class="text">竞赛信息审核</span></el-menu-item>-->
                 </el-sub-menu>
                 <el-sub-menu index="3" class="menu-border">
                     <template #title>

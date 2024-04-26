@@ -121,7 +121,13 @@
         <template #default="{ row }">
           <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
           <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
-          <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
+          <el-tooltip
+              class="box-item"
+              effect="dark"
+              :content="row.reject_reason"
+              placement="top-start"
+          ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="150" type="index">
@@ -159,12 +165,12 @@
   import {
     getContestType,
   } from '@/api/contest'
-  
+
   import {
     processPassGrade,
     processRejectGrade,
     teacherSearchGrade,
-    processRecoverGrade
+    processRecoverGrade, departmentManagerSearchGrade
   } from '@/api/grade'
   
   import {computed, onMounted, reactive, ref} from "vue"
@@ -224,7 +230,7 @@
     param.page_number = 1
     param.type = item.value[0]
     console.log("asd:")
-    teacherSearchGrade(param).then(resp => {
+    departmentManagerSearchGrade(param).then(resp => {
       console.log(resp)
       if (resp.code === 200) {
         tableData.value = resp.data.list
@@ -242,7 +248,7 @@
   // 分页大小改变监听
   const handleSizeChange = (curSize) => {
     param.page_size = curSize
-    teacherSearchGrade(param).then(resp => {
+    departmentManagerSearchGrade(param).then(resp => {
       console.log('分页数据获取成功',resp)
       tableData.value = resp.data.list
       recordTotal.value = resp.data.total
@@ -252,7 +258,7 @@
   // 点击分页监听方法
   const handleCurrentChange = async (curPage) => {
     param.page_number = curPage
-    await teacherSearchGrade(param).then(resp => {
+    await departmentManagerSearchGrade(param).then(resp => {
       console.log('分页数据获取成功',resp)
       tableData.value = resp.data.list
       recordTotal.value = resp.data.total
@@ -264,7 +270,7 @@
     param.state = 2
     param.type = ""
     item.value = ""
-    teacherSearchGrade(param).then(resp => {
+    departmentManagerSearchGrade(param).then(resp => {
       console.log(resp)
       if(resp.code === 200) {
         tableData.value = resp.data.list
