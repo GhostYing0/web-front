@@ -196,3 +196,19 @@ export function departmentManagerSearchEnroll(param) {
     })
 }
 
+
+// 获取竞赛类型
+export function onlyGetDepartmentContest() {
+    return request({
+        url: '/onlyGetDepartmentContest',
+        method: 'get'
+    })
+}
+
+export function getDepartmentContestGrade(param) {
+    return request({
+        url: '/getDepartmentContestGrade',
+        method: 'get',
+        params:param
+    })
+}

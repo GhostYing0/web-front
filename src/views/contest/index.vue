@@ -1,4 +1,5 @@
 <template>
+  <div v-show="desktop">
   <div class="filter-container" style="margin-bottom: 15px">
     <div class="filter">
       <div class="input-container">
@@ -33,17 +34,13 @@
       :data="tableData"
       border
       height="435px"
-      style="width: 100%"
+      style="width: 100vw"
       @selection-change="handleSelectionChange"
   >
     <el-table-column label="竞赛列表">
-      <el-table-column type="expand"
-                       label="简介"
-                       width="70px">
-        <template #default="props">
-          <div>
-            <el-text>{{props.row.desc}}</el-text>
-          </div>
+      <el-table-column label="详情">
+      <template #default="{ row }">
+          <el-button @click="checkDetail(row)" type="success" size="small" >查看详情</el-button>
         </template>
       </el-table-column>
     <el-table-column
@@ -58,8 +55,19 @@
         show-overflow-tooltip>
     </el-table-column>
     <el-table-column
+        prop="contest_level"
+        label="竞赛级别"
+        width="55"
+        show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
         prop="start_time"
         label="开赛时间"
+        show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+        prop="enroll_time"
+        label="报名开始时间"
         show-overflow-tooltip>
     </el-table-column>
     <el-table-column
@@ -69,13 +77,21 @@
     </el-table-column>
     <el-table-column
         prop="contest_state"
+        label="状态"
+        show-overflow-tooltip>
+        <template #default="{ row }">
+          <el-tag v-if="row.contest_state === 1" type="success" size="small">可报名</el-tag>
+          <el-tag v-else type="info" size="small">不可报名</el-tag>
+        </template>
+    </el-table-column>
+    <el-table-column
+        prop="contest_state"
         label="报名"
         show-overflow-tooltip
         v-if="store.getters.roles.includes('student')">
         <template #default="{ row }">
           <el-button v-if="row.contest_state === 1" @click="copyTextToClipboard(row)" type="success" size="small">点击报名</el-button>
           <el-button v-else type="info" size="small" disabled>不可报名</el-button>
-
         </template>
       </el-table-column>
     </el-table-column>
@@ -93,6 +109,18 @@
       :total="recordTotal"
       class="pagination_style"
   ></el-pagination>
+  </div>
+  <div v-show="detail">
+    <contestDetail
+    :contestName="propContestName"
+    :contestDesc="propContestDesc"
+    :contestStartTime="propContestStartTime"  
+    :contestDeadLine="propContestDeadLine"  
+    :ContestEnrollTime="propContestEnrollTime"  
+    :contestType="propContestType" 
+    :contestLevel="propContestLevel" 
+     @sendToParent="handleReturn" />
+  </div>
 </template>
 
 <script setup>
@@ -102,10 +130,22 @@ import {ElMessage} from "element-plus";
 import {router} from "@/router"
 import store from "@/store";
 import {enrollContest} from "@/api/enroll";
+import contestDetail from './detail/index.vue';
+import { defineProps, defineEmits } from 'vue'  
 
 const props = {
   expandTrigger: 'hover',
 }
+
+const emit = defineEmits(['showDetail'])
+
+const propContestName = ref("")
+const propContestDesc = ref("")
+const propContestStartTime = ref("")
+const propContestDeadLine = ref("")
+const propContestEnrollTime = ref("")
+const propContestType = ref("")
+const propContestLevel = ref("")
 
 const param = reactive({
   page_number: 1,
@@ -116,6 +156,9 @@ const param = reactive({
 })
 
 const item = ref()
+
+const desktop = ref(true)
+const detail = ref(false)
 
 const tableData = ref([])
 const recordTotal = ref(0)
@@ -258,6 +301,26 @@ const copyTextToClipboard = (row) => {
       message: '报名失败',
     })
   })
+}
+
+const checkDetail = (row) => {
+  desktop.value = false
+  detail.value = true
+  propContestName.value = row.contest
+  propContestDesc.value = row.desc
+  propContestStartTime.value = row.start_time
+  propContestDeadLine.value = row.deadline
+  propContestEnrollTime.value = row.enroll_time
+  propContestType.value = row.contest_type
+  propContestLevel.value = row.contest_level
+ // emit('showDetail', row.id)
+  //router.push("contestDetail")
+}
+
+const handleReturn = () => {
+  detail.value = false
+  desktop.value = true
+  console.log("get")
 }
 
 onMounted(initOptions)

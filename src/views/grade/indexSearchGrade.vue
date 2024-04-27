@@ -61,7 +61,7 @@
 <!--        width="55">-->
 <!--    </el-table-column>-->
     <el-table-column label="我的成绩">
-      <el-table-column type="expand"
+      <!--<el-table-column type="expand"
                        label="备注"
                        width="70px">
         <template #default="props">
@@ -69,7 +69,7 @@
             <el-text>{{props.row.ps}}</el-text>
           </div>
         </template>
-      </el-table-column>
+      </el-table-column>-->
     <el-table-column
         prop="contest"
         label="竞赛"
@@ -105,7 +105,7 @@
         </el-popover>
       </template>
     </el-table-column>
-    <el-table-column
+    <!--<el-table-column
         prop="state"
         label="审核状态"
         show-overflow-tooltip>
@@ -121,7 +121,7 @@
         <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
         <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
       </template>
-    </el-table-column>
+    </el-table-column>-->
 <!--    <el-table-column fixed="right" label="操作" width="150" type="index">-->
 <!--      <template #default="{ row }">-->
 <!--        <el-button @click="handleUpdate(row)" type="primary" size="small" v-if="row.state === 3">编辑</el-button>-->
