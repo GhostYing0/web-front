@@ -1,5 +1,5 @@
 <template>
-  <div v-show="desktop">
+  <div>
     <div class="filter-container" style="margin-bottom: 15px">
       <div class="filter">
         <div class="input-container">
@@ -29,7 +29,7 @@
     </div>
     <div class="handle-container">
       <!-- 一些按钮 -->
-      <el-button class="handle-button" type="primary" @click="handleShowALL">
+      <el-button class="handle-button" type="primary" @click="handleShowContest">
         显示全部
       </el-button>
     </div>
@@ -69,8 +69,8 @@
           <el-table-column label="三等奖" prop="prize4_count"></el-table-column>
         </el-table-column>
         <el-table-column
-            prop="reward_count"
-            label="获奖人数"
+            prop="enroll_count"
+            label="报名人数"
             width="95"
             show-overflow-tooltip>
         </el-table-column>
@@ -101,75 +101,131 @@
 </template>
 
 <script setup>
-import { ref , reactive, onMounted} from 'vue'
-import {getContestType, onlyGetDepartmentContest, getDepartmentContestGrade} from "@/api/contest";
-import {ElMessage} from "element-plus";
-import {router} from "@/router"
-import store from "@/store";
-import {enrollContest} from "@/api/enroll";
-import { defineProps, defineEmits } from 'vue'
 
-const props = {
-  expandTrigger: 'hover',
+import {
+  cancelContest,
+  getContestType,
+  viewTeacherContestGrade,
+} from '@/api/contest'
+
+import {
+  processPassGrade,
+  processRejectGrade,
+  teacherSearchGrade,
+  processRecoverGrade, revokeGrade
+} from '@/api/grade'
+
+import {computed, onMounted, reactive, ref} from "vue"
+import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
+import store from "@/store";
+import {router} from "@/router";
+
+const multipleTable = ref();
+const multipleSelection = ref([])
+const dialogPictureVisible = ref(false)
+
+
+const handleSelectionChange = (selection) => {
+  multipleSelection.value = selection
+  console.log(multipleSelection.value)
 }
 
-const emit = defineEmits(['showDetail'])
+const item = ref()
+const form_item = ref("")
+const options = ref([])
+const picture = ref()
 
-const propContestID = ref("")
 
-const contestOptions = ref([])
-const contest = ref("")
-const contestType = reactive({})
-
-const param = reactive({
+// 表格数据
+const tableData = ref([])
+// 记录总数
+const recordTotal = ref()
+// 查询参数
+const param = reactive( {
   page_number: 1,
   page_size: 10,
-  contest: "",
-  type: "",
-  state: -1,
-})
-
-const item = ref()
-
-const desktop = ref(true)
-const detail = ref(false)
-
-const tableData = ref([])
-const recordTotal = ref(0)
-
-const options = ref([])
-
-const form = reactive({
-  contest: "",
-  name: "",
+  contest: '',
+  contest_type: '',
+  start_time: '',
+  end_time: '',
   school: "",
-  phone: "",
-  email: "",
-  team_id: "",
+  college: "",
+  name: "",
+  state: -1
 })
 
-const getContestAndType = () => {
-  getContestType().then(resp => {
-    let data = resp.data
-    data.forEach(element => {
-      contestType[element.type] = {value: element.type, label: element.type, children:[]}
-    })
-  }).catch(error => {
-    console.error(error)
-  })
 
-  onlyGetDepartmentContest().then(resp => {
-    let data = resp.data
-    data.forEach(element => {
-      contestType[element.type].children.push({value:element.contest, label:element.contest})
-    })
+const form = reactive( {
+  id: -1,
+  username: "",
+  contest: '',
+  contest_type: '',
+  create_time: '',
+  deadline: '',
+  school: "",
+  college: "",
+  name: "",
+  state: -1
+})
 
-    for (const key in contestType) {
-      let value = contestType[key]
-      contestOptions.value.push(value)
+const checkDetail = (row) => {
+  router.push(`/uploadGradeDetail/${row.id}`)
+  //propContestID.value = row.id
+  // emit('showDetail', row.id)
+  //router.push("contestDetail")
+}
+
+// 搜索
+const handleFilter = () => {
+  param.page_number = 1
+  param.type = item.value[0]
+  console.log("asd:")
+  viewTeacherContestGrade(param).then(resp => {
+    console.log(resp)
+    if (resp.code === 200) {
+      tableData.value = resp.data.list
+      recordTotal.value = resp.data.total
+      if (resp.data.total === 0) {
+        ElMessage({
+          type: 'info',
+          message: '未搜索到该用户',
+        })//
+      }
     }
-  }).catch(error => {
-    console.error(error)
+  })
+}
+
+// 分页大小改变监听
+const handleSizeChange = (curSize) => {
+  param.page_size = curSize
+  viewTeacherContestGrade(param).then(resp => {
+    console.log('分页数据获取成功',resp)
+    tableData.value = resp.data.list
+    recordTotal.value = resp.data.total
+  })
+}
+
+// 点击分页监听方法
+const handleCurrentChange = async (curPage) => {
+  param.page_number = curPage
+  await viewTeacherContestGrade(param).then(resp => {
+    console.log('分页数据获取成功',resp)
+    tableData.value = resp.data.list
+    recordTotal.value = resp.data.total
+  })
+}
+
+const handleShowContest = async () => {
+  param.page_number = 1
+  param.state = -1
+  param.type = ""
+  item.value = ""
+  viewTeacherContestGrade(param).then(resp => {
+    console.log(resp)
+    if(resp.code === 200) {
+      tableData.value = resp.data.list
+      recordTotal.value = resp.data.total
+    }
   })
 }
 
@@ -190,133 +246,11 @@ const initOptions = async () => {
   })
 }
 
-const handleFilter = () => {
-  param.page_number = 1
-  //param.type = item.value[0]
-  if(contest.value[1]) {
-    param.contest = contest.value[1]
-  }
-  getDepartmentContestGrade(param).then(resp => {
-    console.log(resp)
-    if(resp.code === 200) {
-      tableData.value = resp.data.list
-      recordTotal.value = resp.data.total
-      if(resp.data.total === 0){
-        ElMessage({
-          type: 'info',
-          message: '未搜索到该用户',
-        })//
-      }
-    }
-  })
-}
 
-// 分页大小改变监听
-const handleSizeChange = (curSize) => {
-  param.page_size = curSize
-  getDepartmentContestGrade(param).then(resp => {
-    console.log('分页数据获取成功',resp)
-    tableData.value = resp.data.list
-    recordTotal.value = resp.data.total
-  })
-}
-
-// 点击分页监听方法
-const handleCurrentChange = async (curPage) => {
-  param.page_number = curPage
-  await getDepartmentContestGrade(param).then(resp => {
-    console.log('分页数据获取成功', resp)
-    if(resp.code === 200){
-      tableData.value = resp.data.list
-      recordTotal.value = resp.data.total
-    }
-  })
-}
-
-const handleShowContest = async () => {
-  param.page_number = 1
-  getDepartmentContestGrade(param).then(resp => {
-    console.log(resp)
-    if(resp.code === 200) {
-      tableData.value = resp.data.list
-      recordTotal.value = resp.data.total
-    }
-  })
-}
-
-const handleShowALL = () => {
-  param.page_number= 1
-  param.page_size=10
-  param.contest=''
-  param.type=''
-  item.value = ""
-  contest.value = ""
-
-  getDepartmentContestGrade(param).then(resp => {
-    console.log(resp)
-    if(resp.code === 200) {
-      tableData.value = resp.data.list
-      recordTotal.value = resp.data.total
-    }
-  })
-}
-
-const handleShowMyContest = () => {
-  param.page_number= 1
-  param.page_size=10
-  param.contest=''
-  param.type=''
-  param.state= -1
-  item.value = ""
-
-  getDepartmentContestGrade(param).then(resp => {
-    console.log(resp)
-    if(resp.code === 200) {
-      tableData.value = resp.data.list
-      recordTotal.value = resp.data.total
-    }
-  })
-}
-
-const checkDetail = (row) => {
-  router.push(`departmentDisplayGradeDetail/${row.id}`)
-  propContestID.value = row.id
-  // emit('showDetail', row.id)
-  //router.push("contestDetail")
-}
-
-const copyTextToClipboard = (row) => {
-  form.contest = row.contest
-  form.name = store.getters.name
-  form.school = store.getters.school
-  form.phone = store.getters.phone
-  form.email = store.getters.email
-
-  enrollContest(form).then(resp => {
-    console.log("addUser:", resp)
-    if(resp.code === 200) {
-      ElMessage({
-        type: 'success',
-        message: '报名成功',
-      })
-    } else {
-      ElMessage({
-        type: 'error',
-        message: resp.message,
-      })
-    }
-  }).catch(() => {
-    ElMessage({
-      type: 'error',
-      message: '报名失败',
-    })
-  })
-}
-
-onMounted(getContestAndType)
 onMounted(initOptions)
 onMounted(handleShowContest)
 </script>
+
 
 <style scoped>
 

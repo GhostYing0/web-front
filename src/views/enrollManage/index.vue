@@ -543,7 +543,8 @@
                             })
                         }
                     })
-                }).catch(() => {
+                }).catch((error) => {
+                  console.error(error)
                     ElMessage({
                         type: 'info',
                         message: '取消',

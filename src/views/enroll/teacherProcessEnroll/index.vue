@@ -131,7 +131,7 @@ import {router} from "@/router"
 import store from "@/store";
 import {enrollContest} from "@/api/enroll";
 import contestProcessing from './processing.vue';
-import { defineProps, defineEmits } from 'vue'  
+import { defineProps, defineEmits } from 'vue'
 
 const props = {
   expandTrigger: 'hover',
@@ -374,13 +374,13 @@ router
 </div>
 </template>
 
-<script setup>  
+<script setup>
 import { router } from '@/router'
-import { ref ,onMounted} from 'vue'  
+import { ref ,onMounted} from 'vue'
 const defaultActive = ref("/enrollProcessing")
-const handleSelect = (key, keyPath) => { 
-  console.log("==============", key, "  ",keyPath) 
-}  
+const handleSelect = (key, keyPath) => {
+  console.log("==============", key, "  ",keyPath)
+}
 const initDash = () => {
   router.push("/enrollProcessing")
 }

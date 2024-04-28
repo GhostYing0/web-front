@@ -55,7 +55,17 @@ const asyncRoutes = [
             },
             {
                 path: "/uploadGrade",
-                component: () => import("@/views/grade/indexUploadGrade"),
+                component: () => import("@/views/grade/teacherViewGrade/upload.vue"),
+                roles: ["teacher"]
+            },
+            {
+                path: "/uploadGradeDetail/:contest_id",
+                component: () => import("@/views/grade/teacherViewGrade/detail.vue"),
+                roles: ["teacher"]
+            },
+            {
+                path: "/doUploadGrade/:enroll_information_id",
+                component: () => import("@/views/grade/teacherViewGrade/doUploadGrade.vue"),
                 roles: ["teacher"]
             },
             {
@@ -64,9 +74,19 @@ const asyncRoutes = [
                 roles: ["department_manager"]
             },
             {
+                path: "/departmentDisplayGradeDetail/:contest_id",
+                component: () => import("@/views/grade/departmentDisplayGrade/detail.vue"),
+                roles: ["department_manager"],
+            },
+            {
                 path: "/departmentDisplayEnroll",
                 component: () => import("@/views/enroll/departmentDisplayEnroll/index"),
                 roles: ["department_manager"]
+            },
+            {
+                path: "/departmentDisplayEnrollDetail/:contest_id",
+                component: () => import("@/views/enroll/departmentDisplayEnroll/detail.vue"),
+                roles: ["department_manager"],
             },
             // {
             //     path: "/uploadGrade",

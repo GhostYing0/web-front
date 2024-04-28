@@ -145,7 +145,7 @@
       </el-table-column>
       </el-table-column>
     </el-table>
-  
+
     <!--查看图片-->
     <el-dialog v-model="dialogPictureVisible" width="30%">
           <!--普通表单-->
@@ -153,7 +153,7 @@
                   <el-image :src="picture" />
               </div>
       </el-dialog>
-  
+
     <!--分页条-->
     <el-pagination
         background
@@ -167,7 +167,7 @@
         class="pagination_style"
     ></el-pagination>
   </template>
-  
+
   <script setup>
 
   import {

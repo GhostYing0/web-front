@@ -111,3 +111,12 @@ export function revokeEnroll(data) {
         data: data
     })
 }
+
+//
+export function teacherGetOneEnroll(param) {
+    return request({
+        url: "/teacherGetOneEnroll",
+        method: "get",
+        params: param
+    })
+}

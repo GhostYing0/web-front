@@ -174,12 +174,13 @@
           flex-direction: row;
 
           .login-login-button {
-            width: 120px;
+            margin-left: -10px;
+            width: 70px;
           }
 
           .login-register-button {
-            margin-left: 30px;
-            width: 50px;
+            margin-left: 60px;
+            width: 70px;
           }
         }
       }

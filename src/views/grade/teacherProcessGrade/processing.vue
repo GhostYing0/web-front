@@ -5,6 +5,9 @@
       <el-button class="handle-button" type="primary" @click="handleShowContest">
         显示全部
       </el-button>
+      <el-button class="handle-button" type="primary" @click="handlePassSome">
+        批量审核通过
+      </el-button>
       <el-button class="handle-button" type="primary" @click="returnDesktop()">
           返回
         </el-button>
@@ -46,15 +49,20 @@
             label="序号"
             width="55" v-if="store.getters.roles.includes('manager')">
         </el-table-column>
-          <el-table-column type="expand"
-                          label="备注"
-                          width="70px">
-            <template #default="props">
-              <div>
-                <el-text>{{props.row.ps}}</el-text>
-              </div>
-            </template>
+          <el-table-column
+              fixed
+              type="selection"
+              width="55">
           </el-table-column>
+<!--          <el-table-column type="expand"-->
+<!--                          label="备注"-->
+<!--                          width="70px">-->
+<!--            <template #default="props">-->
+<!--              <div>-->
+<!--                <el-text>{{props.row.ps}}</el-text>-->
+<!--              </div>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
         <el-table-column
             prop="contest"
             label="竞赛名称"
@@ -324,6 +332,7 @@
   import {computed, onMounted, reactive, ref, watch} from "vue"
   import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
   import store from "@/store";
+  import {processPassEnroll} from "@/api/enroll";
   
   const emit = defineEmits(['sendToParent'])
   const props = defineProps({
@@ -483,8 +492,10 @@
   const handlePass = (row, index) => {
     form.state = 1
     form.id = row.id
+    const param = {ids:[]}
+    param.ids.push(row.id)
     console.log( row.id)
-    processPassGrade(form).then(resp => {
+    processPassGrade(param).then(resp => {
       if(resp.code === 200) {
         ElMessage({
           type: 'success',
@@ -528,31 +539,50 @@
     dialogFormVisible.value = false
   }
 
-  const handleProcess = (row, index) => {
-    form.state = 3
-    form.id = row.id
-    console.log( row.id)
-    processRecoverEnroll(form).then(resp => {
-      if(resp.code === 200) {
-        ElMessage({
-          type: 'success',
-          message: '更新成功',
-        })//
-        tableData.value.splice(index, 1)
-        // 如果删完了，获取上一页
-        if(tableData.value.length === 0) {
-          param.page_number = handleCurrentChange - 1
+  const handlePassSome = () => {
+    ElMessageBox.confirm('确定要通过这些成绩吗?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      // 获取选中的对象数组
+      const param = {ids:[]};
+      multipleSelection.value.forEach(row => {
+        param.ids.push(row.id)
+      });
+      console.log(param)
+
+      processPassGrade(param).then(resp => {
+        console.log("deletes:",resp)
+        if(resp.code === 200) {
+          ElMessage({
+            type: 'success',
+            message: '审核成功',
+          })
+          if(tableData.value.length === 0) {  //如果本页内容全部删光了
+            //当前页为上一页
+            if(param.page_number !== 1) {
+              param.page_number = param.page_number - 1
+            }
+          }
+          // 重载当前页
           handleCurrentChange(param.page_number)
+        } else {
+          ElMessage({
+            type: 'error',
+            message: '删除失败',
+          })
         }
-      } else {
-        ElMessage({
-          type: 'error',
-          message: '更新失败',
-        })//
-      }
+      })
+    }).catch((error) => {
+      console.error(error)
+      ElMessage({
+        type: 'info',
+        message: '取消',
+      })
     })
   }
-  
+
   const initOptions = async () => {
     getContestType().then(resp => {
       try {

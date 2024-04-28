@@ -212,3 +212,11 @@ export function getDepartmentContestGrade(param) {
         params:param
     })
 }
+
+export function viewTeacherContestGrade(param) {
+    return request({
+        url: '/viewTeacherContestGrade',
+        method: 'get',
+        params:param
+    })
+}

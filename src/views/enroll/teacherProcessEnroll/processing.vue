@@ -20,6 +20,9 @@
         <el-button class="handle-button" type="primary" @click="handleShowContest">
           显示全部
         </el-button>
+        <el-button class="handle-button" type="primary" @click="handlePassSome">
+          批量审核通过
+        </el-button>
         <el-button class="handle-button" type="primary" @click="returnDesktop()">
           返回
         </el-button>
@@ -48,12 +51,12 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
     >
-  <!--    <el-table-column-->
-  <!--        fixed-->
-  <!--        type="selection"-->
-  <!--        width="55">-->
-  <!--    </el-table-column>-->
       <el-table-column label="报名审核表">
+        <el-table-column
+            fixed
+            type="selection"
+            width="55">
+        </el-table-column>
       <el-table-column
           fixed
           prop="id"
@@ -283,7 +286,7 @@
   import {
     teacherSearchEnroll,
     processPassEnroll,
-    processRejectEnroll
+    processRejectEnroll, deleteEnroll
   } from '@/api/enroll'
 
   import {
@@ -434,14 +437,14 @@
   
   const handleShowContest = async () => {
     param.page_number = 1
-    if(activeName === "processing") {
+    if(activeName.value === "processing") {
       param.state = 3
-    } else if (activeName === "rejected") {
+    } else if (activeName.value === "rejected") {
       param.state = 2
     }
     param.type = ""
     item.value = ""
-    departmentManagerSearchEnroll(param).then(resp => {
+    await departmentManagerSearchEnroll(param).then(resp => {
       console.log(resp)
       if(resp.code === 200) {
         tableData.value = resp.data.list
@@ -449,12 +452,57 @@
       }
     })
   }
-  
+
+  const handlePassSome = () => {
+    ElMessageBox.confirm('确定要通过这些报名吗?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      // 获取选中的对象数组
+      const param = {ids:[]};
+      multipleSelection.value.forEach(row => {
+        param.ids.push(row.id)
+      });
+      console.log(param)
+
+      processPassEnroll(param).then(resp => {
+        console.log("deletes:",resp)
+        if(resp.code === 200) {
+          ElMessage({
+            type: 'success',
+            message: '审核成功',
+          })
+          if(tableData.value.length === 0) {  //如果本页内容全部删光了
+            //当前页为上一页
+            if(param.page_number !== 1) {
+              param.page_number = param.page_number - 1
+            }
+          }
+          // 重载当前页
+          handleCurrentChange(param.page_number)
+        } else {
+          ElMessage({
+            type: 'error',
+            message: '删除失败',
+          })
+        }
+      })
+    }).catch((error) => {
+      console.error(error)
+      ElMessage({
+        type: 'info',
+        message: '取消',
+      })
+    })
+  }
+
   const handlePass = (row, index) => {
     form.state = 1
-    form.id = row.id
+    const param = {ids:[]}
+    param.ids.push(row.id)
     console.log( row.id)
-    processPassEnroll(form).then(resp => {
+    processPassEnroll(param).then(resp => {
       if(resp.code === 200) {
         ElMessage({
           type: 'success',
