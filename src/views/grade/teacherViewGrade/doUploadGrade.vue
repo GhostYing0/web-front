@@ -20,10 +20,12 @@
         <div class="block">
           <span class="demonstration">获奖时间</span>
           <el-date-picker
-              v-model="value1"
-              type="date"
+              v-model="form.reward_time"
+              type="datetime"
               placeholder="Pick a day"
               :size="size"
+              format="YYYY-MM-DD HH:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
           />
         </div>
       </div>
@@ -34,7 +36,7 @@
         <el-input v-model="form.major" disabled/>
       </el-form-item>
       <el-form-item label="指导老师姓名">
-        <el-input v-model="form.teacher" />
+        <el-input v-model="form.guidance_teacher" />
       </el-form-item>
       <el-form-item label="指导老师所属院系">
         <el-input v-model="form.teacher_department" />
@@ -90,6 +92,7 @@ import {ElMessage} from "element-plus";
 const route = ref(router)
 
 const form = reactive({
+  enroll_id: -1,
   contest: "",
   contest_type: "",
   contest_level: "",
@@ -98,7 +101,7 @@ const form = reactive({
   semester: "",
   reward_time: "",
   major: "",
-  teacher: "",
+  guidance_teacher: "",
   teacher_department: "",
   teacher_title: "",
   prize: "",
@@ -112,7 +115,7 @@ const param = reactive({
 
 
 const handleGetEnroll = async () => {
-  param.id = route.value.currentRoute.params.enroll_information_id
+  param.id = parseInt(route.value.currentRoute.params.enroll_information_id, 10)
   console.log("=====",param.id)
   param.page_number = 1
   param.type = ""
@@ -172,6 +175,7 @@ uploadAxios.interceptors.request.use(config => {
 
 // 创建表单
 const handleCreate = async () => {
+  form.enroll_id = parseInt(route.value.currentRoute.params.enroll_information_id, 10)
   // 假设 uploadRef.value 是一个具有 submit 方法的上传组件实例
   //if (uploadRef.value && typeof uploadRef.value.submit === 'function') {
   if (uploadRef.value) {
