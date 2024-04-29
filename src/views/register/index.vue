@@ -424,10 +424,9 @@ onMounted(initOptions)
 
 <style lang="scss">
 .root-background {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+    width: 100%;
+    background-image: url('../../../public/login/0119d95da98990a8012163ba589d72.jpg@2o.jpg');
   background-color: #5a5e66;
   .register-el-step-button {
     margin-left: auto;
@@ -443,11 +442,12 @@ onMounted(initOptions)
     margin-right: auto;
   }
   .register-form {
+    border-radius: 15px;
     position: relative;
     background-color: white;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 10%;
+    top: 10vh;
     width: 800px;
     border-style: solid;
     border-width: 3px;

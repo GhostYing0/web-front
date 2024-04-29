@@ -2,12 +2,13 @@
   <div class="root-background">
     <div class="login-container">
         <div class="login-icon">
+            <el-image style="width: 180px; height: 180px" :src="require(`../../../public/login/${imgPath}.png`)" :fit="fit" />
         </div>
         <div class="login-window">
           <el-form ref="loginForm" :model="loginForm" :rules="loginRules">
             <!-- 标题 -->
             <div class="title-container">
-                <h3 class="title">登录竞赛信息管理系统</h3>
+                <h3 class="title">高校学科竞赛信息管理系统</h3>
             </div>
             <!-- 用户名 -->
             <el-form-item prop="username" class="login-input" label="用户名" label-width="80px">
@@ -74,7 +75,9 @@
             const validatePassword = (rule, value, callback) => {
                 callback()
             }
+            const imgPath = "t01594066693effc951"
             return {
+                imgPath,
                 loginForm: {
                     username: 'gu',
                     password: 'gu112233..',
@@ -138,12 +141,17 @@
 </script>
 <style lang="scss">
   .root-background {
-    background-color: #5a5e66;
+    //background-color: #5a5e66;
+    height: 100vh;
+    width: 100%;
+    background-image: url('../../../public/login/0119d95da98990a8012163ba589d72.jpg@2o.jpg');
     .login-container {
+      border-radius: 15px;
       background-color: white;
       margin-left: auto;
       margin-right: auto;
-      margin-top: 20vh;
+      top: 20vh;
+      position: relative;
       width: 90vh;
       border-style: solid;
       border-width: 3px;

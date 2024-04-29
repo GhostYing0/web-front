@@ -1,6 +1,11 @@
 <template>
     <div class="navbar">
         <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+        <el-breadcrumb :separator-icon="ArrowRight" class="breadcrumb-container">
+          <el-breadcrumb-item v-for="item in routes" :key="item.path" :to="{ path: item?.path }">
+            {{item?.meta?.title}}
+          </el-breadcrumb-item>
+        </el-breadcrumb>
       <el-avatar size="large"
                    :src=avatar
                   class="avatar-container"
@@ -31,9 +36,8 @@
 <script>
     import { mapGetters } from 'vuex'
     import Hamburger from '@/components/Hamburger'
-    import {router} from "@/router";
     import store from "@/store";
-
+    import { ArrowRight } from '@element-plus/icons-vue'
     export default {
         components: {
             Hamburger
@@ -95,6 +99,18 @@
           height: 100%;
           line-height: 50px;
 
+        }
+    
+        .breadcrumb-container {
+            line-height: 60px;
+            height: 100%;
+            font-size: 15px;
+            margin-left: 13vw;
+            float: left;
+            cursor: pointer;
+            &:hover {
+                background: rgba(0, 0, 0, .025)
+            }
         }
 
         .hamburger-container {
