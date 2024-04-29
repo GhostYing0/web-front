@@ -15,7 +15,6 @@
                             <el-icon style="color: white"><location /></el-icon>
                             <span class="text">报名信息模块</span>
                         </template>
-                        <el-menu-item class="menu-item" index="/enrollContest" v-if="store.getters.roles.includes('student')"><span class="text">报名竞赛</span></el-menu-item>
                       <el-menu-item class="menu-item" index="/departmentDisplayEnroll" v-if="store.getters.roles.includes('department_manager')"><span class="text">查看报名结果</span></el-menu-item>
                       <el-menu-item class="menu-item" index="/searchEnrollResult" v-if="store.getters.roles.includes('student')"><span class="text">查看报名结果</span></el-menu-item>
                       <el-menu-item class="menu-item" index="/teacherViewEnroll" v-if="store.getters.roles.includes('teacher')"><span class="text">查看报名信息</span></el-menu-item>

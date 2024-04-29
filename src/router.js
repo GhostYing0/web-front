@@ -14,6 +14,11 @@ const asyncRoutes = [
                 roles: ["student"]
             },
             {
+                path: "/enrollContest/:contest_id",
+                component: () => import("@/views/enroll/indexEnrollContest"),
+                roles: ["student"]
+            },
+            {
                 path: "/searchEnrollResult",
                 component: () => import("@/views/enroll/indexSearchEnrollResult"),
                 roles: ["student"]

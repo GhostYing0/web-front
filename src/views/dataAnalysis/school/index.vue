@@ -39,7 +39,6 @@ const param = reactive({
 
 const initSchoolEnrollCountChartData = () => {
   console.log("year:", year.value)
-  param.year = year.value
   School.value = []
   EnrollCount.value = []
   schoolEnrollCount(param).then(resp => {

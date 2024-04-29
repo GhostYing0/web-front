@@ -25,27 +25,6 @@
           <el-radio v-model="param.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
           <el-radio v-model="param.contest_level" :label="3" @change="handleFilter">校级</el-radio>
         </el-form-item>
-        <el-form-item label="证明材料">
-          <el-upload
-              ref="uploadRef"
-              class="upload-demo"
-              drag
-              action="http://localhost:9006/api/public/v1/upload"
-              :on-change="handleChange"
-              :auto-upload="false"
-              name="file"
-          >
-            <el-icon class="esl-icon--upload"><upload-filled /></el-icon>
-            <div class="el-upload__text">
-              Drop file here or <em>click to upload</em>
-            </div>
-            <template #tip>
-              <div class="el-upload__tip">
-                jpg/png files with a size less than 500kb
-              </div>
-            </template>
-          </el-upload>
-        </el-form-item>
       </div>
     </div>
     <div class="handle-container">

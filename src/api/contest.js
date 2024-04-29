@@ -220,3 +220,18 @@ export function viewTeacherContestGrade(param) {
         params:param
     })
 }
+
+export function studentGetOneContest(param) {
+    return request({
+        url: '/studentGetOneContest',
+        method: 'get',
+        params:param
+    })
+}
+
+export  function getContestEntry() {
+    return request({
+        url: '/public/getContestEntry',
+        method: 'get',
+    })
+}
