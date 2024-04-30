@@ -1,42 +1,245 @@
 <template>
     <div class="app-container">
-        <div class="filter-container" style="margin-bottom: 15px">
+      <el-tabs v-model="activeName" class="demo-tabs">
+        <el-tab-pane label="单人赛" name="first">
+          <div class="filter-container" style="margin-bottom: 15px">
             <!-- 用户名输入 -->
-          <div class="filter">
-            <div class="input-container">
-            <el-input v-model="param.contest_name" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
-              <el-date-picker
-                  class="block"
-                  v-model="time_range"
-                  type="datetimerange"
-                  start-placeholder="报名截止时间"
-                  end-placeholder="开赛时间"
-                  value-format="YYYY-MM-DD HH:mm:ss"
-                  date-format="YYYY/MM/DD ddd"
-                  time-format="HH:mm"
-                  @change="handleTime"
-              />
-              <div class="filter-button-container">
-                <el-button class="filter-button" type="primary" @click="handleFilter">
-                  搜索
-                </el-button>
-              </div>            </div>
-            <el-form-item label="审核状态" prop="role" class="filter-check">
-              <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
-              <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
-              <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
-              <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
-            </el-form-item>
+            <div class="filter">
+              <div class="input-container">
+                <el-input v-model="param.contest_name" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+                <el-date-picker
+                    class="block"
+                    v-model="time_range"
+                    type="datetimerange"
+                    start-placeholder="报名截止时间"
+                    end-placeholder="开赛时间"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    date-format="YYYY/MM/DD ddd"
+                    time-format="HH:mm"
+                    @change="handleTime"
+                />
+                <div class="filter-button-container">
+                  <el-button class="filter-button" type="primary" @click="handleFilter">
+                    搜索
+                  </el-button>
+                </div>            </div>
+              <el-form-item label="审核状态" prop="role" class="filter-check">
+                <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
+                <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
+                <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
+                <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
+              </el-form-item>
+              <el-form-item label="竞赛级别" prop="role" class="filter-check">
+                <el-radio v-model="param.contest_level" :label="-1" @change="handleFilter">全部</el-radio>
+                <el-radio v-model="param.contest_level" :label="1" @change="handleFilter">国家级</el-radio>
+                <el-radio v-model="param.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
+                <el-radio v-model="param.contest_level" :label="3" @change="handleFilter">校级</el-radio>
+              </el-form-item>
+            </div>
           </div>
-        </div>
-      <div class="handle-container">
-      <!-- 一些按钮 -->
-        <el-button class="handle-button" type="primary" @click="handleShowALL">
-          显示全部
-        </el-button>
-        <el-text>将光标悬停在未通过标签上查看驳回原因</el-text>
+          <div class="handle-container">
+            <!-- 一些按钮 -->
+            <el-button class="handle-button" type="primary" @click="handleShowALL">
+              显示全部
+            </el-button>
+            <el-text>将光标悬停在未通过标签上查看驳回原因</el-text>
 
-      </div>
+          </div>
+          <el-table
+              height="54vh"
+              class="table"
+              ref="multipleTable"
+              :data="tableData"
+              border=true
+              style="width: 100%"
+              @selection-change="handleSelectionChange"
+          >
+            <el-table-column label="我的报名">
+              <el-table-column
+                  prop="contest"
+                  label="竞赛"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="start_time"
+                  label="开赛时间"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="create_time"
+                  label="报名时间"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="state"
+                  label="审核状态"
+                  show-overflow-tooltip>
+                <template #default="{ row }">
+                  <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      :content="row.reject_reason"
+                      placement="top-start"
+                  ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+                  </el-tooltip>
+                  <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+                  <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
+                  <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
+                </template>
+              </el-table-column>
+              <!--    <el-table-column-->
+              <!--        label="上传成绩"-->
+              <!--        show-overflow-tooltip>-->
+              <!--      <template #default="{ row }">-->
+              <!--        <el-button  type="success" size="small" v-if="row.do_upload === true" @click="openUploadGrade(row)">上传</el-button>-->
+              <!--        <el-button  type="info" size="small" v-else plain disabled>不可上传</el-button>-->
+              <!--      </template>-->
+              <!--    </el-table-column>-->
+              <el-table-column fixed="right" label="操作" width="300" type="index">
+                <template #default="{ row }">
+                  <el-button @click="CheckDetail(row)" type="success" size="small" >查看详情</el-button>
+                  <el-button @click="DoUpdate(row)" type="primary" size="small" v-if="row.state !== 1" >编辑</el-button>
+                  <el-button  type="primary" size="small" v-if="row.state === 1" plain disabled>编辑</el-button>
+                  <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state !== 3" plain disabled>撤回</el-button>
+                  <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state === 3">撤回</el-button>
+                </template>
+              </el-table-column>
+            </el-table-column>
+          </el-table>
+
+          <!--分页条-->
+          <el-pagination
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="param.page_number"
+              :page-sizes="[5, 10, 20, 50]"
+              :page-size="param.page_size"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="recordTotal"
+              class="pagination_style"
+          ></el-pagination>
+        </el-tab-pane>
+        <el-tab-pane label="组队赛" name="second">
+          <div class="filter-container" style="margin-bottom: 15px">
+            <!-- 用户名输入 -->
+            <div class="filter">
+              <div class="input-container">
+                <el-input v-model="param.contest_name" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+                <el-date-picker
+                    class="block"
+                    v-model="time_range"
+                    type="datetimerange"
+                    start-placeholder="报名截止时间"
+                    end-placeholder="开赛时间"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    date-format="YYYY/MM/DD ddd"
+                    time-format="HH:mm"
+                    @change="handleTime"
+                />
+                <div class="filter-button-container">
+                  <el-button class="filter-button" type="primary" @click="handleFilter">
+                    搜索
+                  </el-button>
+                </div>            </div>
+              <el-form-item label="审核状态" prop="role" class="filter-check">
+                <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
+                <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
+                <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
+                <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
+              </el-form-item>
+              <el-form-item label="竞赛级别" prop="role" class="filter-check">
+                <el-radio v-model="param.contest_level" :label="-1" @change="handleFilter">全部</el-radio>
+                <el-radio v-model="param.contest_level" :label="1" @change="handleFilter">国家级</el-radio>
+                <el-radio v-model="param.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
+                <el-radio v-model="param.contest_level" :label="3" @change="handleFilter">校级</el-radio>
+              </el-form-item>
+            </div>
+          </div>
+          <div class="handle-container">
+            <!-- 一些按钮 -->
+            <el-button class="handle-button" type="primary" @click="handleShowALL">
+              显示全部
+            </el-button>
+            <el-text>将光标悬停在未通过标签上查看驳回原因</el-text>
+
+          </div>
+          <el-table
+              height="54vh"
+              class="table"
+              ref="multipleTable"
+              :data="tableData"
+              border=true
+              style="width: 100%"
+              @selection-change="handleSelectionChange"
+          >
+            <el-table-column label="我的报名">
+              <el-table-column
+                  prop="contest"
+                  label="竞赛"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="start_time"
+                  label="开赛时间"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="create_time"
+                  label="报名时间"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="state"
+                  label="审核状态"
+                  show-overflow-tooltip>
+                <template #default="{ row }">
+                  <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      :content="row.reject_reason"
+                      placement="top-start"
+                  ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+                  </el-tooltip>
+                  <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+                  <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
+                  <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
+                </template>
+              </el-table-column>
+              <!--    <el-table-column-->
+              <!--        label="上传成绩"-->
+              <!--        show-overflow-tooltip>-->
+              <!--      <template #default="{ row }">-->
+              <!--        <el-button  type="success" size="small" v-if="row.do_upload === true" @click="openUploadGrade(row)">上传</el-button>-->
+              <!--        <el-button  type="info" size="small" v-else plain disabled>不可上传</el-button>-->
+              <!--      </template>-->
+              <!--    </el-table-column>-->
+              <el-table-column fixed="right" label="操作" width="300" type="index">
+                <template #default="{ row }">
+                  <el-button @click="CheckDetail(row)" type="success" size="small" >查看详情</el-button>
+                  <el-button @click="DoUpdate(row)" type="primary" size="small" v-if="row.state !== 1" >编辑</el-button>
+                  <el-button  type="primary" size="small" v-if="row.state === 1" plain disabled>编辑</el-button>
+                  <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state !== 3" plain disabled>撤回</el-button>
+                  <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state === 3">撤回</el-button>
+                </template>
+              </el-table-column>
+            </el-table-column>
+          </el-table>
+
+          <!--分页条-->
+          <el-pagination
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="param.page_number"
+              :page-sizes="[5, 10, 20, 50]"
+              :page-size="param.page_size"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="recordTotal"
+              class="pagination_style"
+          ></el-pagination>
+        </el-tab-pane>
+      </el-tabs>
     </div>
 
 <!--  &lt;!&ndash;弹出框&ndash;&gt;-->
@@ -82,83 +285,11 @@
 <!--      <el-button type="primary" @click="handleCreate">提交</el-button>-->
 <!--    </div>-->
 <!--  </el-dialog>-->
-
-  <el-table
-      height="54vh"
-      class="table"
-      ref="multipleTable"
-      :data="tableData"
-      border=true
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-  >
-    <el-table-column label="我的报名">
-    <el-table-column
-        prop="contest"
-        label="竞赛"
-        show-overflow-tooltip>
-    </el-table-column>
-      <el-table-column
-          prop="start_time"
-          label="开赛时间"
-          show-overflow-tooltip>
-      </el-table-column>
-    <el-table-column
-        prop="create_time"
-        label="报名时间"
-        show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
-        prop="state"
-        label="审核状态"
-        show-overflow-tooltip>
-      <template #default="{ row }">
-        <el-tooltip
-            class="box-item"
-            effect="dark"
-            :content="row.reject_reason"
-            placement="top-start"
-        ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
-        </el-tooltip>
-        <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
-        <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
-        <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
-      </template>
-    </el-table-column>
-<!--    <el-table-column-->
-<!--        label="上传成绩"-->
-<!--        show-overflow-tooltip>-->
-<!--      <template #default="{ row }">-->
-<!--        <el-button  type="success" size="small" v-if="row.do_upload === true" @click="openUploadGrade(row)">上传</el-button>-->
-<!--        <el-button  type="info" size="small" v-else plain disabled>不可上传</el-button>-->
-<!--      </template>-->
-<!--    </el-table-column>-->
-    <el-table-column fixed="right" label="操作" width="150" type="index">
-      <template #default="{ row }">
-        <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state !== 3" plain disabled>撤回</el-button>
-        <el-button @click="handleCancel(row)" type="warning" size="small" v-if="row.state === 3">撤回</el-button>
-      </template>
-    </el-table-column>
-    </el-table-column>
-  </el-table>
-
-    <!--分页条-->
-    <el-pagination
-            background
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="param.page_number"
-            :page-sizes="[5, 10, 20, 50]"
-            :page-size="param.page_size"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="recordTotal"
-            class="pagination_style"
-    ></el-pagination>
 </template>
 
 <script>
     import {getUserEnroll, revokeEnroll} from '@/api/enroll'
-    import {computed, reactive, ref} from "vue"
+    import {computed, reactive, ref, watch} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
     import {uploadGrade} from "@/api/grade";
     import { getToken } from '@/utils/auth'
@@ -168,6 +299,8 @@
     export default {
         //创建后
         setup() {
+            const activeName = ref('first');
+
             const formType = ref(0);
             const formTitle = computed(() => {
                 console.log("computed")
@@ -275,6 +408,7 @@
           const dialogFormVisible = ref(false)
 
             return {
+              activeName,
                 value,
                 form,
                 time_range,
@@ -329,7 +463,8 @@
                     contest_name: '',
                     start_time: '',
                     end_time: '',
-                    state: -1
+                    state: -1,
+                    contest_level: -1,
                 },
 
 
@@ -341,7 +476,14 @@
         created() {
             return this.handleShowUser()
         },
+      watch : {
+        // 使用 watch 监听 contestID prop 的变化
+        activeName(newActiveName, oldActiveName) {
+          this.handleFilter(newActiveName);
+        }
+        },
         methods: {
+
             openUploadGrade(row) {
               this.form.contest = row.contest
               this.dialogFormVisible = true
@@ -353,7 +495,12 @@
               this.param.start_time = this.time_range[0]
             },
             // 搜索
-            handleFilter() {
+            handleFilter(newActiveName) {
+              if(newActiveName === "first") {
+                this.param.is_group = 2
+              } else if(newActiveName === "second") {
+                this.param.is_group = 1
+              }
                 this.param.page_number = 1
                 console.log("asda:",this.param.contest_name)
                 console.log("asda:",this.param.state)
@@ -415,10 +562,13 @@
                     school: '',
                     phone: '',
                     email: '',
-                    state: -1
+                    state: -1,
+                    contest_level: -1,
                 }
-                this.time_range[0] = ''
-                this.time_range[1] = ''
+                if (this.time_range) {
+                  this.time_range[0] = ''
+                  this.time_range[1] = ''
+                }
                 getUserEnroll(this.param).then(resp => {
                     console.log(resp)
                     if (resp.code === 200) {
@@ -440,7 +590,13 @@
                 this.handleCurrentChange(this.param.page_number)
               }
             })
-          }
+          },
+          CheckDetail(row) {
+            this.$router.push(`/studentEnrollDetail/${row.id}`)
+          },
+          DoUpdate(row) {
+            this.$router.push(`/studentEnrollUpdate/${row.id}`)
+          },
         }
     };
 </script>

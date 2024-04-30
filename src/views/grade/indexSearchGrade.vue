@@ -1,42 +1,99 @@
 <template>
     <div class="app-container">
-        <div class="filter-container" style="margin-bottom: 15px">
-            <!-- 用户名输入 -->
-          <div class="filter">
-            <div class="input-container">
-            <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
-            <el-input v-model="param.grade" placeholder="成绩" class="filter-item" @keyup.enter="handleFilter" />
-            <el-date-picker
-                class="block"
-                v-model="time_range"
-                type="datetimerange"
-                start-placeholder="报名截止时间"
-                end-placeholder="开赛时间"
-                value-format="YYYY-MM-DD HH:mm:ss"
-                date-format="YYYY/MM/DD ddd"
-                time-format="HH:mm"
-                @change="handleTime"
-            />
-              <div class="filter-button-container">
-                <el-button class="filter-button" type="primary" @click="handleFilter">
-                  搜索
-                </el-button>
+      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleFilter">
+        <el-tab-pane label="单人赛" name="first">
+          <div class="filter-container" style="margin-bottom: 15px">
+              <!-- 用户名输入 -->
+            <div class="filter">
+              <div class="input-container">
+              <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+<!--              <el-input v-model="param.grade" placeholder="成绩" class="filter-item" @keyup.enter="handleFilter" />-->
+              <el-date-picker
+                  class="block"
+                  v-model="time_range"
+                  type="datetimerange"
+                  start-placeholder="报名截止时间"
+                  end-placeholder="开赛时间"
+                  value-format="YYYY-MM-DD HH:mm:ss"
+                  date-format="YYYY/MM/DD ddd"
+                  time-format="HH:mm"
+                  @change="handleTime"
+              />
+                <div class="filter-button-container">
+                  <el-button class="filter-button" type="primary" @click="handleFilter">
+                    搜索
+                  </el-button>
+                </div>
               </div>
+              <el-form-item label="竞赛级别" prop="role" class="filter-check">
+                <el-radio v-model="param.contest_level" :label="-1" @change="handleFilter">全部</el-radio>
+                <el-radio v-model="param.contest_level" :label="1" @change="handleFilter">国家级</el-radio>
+                <el-radio v-model="param.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
+                <el-radio v-model="param.contest_level" :label="3" @change="handleFilter">校级</el-radio>
+              </el-form-item>
+              <el-form-item label="奖项" prop="role" class="filter-check">
+                <el-radio v-model="param.grade" :label="-1" @change="handleFilter">全部</el-radio>
+                <el-radio v-model="param.grade" :label="1" @change="handleFilter">特等奖</el-radio>
+                <el-radio v-model="param.grade" :label="2" @change="handleFilter">一等奖</el-radio>
+                <el-radio v-model="param.grade" :label="3" @change="handleFilter">二等奖</el-radio>
+                <el-radio v-model="param.grade" :label="4" @change="handleFilter">三等奖</el-radio>
+              </el-form-item>
             </div>
-            <el-form-item label="审核状态" prop="role" class="filter-check">
-                <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
-                <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
-                <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
-                <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
-            </el-form-item>
           </div>
+        <div class="handle-container">
+        <!-- 一些按钮 -->
+        <el-button class="handle-button" type="primary" @click="handleShowALL">
+          显示全部
+        </el-button>
         </div>
-      <div class="handle-container">
-      <!-- 一些按钮 -->
-      <el-button class="handle-button" type="primary" @click="handleShowALL">
-        显示全部
-      </el-button>
-      </div>
+        </el-tab-pane>
+        <el-tab-pane label="组队赛" name="second">
+          <div class="filter-container" style="margin-bottom: 15px">
+            <!-- 用户名输入 -->
+            <div class="filter">
+              <div class="input-container">
+                <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+<!--                <el-input v-model="param.grade" placeholder="成绩" class="filter-item" @keyup.enter="handleFilter" />-->
+                <el-date-picker
+                    class="block"
+                    v-model="time_range"
+                    type="datetimerange"
+                    start-placeholder="报名截止时间"
+                    end-placeholder="开赛时间"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    date-format="YYYY/MM/DD ddd"
+                    time-format="HH:mm"
+                    @change="handleTime"
+                />
+                <div class="filter-button-container">
+                  <el-button class="filter-button" type="primary" @click="handleFilter">
+                    搜索
+                  </el-button>
+                </div>
+              </div>
+              <el-form-item label="竞赛级别" prop="role" class="filter-check">
+                <el-radio v-model="param.contest_level" :label="-1" @change="handleFilter">全部</el-radio>
+                <el-radio v-model="param.contest_level" :label="1" @change="handleFilter">国家级</el-radio>
+                <el-radio v-model="param.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
+                <el-radio v-model="param.contest_level" :label="3" @change="handleFilter">校级</el-radio>
+              </el-form-item>
+              <el-form-item label="奖项" prop="role" class="filter-check">
+                <el-radio v-model="param.grade" :label="-1" @change="handleFilter">全部</el-radio>
+                <el-radio v-model="param.grade" :label="1" @change="handleFilter">特等奖</el-radio>
+                <el-radio v-model="param.grade" :label="2" @change="handleFilter">一等奖</el-radio>
+                <el-radio v-model="param.grade" :label="3" @change="handleFilter">二等奖</el-radio>
+                <el-radio v-model="param.grade" :label="4" @change="handleFilter">三等奖</el-radio>
+              </el-form-item>
+            </div>
+          </div>
+          <div class="handle-container">
+            <!-- 一些按钮 -->
+            <el-button class="handle-button" type="primary" @click="handleShowALL">
+              显示全部
+            </el-button>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
     </div>
 
 
@@ -225,7 +282,9 @@
                 return "编辑成绩";
             });
 
-            const time_range = ref([])
+          const activeName = ref('first');
+
+          const time_range = ref([])
 
             const multipleTable = ref()
             const multipleSelection = ref([])
@@ -245,6 +304,7 @@
                 formPic,
                 uploadAxios,
                 uploadRef,
+               activeName,
 
                 formType,
                 formTitle,
@@ -295,11 +355,13 @@
                     page_number: 1,
                     page_size: 10,
                     username: '',
-                    grade: '',
+                    grade: -1,
                     contest: '',
                     start_time: '',
                     end_time: '',
-                    state: -1
+                    state: -1,
+                    contest_level: -1,
+                    is_group: 2,
                 },
 
 

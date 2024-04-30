@@ -120,3 +120,12 @@ export function teacherGetOneEnroll(param) {
         params: param
     })
 }
+
+export function studentUpdateEnrollContest(data) {
+    return request({
+        url: "/studentUpdateEnrollContest",
+        method: "post",
+        data: data
+    })
+}
+

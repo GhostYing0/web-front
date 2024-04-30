@@ -235,3 +235,19 @@ export  function getContestEntry() {
         method: 'get',
     })
 }
+
+export function getTeacherContestGrade(param) {
+    return request({
+        url: '/getTeacherContestGrade',
+        method: 'get',
+        params:param
+    })
+}
+
+export  function viewTeacherContestEnroll(param) {
+    return request({
+        url: '/viewTeacherContestEnroll',
+        method: 'get',
+        params: param
+    })
+}
