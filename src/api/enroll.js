@@ -71,6 +71,14 @@ export function uploadContest(data) {
     })
 }
 
+export function teacherUpdateContest(data) {
+    return request({
+        url: "/updateContest",
+        method: "post",
+        data: data
+    })
+}
+
 // 教师显示自身竞赛报名成绩
 export function teacherSearchEnroll(param) {
     return request({

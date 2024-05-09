@@ -13,16 +13,16 @@
                 filterable
                 @change="handleFilter"
             />
-            <el-cascader
-                class="filter-item"
-                v-model="item_contest"
-                :options="contestOptions"
-                :props="props"
-                placeholder="竞赛名称"
-                filterable
-                @change="handleFilter"
-            />
-            <!--        <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />-->
+<!--            <el-cascader-->
+<!--                class="filter-item"-->
+<!--                v-model="item_contest"-->
+<!--                :options="contestOptions"-->
+<!--                :props="props"-->
+<!--                placeholder="竞赛名称"-->
+<!--                filterable-->
+<!--                @change="handleFilter"-->
+<!--            />-->
+                    <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
             <div class="filter-button-container">
               <el-button class="filter-button" type="primary" @click="handleFilter">
                 搜索
@@ -34,6 +34,12 @@
             <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
             <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
             <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
+          </el-form-item>
+          <el-form-item label="竞赛级别" prop="role" class="filter-check">
+            <el-radio v-model="param.contest_level_id" :label="-1" @change="handleFilter">全部</el-radio>
+            <el-radio v-model="param.contest_level_id" :label="1" @change="handleFilter">国家级</el-radio>
+            <el-radio v-model="param.contest_level_id" :label="2" @change="handleFilter">省部级</el-radio>
+            <el-radio v-model="param.contest_level_id" :label="3" @change="handleFilter">校级</el-radio>
           </el-form-item>
         </div>
       </div>
@@ -59,15 +65,6 @@
               label="id"
               show-overflow-tooltip v-if="store.getters.roles.includes('manager')">
           </el-table-column>
-          <el-table-column type="expand"
-                           label="简介"
-                           width="70px">
-            <template #default="props">
-              <div>
-                <el-text>{{props.row.desc}}</el-text>
-              </div>
-            </template>
-          </el-table-column>
           <el-table-column
               prop="contest"
               label="竞赛名称"
@@ -77,6 +74,12 @@
           <el-table-column
               prop="contest_type"
               label="竞赛类型"
+              width="100px"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="contest_level"
+              label="竞赛级别"
               width="100px"
               show-overflow-tooltip>
           </el-table-column>
@@ -125,7 +128,7 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="270px" type="index">
             <template #default="{ row, $index }">
-              <el-button v-if="row.state === 3" @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
+              <el-button v-if="row.state === 3" @click="DoUpdate(row)" type="primary" size="small">编辑</el-button>
               <el-button v-else type="primary" size="small" disabled>编辑</el-button>
               <template v-if="row.state === 1">
                 <el-button v-if="row.contest_state === 1" size="small" @click="transformContestState(row)" type="warning">关闭报名</el-button>
@@ -202,16 +205,16 @@
                 filterable
                 @change="handleFilter"
             />
-            <el-cascader
-                class="filter-item"
-                v-model="item_contest"
-                :options="contestOptions"
-                :props="props"
-                placeholder="竞赛名称"
-                filterable
-                @change="handleFilter"
-            />
-            <!--        <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />-->
+<!--            <el-cascader-->
+<!--                class="filter-item"-->
+<!--                v-model="item_contest"-->
+<!--                :options="contestOptions"-->
+<!--                :props="props"-->
+<!--                placeholder="竞赛名称"-->
+<!--                filterable-->
+<!--                @change="handleFilter"-->
+<!--            />-->
+                    <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
             <div class="filter-button-container">
               <el-button class="filter-button" type="primary" @click="handleFilter">
                 搜索
@@ -223,6 +226,12 @@
             <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
             <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
             <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
+          </el-form-item>
+          <el-form-item label="竞赛级别" prop="role" class="filter-check">
+            <el-radio v-model="param.contest_level_id" :label="-1" @change="handleFilter">全部</el-radio>
+            <el-radio v-model="param.contest_level_id" :label="1" @change="handleFilter">国家级</el-radio>
+            <el-radio v-model="param.contest_level_id" :label="2" @change="handleFilter">省部级</el-radio>
+            <el-radio v-model="param.contest_level_id" :label="3" @change="handleFilter">校级</el-radio>
           </el-form-item>
         </div>
       </div>
@@ -248,15 +257,6 @@
               label="id"
               show-overflow-tooltip v-if="store.getters.roles.includes('manager')">
           </el-table-column>
-          <el-table-column type="expand"
-                           label="简介"
-                           width="70px">
-            <template #default="props">
-              <div>
-                <el-text>{{props.row.desc}}</el-text>
-              </div>
-            </template>
-          </el-table-column>
           <el-table-column
               prop="contest"
               label="竞赛名称"
@@ -266,6 +266,12 @@
           <el-table-column
               prop="contest_type"
               label="竞赛类型"
+              width="100px"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="contest_level"
+              label="竞赛级别"
               width="100px"
               show-overflow-tooltip>
           </el-table-column>
@@ -314,7 +320,7 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="270px" type="index">
             <template #default="{ row, $index }">
-              <el-button v-if="row.state === 3" @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
+              <el-button v-if="row.state === 3" @click="DoUpdate(row)" type="primary" size="small">编辑</el-button>
               <el-button v-else type="primary" size="small" disabled>编辑</el-button>
               <template v-if="row.state === 1">
                 <el-button v-if="row.contest_state === 1" size="small" @click="transformContestState(row)" type="warning">关闭报名</el-button>
@@ -323,7 +329,7 @@
               <template v-else>
                 <el-button size="small"  type="success" disabled>打开报名</el-button>
               </template>
-              <el-button v-if="row.state === 3" @click="handleRevoke(row, $index)" type="danger" size="small">撤销</el-button>
+              <el-button v-if="row.state === 3" @click="DoUpdate(row)" type="danger" size="small">撤销</el-button>
               <el-button v-else  type="danger" size="small" disabled>撤销</el-button>
 
             </template>
@@ -393,6 +399,7 @@ import {
 } from "@/api/contest";
 import {ElMessage, ElMessageBox} from "element-plus";
 import store from "@/store";
+import {router} from "@/router"
 import {getContestForTeacher, transformState} from "@/api/contest";
 
 
@@ -499,7 +506,7 @@ const handleFilter = (newActiveName) => {
       if(resp.data.total === 0){
         ElMessage({
           type: 'info',
-          message: '未搜索到该用户',
+          message: '未搜索到竞赛信息',
         })//
       }
     }
@@ -552,7 +559,7 @@ const handleShowMyContest = () => {
   //contest.value = ""
   param.contest = ""
   param.year = year.value
-  param.contest_level = -1
+  param.contest_level_id = -1
 
   viewTeacherContest(param).then(resp => {
     console.log(resp)
@@ -590,6 +597,10 @@ const handleRevoke = (row) => {
     }
     dialogFormVisible.value = false  // 关闭对话框
   })
+}
+
+const DoUpdate = (row) => {
+  router.push(`/UpdateContest/${row.id}`)
 }
 
 // 点击修改竞赛信息

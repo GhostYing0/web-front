@@ -11,8 +11,8 @@
                     class="block"
                     v-model="time_range"
                     type="datetimerange"
-                    start-placeholder="报名截止时间"
-                    end-placeholder="开赛时间"
+                    start-placeholder="搜索报名时间"
+                    end-placeholder="请输入时间区间"
                     value-format="YYYY-MM-DD HH:mm:ss"
                     date-format="YYYY/MM/DD ddd"
                     time-format="HH:mm"
@@ -42,7 +42,7 @@
             <el-button class="handle-button" type="primary" @click="handleShowALL">
               显示全部
             </el-button>
-            <el-text>将光标悬停在未通过标签上查看驳回原因</el-text>
+
 
           </div>
           <el-table
@@ -130,8 +130,8 @@
                     class="block"
                     v-model="time_range"
                     type="datetimerange"
-                    start-placeholder="报名截止时间"
-                    end-placeholder="开赛时间"
+                    start-placeholder="搜索报名时间"
+                    end-placeholder="请输入时间区间"
                     value-format="YYYY-MM-DD HH:mm:ss"
                     date-format="YYYY/MM/DD ddd"
                     time-format="HH:mm"
@@ -161,8 +161,6 @@
             <el-button class="handle-button" type="primary" @click="handleShowALL">
               显示全部
             </el-button>
-            <el-text>将光标悬停在未通过标签上查看驳回原因</el-text>
-
           </div>
           <el-table
               height="54vh"
@@ -177,6 +175,11 @@
               <el-table-column
                   prop="contest"
                   label="竞赛"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="team_name"
+                  label="所属队伍"
                   show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -512,7 +515,7 @@
                         if (resp.data.total === 0) {
                             ElMessage({
                                 type: 'info',
-                                message: '未搜索到该用户',
+                                message: '未搜索到报名信息',
                             })//
                         }
                     }
@@ -565,6 +568,11 @@
                     state: -1,
                     contest_level: -1,
                 }
+              if(this.activeName === "first") {
+                this.param.is_group = 2
+              } else if( this.activeName === "second") {
+                this.param.is_group = 1
+              }
                 if (this.time_range) {
                   this.time_range[0] = ''
                   this.time_range[1] = ''

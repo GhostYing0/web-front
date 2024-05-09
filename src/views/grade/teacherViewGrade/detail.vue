@@ -2,26 +2,9 @@
   <div class="filter-container" style="margin-bottom: 15px">
     <div class="filter">
       <div class="input-container">
-        <el-input v-model="param.contest" placeholder="搜索姓名" class="filter-item" @keyup.enter="handleFilter" />
-        <el-cascader
-            class="filter-item"
-            placeholder="选择专业"
-            v-model="contest"
-            :options="contestOptions"
-            :props="props"
-            filterable
-            @change="handleFilter"
-        />
-        <el-cascader
-            class="filter-item"
-            placeholder="入学年份"
-            v-model="contest"
-            :options="contestOptions"
-            :props="props"
-            filterable
-            @change="handleFilter"
-        />
-        <el-input v-model="param.contest" placeholder="班级" class="filter-item" @keyup.enter="handleFilter" />
+        <el-input v-model="param.name" placeholder="搜索姓名" class="filter-item" @keyup.enter="handleFilter" />
+        <el-input v-model="param.major" placeholder="搜索专业" class="filter-item" @keyup.enter="handleFilter" />
+        <el-input v-model="param.student_class" placeholder="搜索班级" class="filter-item" @keyup.enter="handleFilter" />
         <div class="filter-button-container">
           <el-button class="filter-button" type="primary"  @click="handleFilter">
             搜索
@@ -49,11 +32,6 @@
       @selection-change="handleSelectionChange"
   >
     <el-table-column label="报名审核表">
-      <el-table-column
-          fixed
-          type="selection"
-          width="55">
-      </el-table-column>
       <el-table-column
           fixed
           prop="id"
@@ -107,23 +85,18 @@
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-          prop="semester"
-          label="入学年份"
+          prop="student_school_id"
+          label="学号"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="major"
+          label="专业"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
           prop="student_class"
           label="班级"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="phone"
-          label="电话"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="email"
-          label="邮箱"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -252,7 +225,10 @@ const param = reactive( {
   college: "",
   reject_reason: "",
   name: "",
-  state: 1
+  state: 1,
+  student_school_id: "",
+  major:"",
+  student_class: "",
 })
 
 
@@ -282,7 +258,7 @@ const handleFilter = () => {
       if (resp.data.total === 0) {
         ElMessage({
           type: 'info',
-          message: '未搜索到该用户',
+          message: '未搜索到报名信息',
         })//
       }
     }
@@ -314,6 +290,9 @@ const handleShowContest = async () => {
   param.id = route.value.currentRoute.params.contest_id
   param.page_number = 1
   param.type = ""
+  param.major = ""
+  param.name = ""
+  param.student_class = ""
   item.value = ""
   await teacherSearchEnroll(param).then(resp => {
     console.log(resp)

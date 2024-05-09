@@ -133,6 +133,14 @@ export function processRejectContest(data) {
     })
 }
 
+export  function  processRecoverContest(data) {
+    return request({
+        url: '/processRecoverContest',
+        method: 'post',
+        data: data
+    })
+}
+
 // 获取学校
 export function getSchool() {
     return request({
@@ -247,6 +255,15 @@ export function getTeacherContestGrade(param) {
 export  function viewTeacherContestEnroll(param) {
     return request({
         url: '/viewTeacherContestEnroll',
+        method: 'get',
+        params: param
+    })
+}
+
+
+export  function getContestDetail(param) {
+    return request({
+        url: '/getContestDetail',
         method: 'get',
         params: param
     })

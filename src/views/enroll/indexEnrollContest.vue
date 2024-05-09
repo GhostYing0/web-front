@@ -13,11 +13,11 @@
       <el-form-item label="电子邮箱">
         <el-input v-model="form.email"/>
       </el-form-item>
-      <el-form-item label="组队操作" prop="role" class="filter-check">
+      <el-form-item v-if="form.is_group === 1" label="组队操作" prop="role" class="filter-check">
         <el-radio v-model="form.handle_team" :label="1">创建队伍</el-radio>
         <el-radio v-model="form.handle_team" :label="2">加入队伍</el-radio>
       </el-form-item>
-      <el-form-item label="创建队伍名" v-if="form.handle_team === 1">
+      <el-form-item  label="创建队伍名" v-if="form.is_group === 1 && form.handle_team === 1">
         <el-input v-model="form.team_name"/>
       </el-form-item>
       <el-form-item label="加入队伍名" v-if="form.handle_team === 2">
@@ -77,13 +77,14 @@ const form = reactive({
   student_name: store.getters.name,
   student_school_id: "",
   team_name: "",
-  major: 0,
+  major: "",
   guidance_teacher: "",
   teacher_department: "",
   teacher_title: "",
-  college: 0,
+  college: "",
   phone: store.getters.phone,
   email: store.getters.email,
+  is_group: 2,
 })
 
 const param = reactive({
@@ -103,13 +104,12 @@ const handleGetContest = async () => {
       form.contest = resp.data.list[0].contest
       form.contest_type = resp.data.list[0].contest_type
       form.contest_level = resp.data.list[0].contest_level
+      form.is_group = resp.data.list[0].is_group
     }
   })
 }
 
 const Submit = () => {
-  form.major = parseInt(form.major, 10)
-  form.college = parseInt(form.college, 10)
   enrollContest(form).then(resp => {
     console.log("addUser:", resp)
     if(resp.code === 200) {

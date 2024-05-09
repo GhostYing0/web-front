@@ -139,3 +139,20 @@ export function departmentManagerSearchGrade(param) {
         params:param
     })
 }
+
+export function getUserGrade(param) {
+    return request({
+        url: '/getUserGrade',
+        method: 'get',
+        params:param
+    })
+}
+
+export function updateStudentGrade(data) {
+    return request({
+        url: '/updateStudentGrade',
+        method: 'post',
+        data:data
+    })
+}
+

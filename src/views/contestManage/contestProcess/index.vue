@@ -1,142 +1,386 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container" style="margin-bottom: 15px">
-      <!-- 用户名输入 -->
-      <div class="filter">
-        <div class="input-container">
-          <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
-          <el-input v-model="param.contest_type" placeholder="类型" class="filter-item" @keyup.enter="handleFilter" />
+  <el-tabs v-model="activeName" class="demo-tabs">
+    <el-tab-pane label="单人赛" name="first">
+      <div class="app-container">
+        <div class="filter-container" style="margin-bottom: 15px">
+          <!-- 用户名输入 -->
+          <div class="filter">
+            <div class="input-container">
+              <el-cascader
+                  class="filter-item"
+                  v-model="item"
+                  :options="options"
+                  :props="props"
+                  placeholder="竞赛类别"
+                  filterable
+                  @change="handleFilter"
+              />
+              <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+              <div class="filter-button-container">
+                <el-button class="filter-button" type="primary"  @click="handleFilter">
+                  搜索
+                </el-button>
+              </div>
+            </div>
+            <el-form-item label="竞赛级别" prop="role" class="filter-check">
+              <el-radio v-model="param.contest_level" :label="-1" @change="handleFilter">全部</el-radio>
+              <el-radio v-model="param.contest_level" :label="1" @change="handleFilter">国家级</el-radio>
+              <el-radio v-model="param.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
+              <el-radio v-model="param.contest_level" :label="3" @change="handleFilter">校级</el-radio>
+            </el-form-item>
+          </div>
+        </div>
+        <div class="handle-container">
+          <!-- 一些按钮 -->
+          <el-button class="handle-button" type="primary" @click="handleShowContest">
+            显示全部
+          </el-button>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!--弹出框-->
-  <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
-    <!--普通表单-->
-    <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
-      <el-form-item label="驳回原因" prop="reject_reason">
-        <el-input v-model="form.reject_reason"></el-input>
-      </el-form-item>
-    </el-form>
+      <!--弹出框-->
+      <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
+        <!--普通表单-->
+        <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
+          <el-form-item label="驳回原因" prop="reject_reason">
+            <el-input v-model="form.reject_reason"></el-input>
+          </el-form-item>
+        </el-form>
 
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="cancel">取 消</el-button>
-      <el-button type="primary" @click="handleReject">确 定</el-button>
-    </div>
-  </el-dialog>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="cancel">取 消</el-button>
+          <el-button type="primary" @click="handleReject">确 定</el-button>
+        </div>
+      </el-dialog>
 
-  <el-table
-      ref="multipleTable"
-      :data="tableData"
-      border
-      class="table"
-      height="435px"
-      @selection-change="handleSelectionChange"
-  >
-    <el-table-column label="待审核竞赛表">
-    <el-table-column
-        fixed
-        type="selection"
-        width="55">
-    </el-table-column>
-      <el-table-column type="expand"
-                       label="简介"
-                       width="70px">
-        <template #default="props">
-          <div>
-            <el-text>{{props.row.desc}}</el-text>
+      <el-table
+          class="table"
+          ref="multipleTable"
+          :data="tableData"
+          border
+          height="435px"
+          style="width: 100vw"
+          @selection-change="handleSelectionChange"
+      >
+        <el-table-column label="待审核竞赛表">
+          <el-table-column label="详情">
+            <template #default="{ row }">
+              <el-button @click="checkDetail(row)" type="success" size="small" >查看详情</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
+              prop="contest"
+              label="竞赛名称"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="contest_type"
+              label="竞赛类型"
+              width="55"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="contest_level"
+              label="竞赛级别"
+              width="55"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="start_time"
+              label="开赛时间"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="enroll_time"
+              label="报名开始时间"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="deadline"
+              label="报名截至时间"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="contest_state"
+              label="状态"
+              show-overflow-tooltip>
+            <template #default="{ row }">
+              <el-tag v-if="row.contest_state === 1" type="success" size="small">可报名</el-tag>
+              <el-tag v-else type="info" size="small">不可报名</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+              prop="contest_state"
+              label="报名"
+              show-overflow-tooltip
+              v-if="store.getters.roles.includes('student')">
+            <template #default="{ row }">
+              <el-button v-if="row.contest_state === 1" @click="handleEnroll(row)" type="success" size="small">点击报名</el-button>
+              <el-button v-else type="info" size="small" disabled>不可报名</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column fixed="right" label="操作" width="150" type="index">
+            <template #default="{ row, $index}">
+              <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
+              <el-button @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>
+            </template>
+          </el-table-column>
+        </el-table-column>
+      </el-table>
+
+      <!--分页条-->
+      <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="param.page_number"
+          :page-sizes="[5, 10, 20, 50]"
+          :page-size="param.page_size"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="recordTotal"
+          class="pagination_style"
+      ></el-pagination>
+    </el-tab-pane>
+    <el-tab-pane label="组队赛" name="second">
+      <div class="app-container">
+        <div class="filter-container" style="margin-bottom: 15px">
+          <!-- 用户名输入 -->
+          <div class="filter">
+            <div class="input-container">
+              <el-cascader
+                  class="filter-item"
+                  v-model="item"
+                  :options="options"
+                  :props="props"
+                  placeholder="竞赛类别"
+                  filterable
+                  @change="handleFilter"
+              />
+              <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+              <div class="filter-button-container">
+                <el-button class="filter-button" type="primary"  @click="handleFilter">
+                  搜索
+                </el-button>
+              </div>
+            </div>
+            <el-form-item label="竞赛级别" prop="role" class="filter-check">
+              <el-radio v-model="param.contest_level" :label="-1" @change="handleFilter">全部</el-radio>
+              <el-radio v-model="param.contest_level" :label="1" @change="handleFilter">国家级</el-radio>
+              <el-radio v-model="param.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
+              <el-radio v-model="param.contest_level" :label="3" @change="handleFilter">校级</el-radio>
+            </el-form-item>
           </div>
-        </template>
-      </el-table-column>
-    <el-table-column
-        fixed
-        prop="id"
-        label="序号"
-        width="55">
-    </el-table-column>
-    <el-table-column
-        prop="contest"
-        label="竞赛名称"
-        show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
-        prop="contest_type"
-        label="竞赛类型"
-        width="55"
-        show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
-        prop="create_time"
-        label="创建时间"
-        show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
-        prop="start_time"
-        label="开赛时间"
-        show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
-        prop="deadline"
-        label="报名截至时间"
-        show-overflow-tooltip>
-    </el-table-column>
-<!--    <el-table-column-->
-<!--        prop="username"-->
-<!--        label="用户名"-->
-<!--        show-overflow-tooltip>-->
-<!--    </el-table-column>-->
-    <el-table-column
-        prop="name"
-        label="姓名"
-        show-overflow-tooltip>
-    </el-table-column>
-<!--    <el-table-column-->
-<!--        prop="school"-->
-<!--        label="学校"-->
-<!--        show-overflow-tooltip>-->
-<!--    </el-table-column>-->
-<!--    <el-table-column-->
-<!--        prop="college"-->
-<!--        label="学院"-->
-<!--        show-overflow-tooltip>-->
-<!--    </el-table-column>-->
-    <el-table-column
-        prop="desc"
-        label="简介"
-        show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
-        prop="state"
-        label="审核状态"
-        show-overflow-tooltip>
-      <template #default="{ row }">
-        <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
-        <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
-        <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column fixed="right" label="操作" width="150" type="index">
-      <template #default="{ row, $index}">
-        <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
-        <el-button @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>
-      </template>
-    </el-table-column>
-    </el-table-column>
-  </el-table>
+        </div>
+        <div class="handle-container">
+          <!-- 一些按钮 -->
+          <el-button class="handle-button" type="primary" @click="handleShowContest">
+            显示全部
+          </el-button>
+        </div>
+      </div>
 
-  <!--分页条-->
-  <el-pagination
-      background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="param.page_number"
-      :page-sizes="[5, 10, 20, 50]"
-      :page-size="param.page_size"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="recordTotal"
-      class="pagination_style"
-  ></el-pagination>
+      <!--弹出框-->
+      <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
+        <!--普通表单-->
+        <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
+          <el-form-item label="驳回原因" prop="reject_reason">
+            <el-input v-model="form.reject_reason"></el-input>
+          </el-form-item>
+        </el-form>
+
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="cancel">取 消</el-button>
+          <el-button type="primary" @click="handleReject">确 定</el-button>
+        </div>
+      </el-dialog>
+
+<!--      <el-table-->
+<!--          ref="multipleTable"-->
+<!--          :data="tableData"-->
+<!--          border-->
+<!--          class="table"-->
+<!--          height="435px"-->
+<!--          @selection-change="handleSelectionChange"-->
+<!--      >-->
+<!--        <el-table-column label="待审核竞赛表">-->
+<!--          <el-table-column-->
+<!--              fixed-->
+<!--              type="selection"-->
+<!--              width="55">-->
+<!--          </el-table-column>-->
+<!--          <el-table-column type="expand"-->
+<!--                           label="简介"-->
+<!--                           width="70px">-->
+<!--            <template #default="props">-->
+<!--              <div>-->
+<!--                <el-text>{{props.row.desc}}</el-text>-->
+<!--              </div>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column-->
+<!--              fixed-->
+<!--              prop="id"-->
+<!--              label="序号"-->
+<!--              width="55">-->
+<!--          </el-table-column>-->
+<!--          <el-table-column-->
+<!--              prop="contest"-->
+<!--              label="竞赛名称"-->
+<!--              show-overflow-tooltip>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column-->
+<!--              prop="contest_type"-->
+<!--              label="竞赛类型"-->
+<!--              width="55"-->
+<!--              show-overflow-tooltip>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column-->
+<!--              prop="create_time"-->
+<!--              label="创建时间"-->
+<!--              show-overflow-tooltip>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column-->
+<!--              prop="start_time"-->
+<!--              label="开赛时间"-->
+<!--              show-overflow-tooltip>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column-->
+<!--              prop="deadline"-->
+<!--              label="报名截至时间"-->
+<!--              show-overflow-tooltip>-->
+<!--          </el-table-column>-->
+<!--          &lt;!&ndash;    <el-table-column&ndash;&gt;-->
+<!--          &lt;!&ndash;        prop="username"&ndash;&gt;-->
+<!--          &lt;!&ndash;        label="用户名"&ndash;&gt;-->
+<!--          &lt;!&ndash;        show-overflow-tooltip>&ndash;&gt;-->
+<!--          &lt;!&ndash;    </el-table-column>&ndash;&gt;-->
+<!--          <el-table-column-->
+<!--              prop="name"-->
+<!--              label="姓名"-->
+<!--              show-overflow-tooltip>-->
+<!--          </el-table-column>-->
+<!--          &lt;!&ndash;    <el-table-column&ndash;&gt;-->
+<!--          &lt;!&ndash;        prop="school"&ndash;&gt;-->
+<!--          &lt;!&ndash;        label="学校"&ndash;&gt;-->
+<!--          &lt;!&ndash;        show-overflow-tooltip>&ndash;&gt;-->
+<!--          &lt;!&ndash;    </el-table-column>&ndash;&gt;-->
+<!--          &lt;!&ndash;    <el-table-column&ndash;&gt;-->
+<!--          &lt;!&ndash;        prop="college"&ndash;&gt;-->
+<!--          &lt;!&ndash;        label="学院"&ndash;&gt;-->
+<!--          &lt;!&ndash;        show-overflow-tooltip>&ndash;&gt;-->
+<!--          &lt;!&ndash;    </el-table-column>&ndash;&gt;-->
+<!--          <el-table-column-->
+<!--              prop="desc"-->
+<!--              label="简介"-->
+<!--              show-overflow-tooltip>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column-->
+<!--              prop="state"-->
+<!--              label="审核状态"-->
+<!--              show-overflow-tooltip>-->
+<!--            <template #default="{ row }">-->
+<!--              <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>-->
+<!--              <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>-->
+<!--              <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column fixed="right" label="操作" width="150" type="index">-->
+<!--            <template #default="{ row, $index}">-->
+<!--              <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>-->
+<!--              <el-button @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--        </el-table-column>-->
+<!--      </el-table>-->
+
+      <el-table
+          class="table"
+          ref="multipleTable"
+          :data="tableData"
+          border
+          height="435px"
+          style="width: 100vw"
+          @selection-change="handleSelectionChange"
+      >
+        <el-table-column label="待审核竞赛表">
+          <el-table-column label="详情">
+            <template #default="{ row }">
+              <el-button @click="checkDetail(row)" type="success" size="small" >查看详情</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
+              prop="contest"
+              label="竞赛名称"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="contest_type"
+              label="竞赛类型"
+              width="55"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="contest_level"
+              label="竞赛级别"
+              width="55"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="start_time"
+              label="开赛时间"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="enroll_time"
+              label="报名开始时间"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="deadline"
+              label="报名截至时间"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="contest_state"
+              label="状态"
+              show-overflow-tooltip>
+            <template #default="{ row }">
+              <el-tag v-if="row.contest_state === 1" type="success" size="small">可报名</el-tag>
+              <el-tag v-else type="info" size="small">不可报名</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+              prop="contest_state"
+              label="报名"
+              show-overflow-tooltip
+              v-if="store.getters.roles.includes('student')">
+            <template #default="{ row }">
+              <el-button v-if="row.contest_state === 1" @click="handleEnroll(row)" type="success" size="small">点击报名</el-button>
+              <el-button v-else type="info" size="small" disabled>不可报名</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column fixed="right" label="操作" width="150" type="index">
+            <template #default="{ row, $index}">
+              <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
+              <el-button @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>
+            </template>
+          </el-table-column>
+        </el-table-column>
+      </el-table>
+      <!--分页条-->
+      <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="param.page_number"
+          :page-sizes="[5, 10, 20, 50]"
+          :page-size="param.page_size"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="recordTotal"
+          class="pagination_style"
+      ></el-pagination>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script setup>
@@ -147,10 +391,12 @@ import {
   updateContest,
   getContestCount,
   viewTeacherContest,
-  updateTeacherContest, getDepartmentContest
+  updateTeacherContest, getDepartmentContest, getContestType
 } from '@/api/contest'
-import {computed, onMounted, reactive, ref} from "vue"
+import {computed, onMounted, reactive, ref, watch} from "vue"
+import {router} from "@/router"
 import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
+import store from "@/store";
 
 const multipleTable = ref();
 const multipleSelection = ref([])
@@ -178,7 +424,10 @@ const param = reactive( {
   school: "",
   college: "",
   name: "",
-  state: -1
+  state: -1,
+  year: "",
+  is_group: 2,
+  contest_level:-1,
 })
 
 const delete_index = ref()
@@ -198,23 +447,45 @@ const form = reactive( {
   state: -1
 })
 
+
+const activeName = ref('first');
+
+// 使用 watch 监听 contestID prop 的变化
+watch(() => activeName.value, (newActiveName, oldActiveName) => {
+  handleFilter(newActiveName);
+});
+
+const year = ref(new Date().getFullYear())
+
 // 搜索
-const handleFilter = () => {
+const handleFilter = (newActiveName) => {
   param.page_number = 1
+  if(newActiveName === "first") {
+    param.is_group = 2
+  } else if(newActiveName === "second") {
+    param.is_group = 1
+  }
+  if(item.value) {
+    param.type = item.value[0]
+  }
   console.log("asd:")
-  getContest(param).then(resp => {
+  getDepartmentContest(param).then(resp => {
     console.log(resp)
     if (resp.code === 200) {
-      this.tableData = resp.data.list
-      this.recordTotal = resp.data.total
+      tableData.value = resp.data.list
+      recordTotal.value = resp.data.total
       if (resp.data.total === 0) {
         ElMessage({
           type: 'info',
-          message: '未搜索到该用户',
+          message: '未搜索到竞赛信息',
         })//
       }
     }
   })
+}
+
+const checkDetail = (row) => {
+  router.push(`processContestDetail/${row.id}`)
 }
 
 // 分页大小改变监听
@@ -240,6 +511,11 @@ const handleCurrentChange = async (curPage) => {
 const handleShowContest = async () => {
   param.page_number = 1
   param.state = 3
+  param.year = year.value
+  item.value = ""
+  param.type = ""
+  param.contest_level = -1
+  param.contest = ""
   getDepartmentContest(param).then(resp => {
     console.log(resp)
     if(resp.code === 200) {
@@ -309,6 +585,26 @@ const cancel = () => {
   dialogFormVisible.value = false
 }
 
+const item = ref()
+const options = ref([])
+const initOptions = async () => {
+  getContestType().then(resp => {
+    try {
+      resp.data.forEach(unit => {
+        console.log(unit.type)
+        options.value.push({
+          value:unit.type,
+          label:unit.type
+        })
+        console.log(options)
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  })
+}
+
+onMounted(initOptions)
 onMounted(handleShowContest)
 </script>
 

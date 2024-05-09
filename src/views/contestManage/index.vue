@@ -341,7 +341,7 @@
                         if(resp.data.total === 0){
                             ElMessage({
                                 type: 'info',
-                                message: '未搜索到该用户',
+                                message: '未搜索到竞赛信息',
                             })//
                         }
                     }

@@ -11,17 +11,17 @@
           date-format="YYYY"
       />
     </div>
-    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleFilter">
+    <el-tabs v-model="activeName" class="demo-tabs">
       <el-tab-pane label="单人赛" name="first">
         <div class="filter-container" style="margin-bottom: 15px">
         <div class="filter">
           <div class="input-container">
-            <p>竞赛类型</p>
             <el-cascader
                 class="filter-item"
                 v-model="item"
                 :options="options"
                 :props="props"
+                placeholder="竞赛类别"
                 filterable
                 @change="handleFilter"
             />
@@ -30,6 +30,17 @@
               <el-button class="filter-button" type="primary"  @click="handleFilter">
                 搜索
               </el-button>
+            </div>
+            <div class="block">
+              <span class="demonstration">年份</span>
+              <el-date-picker
+                  v-model="year"
+                  type="year"
+                  placeholder="选择年份"
+                  @change="handleFilter"
+                  value-format="YYYY"
+                  date-format="YYYY"
+              />
             </div>
           </div>
           <el-form-item label="竞赛级别" prop="role" class="filter-check">
@@ -42,7 +53,7 @@
       </div>
         <div class="handle-container">
           <!-- 一些按钮 -->
-          <el-button class="handle-button" type="primary" @click="handleShowALL">
+          <el-button class="handle-button" type="primary" @click="handleShowContest">
             显示全部
           </el-button>
         </div>
@@ -113,6 +124,13 @@
                 <el-button v-else type="info" size="small" disabled>不可报名</el-button>
               </template>
             </el-table-column>
+            <el-table-column v-if="store.getters.roles.includes('department_manager')"
+                             label="操作"
+                             show-overflow-tooltip>
+              <template #default="{ row, $index}">
+                <el-button @click="handleRecover(row, $index)" type="primary" size="small">重新审核</el-button>
+              </template>
+            </el-table-column>
           </el-table-column>
         </el-table>
 
@@ -132,12 +150,12 @@
         <div class="filter-container" style="margin-bottom: 15px">
           <div class="filter">
             <div class="input-container">
-                <p>竞赛类型</p>
                 <el-cascader
                     class="filter-item"
                   v-model="item"
                   :options="options"
                   :props="props"
+                    placeholder="竞赛类别"
                   filterable
                   @change="handleFilter"
               />
@@ -146,6 +164,17 @@
                 <el-button class="filter-button" type="primary"  @click="handleFilter">
                   搜索
                 </el-button>
+              </div>
+              <div class="block">
+                <span class="demonstration">年份</span>
+                <el-date-picker
+                    v-model="year"
+                    type="year"
+                    placeholder="选择年份"
+                    @change="handleFilter"
+                    value-format="YYYY"
+                    date-format="YYYY"
+                />
               </div>
             </div>
             <el-form-item label="竞赛级别" prop="role" class="filter-check">
@@ -158,7 +187,7 @@
         </div>
         <div class="handle-container">
           <!-- 一些按钮 -->
-          <el-button class="handle-button" type="primary" @click="handleShowALL">
+          <el-button class="handle-button" type="primary" @click="handleShowContest">
             显示全部
           </el-button>
         </div>
@@ -229,6 +258,13 @@
                 <el-button v-else type="info" size="small" disabled>不可报名</el-button>
               </template>
             </el-table-column>
+            <el-table-column v-if="store.getters.roles.includes('department_manager')"
+                             label="操作"
+                             show-overflow-tooltip>
+              <template #default="{ row, $index}">
+                <el-button @click="handleRecover(row, $index)" type="primary" size="small">重新审核</el-button>
+              </template>
+            </el-table-column>
           </el-table-column>
         </el-table>
 
@@ -261,8 +297,8 @@
 
 <script setup>
 import { ref , reactive, onMounted,watch} from 'vue'
-import {viewContest, getContestType} from "@/api/contest";
-import {ElMessage} from "element-plus";
+import {viewContest, getContestType, processRejectContest, processRecoverContest, deleteContest} from "@/api/contest";
+import {ElMessage, ElMessageBox} from "element-plus";
 import {router} from "@/router"
 import store from "@/store";
 import {enrollContest} from "@/api/enroll";
@@ -351,6 +387,7 @@ const handleFilter = (newActiveName) => {
   if(item.value) {
     param.type = item.value[0]
   }
+  param.year = year.value
   viewContest(param).then(resp => {
     console.log(resp)
     if(resp.code === 200) {
@@ -359,7 +396,7 @@ const handleFilter = (newActiveName) => {
       if(resp.data.total === 0){
         ElMessage({
           type: 'info',
-          message: '未搜索到该用户',
+          message: '未搜索到相关信息',
         })//
       }
     }
@@ -395,6 +432,12 @@ const handleShowContest = async () => {
   } else if(activeName.value === "second") {
     param.is_group = 1
   }
+  param.page_number= 1
+  param.page_size=10
+  param.contest=''
+  param.type=''
+  item.value = ""
+
   param.page_number = 1
   viewContest(param).then(resp => {
     console.log(resp)
@@ -405,53 +448,67 @@ const handleShowContest = async () => {
   })
 }
 
-const handleShowALL = () => {
-  if(activeName.value === "first") {
-    param.is_group = 2
-  } else if(activeName.value === "second") {
-    param.is_group = 1
-  }
-  param.page_number= 1
-  param.page_size=10
-  param.contest=''
-  param.type=''
-  item.value = ""
-
-  viewContest(param).then(resp => {
-    console.log(resp)
-    if(resp.code === 200) {
-      tableData.value = resp.data.list
-      recordTotal.value = resp.data.total
-    }
+const handleRecover = (row, index) => {
+  ElMessageBox.confirm('确定要重新审核该竞赛吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    form.id = row.id
+    processRecoverContest(form).then(resp => {
+      if(resp.code === 200) {
+        ElMessage({
+          type: 'success',
+          message: '更新成功',
+        })//
+        tableData.value.splice(index, 1)
+        // 如果删完了，获取上一页
+        if(tableData.value.length === 0) {
+          param.page_number = handleCurrentChange - 1
+          handleCurrentChange(param.page_number)
+        }
+      } else {
+        ElMessage({
+          type: 'error',
+          message: '更新失败',
+        })//
+      }
+    })
+  }).catch(() => {
+    ElMessage({
+      type: 'error',
+      message: '删除失败',
+    })
   })
 }
 
 const handleEnroll = (row) => {
-  form.contest = row.contest
-  form.name = store.getters.name
-  form.school = store.getters.school
-  form.phone = store.getters.phone
-  form.email = store.getters.email
-
-  enrollContest(form).then(resp => {
-    console.log("addUser:", resp)
-    if(resp.code === 200) {
-      ElMessage({
-        type: 'success',
-        message: '报名成功',
-      })
-    } else {
-      ElMessage({
-        type: 'error',
-        message: resp.message,
-      })
-    }
-  }).catch(() => {
-    ElMessage({
-      type: 'error',
-      message: '报名失败',
-    })
-  })
+  router.push(`/enrollContest/${row.id}`)
+  // form.contest = row.contest
+  // form.name = store.getters.name
+  // form.school = store.getters.school
+  // form.phone = store.getters.phone
+  // form.email = store.getters.email
+  //
+  // enrollContest(form).then(resp => {
+  //   console.log("addUser:", resp)
+  //   if(resp.code === 200) {
+  //     ElMessage({
+  //       type: 'success',
+  //       message: '报名成功',
+  //     })
+  //   } else {
+  //     ElMessage({
+  //       type: 'error',
+  //       message: resp.message,
+  //     })
+  //   }
+  // }).catch(() => {
+  //   ElMessage({
+  //     type: 'error',
+  //     message: '报名失败',
+  //   })
+  // })
 }
 
 const handleEnrollGroup = (row) => {

@@ -6,6 +6,8 @@
           <div class="filter">
             <div class="input-container">
               <el-cascader
+                  style="width:150px"
+                  placeholder="选择竞赛类型"
                   v-model="item"
                   :options="options"
                   :props="props"
@@ -13,7 +15,8 @@
                   @change="handleFilter"
               />
               <el-cascader
-                style="width: 300px;"
+                  style="margin-left: 10px; width: 300px;"
+                  placeholder="搜索竞赛名称"
                 v-model="contest"
                 :options="contestOptions"
                 :props="props"
@@ -22,9 +25,9 @@
             />
               <!--<el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />-->
               <div class="filter-button-container">
-                <el-button class="filter-button" type="primary"  @click="handleFilter">
-                  搜索
-                </el-button>
+<!--                <el-button class="filter-button" type="primary"  @click="handleFilter">-->
+<!--                  搜索-->
+<!--                </el-button>-->
               </div>
             </div>
             <el-form-item label="竞赛级别" prop="role" class="filter-check">
@@ -111,6 +114,8 @@
           <div class="filter">
             <div class="input-container">
               <el-cascader
+                  style="width:150px"
+                  placeholder="选择竞赛类型"
                   v-model="item"
                   :options="options"
                   :props="props"
@@ -118,7 +123,8 @@
                   @change="handleFilter"
               />
               <el-cascader
-                  style="width: 300px;"
+                  style="margin-left: 10px; width: 300px;"
+                  placeholder="搜索竞赛名称"
                   v-model="contest"
                   :options="contestOptions"
                   :props="props"
@@ -127,9 +133,9 @@
               />
               <!--<el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />-->
               <div class="filter-button-container">
-                <el-button class="filter-button" type="primary"  @click="handleFilter">
-                  搜索
-                </el-button>
+<!--                <el-button class="filter-button" type="primary"  @click="handleFilter">-->
+<!--                  搜索-->
+<!--                </el-button>-->
               </div>
             </div>
             <el-form-item label="竞赛级别" prop="role" class="filter-check">
@@ -218,21 +224,14 @@
 <script setup>
 
 import {
-  cancelContest, getContestForTeacher,
+  getContestForTeacher,
   getContestType,
   viewTeacherContestGrade,
 } from '@/api/contest'
 
-import {
-  processPassGrade,
-  processRejectGrade,
-  teacherSearchGrade,
-  processRecoverGrade, revokeGrade
-} from '@/api/grade'
 
-import {computed, onMounted, reactive, ref, watch} from "vue"
-import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
-import store from "@/store";
+import { onMounted, reactive, ref, watch} from "vue"
+import { ElMessage ,ElTable} from 'element-plus';
 import {router} from "@/router";
 
 const multipleTable = ref();
@@ -329,7 +328,7 @@ const handleFilter = (newActiveName) => {
       if (resp.data.total === 0) {
         ElMessage({
           type: 'info',
-          message: '未搜索到该用户',
+          message: '未搜索到竞赛信息',
         })//
       }
     }

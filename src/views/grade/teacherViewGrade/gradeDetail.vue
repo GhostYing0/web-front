@@ -2,26 +2,9 @@
   <div class="filter-container" style="margin-bottom: 15px">
     <div class="filter">
       <div class="input-container">
-        <el-input v-model="param.contest" placeholder="搜索姓名" class="filter-item" @keyup.enter="handleFilter" />
-        <el-cascader
-            class="filter-item"
-            placeholder="选择专业"
-            v-model="contest"
-            :options="contestOptions"
-            :props="props"
-            filterable
-            @change="handleFilter"
-        />
-        <el-cascader
-            class="filter-item"
-            placeholder="入学年份"
-            v-model="contest"
-            :options="contestOptions"
-            :props="props"
-            filterable
-            @change="handleFilter"
-        />
-        <el-input v-model="param.contest" placeholder="班级" class="filter-item" @keyup.enter="handleFilter" />
+        <el-input v-model="param.name" placeholder="搜索学生姓名" class="filter-item" @keyup.enter="handleFilter" />
+        <el-input v-model="param.major" placeholder="搜索专业" class="filter-item" @keyup.enter="handleFilter" />
+        <el-input v-model="param.student_class" placeholder="搜索班级" class="filter-item" @keyup.enter="handleFilter" />
         <div class="filter-button-container">
           <el-button class="filter-button" type="primary"  @click="handleFilter">
             搜索
@@ -54,11 +37,6 @@
     <el-table-column label="报名审核表">
       <el-table-column
           fixed
-          type="selection"
-          width="55">
-      </el-table-column>
-      <el-table-column
-          fixed
           prop="id"
           label="序号"
           width="55" v-if="store.getters.roles.includes('manager')">
@@ -68,18 +46,6 @@
           label="竞赛名称"
           show-overflow-tooltip>
       </el-table-column>
-<!--      <el-table-column-->
-<!--          prop="contest_type"-->
-<!--          label="竞赛类型"-->
-<!--          width="55"-->
-<!--          show-overflow-tooltip>-->
-<!--      </el-table-column>-->
-<!--      <el-table-column-->
-<!--          prop="contest_level"-->
-<!--          label="竞赛级别"-->
-<!--          width="55"-->
-<!--          show-overflow-tooltip>-->
-<!--      </el-table-column>-->
           <el-table-column
               prop="reward_time"
               label="获奖时间"
@@ -93,6 +59,11 @@
       <el-table-column
           prop="college"
           label="学院"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="major"
+          label="专业"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -146,11 +117,15 @@
           <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
           <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
           <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
+          <el-tag v-else-if="row.state === 4" type="warning">已撤回</el-tag>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="150" type="index">
         <template #default="{ row, $index}">
-          <el-button type="primary" size="small">编辑</el-button>
+          <el-button type="primary" size="small" v-if="row.state === 1" disabled>编辑</el-button>
+          <el-button type="primary" size="small" v-else @click="UpdateGrade(row)">编辑</el-button>
+          <el-button type="warning" size="small" v-if="row.state === 3" @click="handleRevoke(row)">撤回</el-button>
+          <el-button type="warning" size="small" v-else disabled>撤回</el-button>
         </template>
       </el-table-column>
     </el-table-column>
@@ -186,6 +161,7 @@ import {
 import {router} from "@/router"
 
 import {
+  revokeGrade,
   teacherSearchGrade,
 } from '@/api/grade'
 
@@ -280,7 +256,10 @@ const param = reactive( {
   college: "",
   reject_reason: "",
   name: "",
-  state: -1
+  state: -1,
+  student_school_id:"",
+  major: "",
+  student_class: "",
 })
 
 
@@ -310,7 +289,7 @@ const handleFilter = () => {
       if (resp.data.total === 0) {
         ElMessage({
           type: 'info',
-          message: '未搜索到该用户',
+          message: '未搜索到成绩信息',
         })//
       }
     }
@@ -343,6 +322,9 @@ const handleShowContest = async () => {
   param.page_number = 1
   param.type = ""
   item.value = ""
+  param.major = ""
+  param.name = ""
+  param.student_classs = ""
   param.state = -1
   await teacherSearchGrade(param).then(resp => {
     console.log(resp)
@@ -378,6 +360,40 @@ const initOptions = async () => {
     } catch (error) {
       console.error(error)
     }
+  })
+}
+
+const UpdateGrade = (row) => {
+  route.value.push(`/UpdateGrade/${param.id}/${row.id}`)
+}
+
+const handleRevoke = (row) => {
+  ElMessageBox.confirm(
+      '确定要撤回吗？',
+      'Warning',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    form.id = row.id
+    revokeGrade(form).then(resp => {
+      if (resp.code === 200) {
+        ElMessage({
+          type: 'success',
+          message: '撤回成功',
+        })
+        handleShowContest()
+      }
+    }).catch(error => {
+      console.error(error)
+    })
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '取消',
+    })
   })
 }
 

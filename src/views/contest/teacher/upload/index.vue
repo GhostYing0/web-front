@@ -1,88 +1,98 @@
 <template>
-  教师上传竞赛
-  <el-form :model="form" label-width="auto" style="max-width: 600px">
-    <div class="m-4">
-      竞赛所属项目
-      <el-cascader
-          v-model="contest_entry_item"
-          :options="entryOptions"
-          :props="props"
-          filterable
-          @change="handleEntry"
-      />
-    </div>
-    <el-form-item label="竞赛名称">
-      <el-input v-model="form.contest" />
-    </el-form-item>
+  上传竞赛
+  <el-form :model="form" label-width="auto" class="contest-form-container">
+      <div class="form-item-group">
+      <el-input class="form-item" v-model="form.contest" placeholder="竞赛名称" />
+      </div>
+      <div class="form-item-group">
+        <el-cascader
+            class="form-item"
+            placeholder="竞赛所属项目"
+            v-model="contest_entry_item"
+            :options="entryOptions"
+            :props="props"
+            filterable
+            @change="handleEntry"
+        />
+      </div>
+      <div class="form-item-group">
+        <el-cascader
+            class="form-item"
+            v-model="contest_type_item"
+            placeholder="竞赛类型"
+            :options="typeOptions"
+            :props="props"
+            filterable
+            @change="handleType"
+        />
+
+      </div>
     <el-form-item label="竞赛级别" prop="role" class="filter-check">
       <el-radio v-model="form.contest_level" :label="1" @change="handleFilter">国家级</el-radio>
       <el-radio v-model="form.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
       <el-radio v-model="form.contest_level" :label="3" @change="handleFilter">校级</el-radio>
     </el-form-item>
-    <el-form-item prop="role" class="filter-check">
+    <el-form-item  label="竞赛规格" prop="role" class="filter-check">
       <el-radio v-model="form.is_group" :label="2" @change="handleFilter">单人赛</el-radio>
       <el-radio v-model="form.is_group" :label="1" @change="handleFilter">组队赛</el-radio>
       <el-form-item v-if="form.is_group === 1" label="队伍人数">
         <el-input-number v-model="form.max_group_number" :min="2" @change="handleChange" />
       </el-form-item>
     </el-form-item>
-    <el-text>奖项数量设置</el-text>
-    <el-form-item label="特等奖">
+    <div class="form-prize-group">
+      <div class="form-group">
+    <el-form-item  class="form-item" label="特等奖数量">
         <el-input-number v-model="form.prize1" :min="0"  @change="handleChange" />
     </el-form-item>
-    <el-form-item label="一等奖">
+    <el-form-item class="form-item" label="一等奖数量">
       <el-input-number v-model="form.prize2" :min="0"  @change="handleChange" />
     </el-form-item>
-    <el-form-item label="二等奖">
+      </div>
+      <div class="form-group">
+    <el-form-item class="form-item" label="二等奖数量">
       <el-input-number v-model="form.prize3" :min="0"  @change="handleChange" />
     </el-form-item>
-    <el-form-item label="三等奖">
+    <el-form-item class="form-item" label="三等奖数量">
       <el-input-number v-model="form.prize4" :min="0"  @change="handleChange" />
     </el-form-item>
-    <div class="m-4">
-      竞赛类型
-      <el-cascader
-          v-model="contest_type_item"
-          :options="typeOptions"
-          :props="props"
-          filterable
-          @change="handleType"
-      />
+        </div>
     </div>
-    <el-form-item label="开赛时间" prop="create_time">
-      <div class="block">
-        <span class="demonstration"></span>
+    <div class="form-item-group">
+      <el-form-item class="form-item" label="开赛时间">
         <el-date-picker
             v-model="form.start_time"
             type="datetime"
-            placeholder="Select date and time"
+            placeholder="选择时间"
             value-format="YYYY-MM-DD HH:mm:ss"
             date-format="YYYY/MM/DD ddd"
             time-format="HH:mm"
             :shortcuts="shortcuts"
         />
+      </el-form-item>
+      <el-form-item class="form-time-range" label="报名时间段">
+        <el-date-picker
+                v-model="time_range"
+                type="datetimerange"
+                start-placeholder="选择报名时间"
+                end-placeholder="选择截止时间"
+                value-format="YYYY-MM-DD HH:mm:ss"
+                date-format="YYYY/MM/DD ddd"
+                time-format="HH:mm"
+                @change="handleTime"
+      />
+      </el-form-item>
       </div>
-    </el-form-item>
-    <el-date-picker
-        class="block"
-        v-model="time_range"
-        type="datetimerange"
-        start-placeholder="报名开始时间"
-        end-placeholder="报名截止时间"
-        value-format="YYYY-MM-DD HH:mm:ss"
-        date-format="YYYY/MM/DD ddd"
-        time-format="HH:mm"
-        @change="handleTime"
-    />
-    <el-form-item label="备注">
-      <el-input v-model="form.ps" type="textarea" />
-    </el-form-item>
+
     <el-form-item label="竞赛介绍">
-      <el-input v-model="form.desc" type="textarea" />
+      <el-input style="width:500px" v-model="form.desc" type="textarea" />
+    </el-form-item>
+    <el-form-item label="备注">
+      <el-input style="width:500px" v-model="form.ps" type="textarea" />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="handleCreate">提交</el-button>
-      <el-button @click="handleClearForm">清空表单</el-button>
+      <div class="form-button-container">
+      <el-button class="form-button" type="primary" @click="handleCreate">提交</el-button>
+      </div>
     </el-form-item>
   </el-form>
 

@@ -15,6 +15,21 @@
       </div>
     </div>-->
   <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <div class="filter-container" style="margin-bottom: 15px">
+    <div class="filter">
+      <div class="input-container">
+        <el-input v-model="param.name" placeholder="搜索姓名" class="filter-item" @keyup.enter="handleFilter" />
+        <el-input v-model="param.major" placeholder="搜索专业" class="filter-item" @keyup.enter="handleFilter" />
+        <el-input v-model="param.student_class" placeholder="搜索班级" class="filter-item" @keyup.enter="handleFilter" />
+        <div class="filter-button-container">
+          <el-button class="filter-button" type="primary"  @click="handleFilter">
+            搜索
+          </el-button>
+        </div>
+      </div>
+    </div>
+    </div>
+
     <el-tab-pane label="审核中" name="processing">
       <div class="handle-container">
         <el-button class="handle-button" type="primary" @click="handleShowContest">
@@ -42,103 +57,105 @@
       </div>
     </el-dialog>
 
-    <el-table
-        class="table"
-        ref="multipleTable"
-        :data="tableData"
-        border
-        height="435px"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-    >
-      <el-table-column label="报名审核表">
-        <el-table-column
-            fixed
-            type="selection"
-            width="55">
-        </el-table-column>
-      <el-table-column
-          fixed
-          prop="id"
-          label="序号"
-          width="55" v-if="store.getters.roles.includes('manager')">
-      </el-table-column>
-      <el-table-column
-          prop="contest"
-          label="竞赛名称"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="contest_type"
-          label="竞赛类型"
-          width="55"
-          show-overflow-tooltip>
-      </el-table-column>
-  <!--    <el-table-column-->
-  <!--        prop="create_time"-->
-  <!--        label="创建时间"-->
-  <!--        show-overflow-tooltip>-->
-  <!--    </el-table-column>-->
-  <!--    <el-table-column-->
-  <!--        prop="start_time"-->
-  <!--        label="开赛时间"-->
-  <!--        show-overflow-tooltip>-->
-  <!--    </el-table-column>-->
-  <!--    <el-table-column-->
-  <!--        prop="deadline"-->
-  <!--        label="报名截至时间"-->
-  <!--        show-overflow-tooltip>-->
-  <!--    </el-table-column>-->
-<!--      <el-table-column-->
-<!--          prop="username"-->
-<!--          label="用户名"-->
-<!--          show-overflow-tooltip>-->
-<!--      </el-table-column>-->
-      <el-table-column
-          prop="name"
-          label="姓名"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="school"
-          label="学校"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="college"
-          label="学院"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="semester"
-          label="入学年份"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="student_class"
-          label="班级"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="phone"
-          label="电话"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="email"
-          label="邮箱"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="state"
-          label="审核状态"
-          show-overflow-tooltip>
-        <template #default="{ row }">
-          <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
-          <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
-          <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
-        </template>
-      </el-table-column>
+      <el-table
+          class="table"
+          ref="multipleTable"
+          :data="tableData"
+          border
+          height="435px"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+      >
+        <el-table-column :label="contestFullName + ' 竞赛审核表'">
+          <el-table-column
+              fixed
+              prop="id"
+              label="序号"
+              width="55" v-if="store.getters.roles.includes('manager')">
+          </el-table-column>
+<!--          <el-table-column-->
+<!--              prop="contest"-->
+<!--              label="竞赛名称"-->
+<!--              show-overflow-tooltip>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column-->
+<!--              prop="contest_type"-->
+<!--              label="竞赛类型"-->
+<!--              width="55"-->
+<!--              show-overflow-tooltip>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column-->
+<!--              prop="contest_level"-->
+<!--              label="竞赛级别"-->
+<!--              width="55"-->
+<!--              show-overflow-tooltip>-->
+<!--          </el-table-column>-->
+          <el-table-column
+              prop="name"
+              label="姓名"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="college"
+              label="所属学院"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="student_class"
+              label="班级"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="student_school_id"
+              label="学号"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="phone"
+              label="电话"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="email"
+              label="邮箱"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="team_name"
+              label="队伍名"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="teacher_name"
+              label="指导教师"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="department"
+              label="指导教师系部"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="title"
+              label="指导教师职称"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="state"
+              label="审核状态"
+              show-overflow-tooltip>
+            <template #default="{ row }">
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  :content="row.reject_reason"
+                  placement="top-start"
+              ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+              </el-tooltip>
+              <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+              <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
+            </template>
+          </el-table-column>
       <el-table-column fixed="right" label="操作" width="150" type="index">
         <template #default="{ row, $index}">
           <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
@@ -179,52 +196,38 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
     >
-  <!--    <el-table-column-->
-  <!--        fixed-->
-  <!--        type="selection"-->
-  <!--        width="55">-->
-  <!--    </el-table-column>-->
-      <el-table-column label="报名驳回表">
+      <el-table-column :label="contestFullName + ' 竞赛驳回表'">
       <el-table-column
           fixed
           prop="id"
           label="序号"
           width="55" v-if="store.getters.roles.includes('manager')">
       </el-table-column>
-      <el-table-column
-          prop="contest"
-          label="竞赛名称"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="contest_type"
-          label="竞赛类型"
-          width="55"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="username"
-          label="用户名"
-          show-overflow-tooltip>
-      </el-table-column>
+<!--      <el-table-column-->
+<!--          prop="contest"-->
+<!--          label="竞赛名称"-->
+<!--          show-overflow-tooltip>-->
+<!--      </el-table-column>-->
+<!--      <el-table-column-->
+<!--          prop="contest_type"-->
+<!--          label="竞赛类型"-->
+<!--          width="55"-->
+<!--          show-overflow-tooltip>-->
+<!--      </el-table-column>-->
+<!--        <el-table-column-->
+<!--            prop="contest_level"-->
+<!--            label="竞赛级别"-->
+<!--            width="55"-->
+<!--            show-overflow-tooltip>-->
+<!--        </el-table-column>-->
       <el-table-column
           prop="name"
           label="姓名"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-          prop="school"
-          label="学校"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
           prop="college"
-          label="学院"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="semester"
-          label="入学年份"
+          label="所属学院"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -232,6 +235,11 @@
           label="班级"
           show-overflow-tooltip>
       </el-table-column>
+        <el-table-column
+            prop="student_school_id"
+            label="学号"
+            show-overflow-tooltip>
+        </el-table-column>
       <el-table-column
           prop="phone"
           label="电话"
@@ -242,6 +250,26 @@
           label="邮箱"
           show-overflow-tooltip>
       </el-table-column>
+        <el-table-column
+            prop="team_name"
+            label="队伍名"
+            show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+            prop="teacher_name"
+            label="指导教师"
+            show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+            prop="department"
+            label="指导教师系部"
+            show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+            prop="title"
+            label="指导教师职称"
+            show-overflow-tooltip>
+        </el-table-column>
       <el-table-column
           prop="state"
           label="审核状态"
@@ -258,6 +286,11 @@
           <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
         </template>
       </el-table-column>
+        <el-table-column
+            prop="reject_reason"
+            label="驳回原因"
+            show-overflow-tooltip>
+        </el-table-column>
       <el-table-column fixed="right" label="操作" width="150" type="index">
         <template #default="{ row, $index}">
           <el-button @click="handleProcess(row, $index)" type="primary" size="small">重新审核</el-button>
@@ -284,7 +317,7 @@
   
   <script setup>
   import {
-    teacherSearchEnroll,
+    processRecoverEnroll,
     processPassEnroll,
     processRejectEnroll, deleteEnroll
   } from '@/api/enroll'
@@ -305,7 +338,20 @@
     contestID: {
       type: Number,
       required: true
-    }
+    },
+    contestName: {
+      type: String,
+      required: true
+    },
+    contestType: {
+      type: String,
+      required: true
+    },
+    contestLevel: {
+      type: String,
+      required: true
+    },
+
   })
 
   const activeName = ref('processing');  
@@ -331,11 +377,16 @@
     handleShowContest()
 
   }  
-  
+
+
+  const contestFullName = ref("")
   // 使用 watch 监听 contestID prop 的变化  
   watch(() => props.contestID, (newContestID, oldContestID) => {  
-    handleContestIDChange(newContestID);  
-  });  
+    handleContestIDChange(newContestID);
+    contestFullName.value = props.contestName + " " + props.contestType + " " + props.contestLevel
+  });
+
+
 
   watch(() => activeName.value, (newActiveName, oldActiveName) => {  
     console.log(newActiveName) 
@@ -408,7 +459,7 @@
         if (resp.data.total === 0) {
           ElMessage({
             type: 'info',
-            message: '未搜索到该用户',
+            message: '未搜索到报名信息',
           })//
         }
       }
@@ -442,6 +493,9 @@
     } else if (activeName.value === "rejected") {
       param.state = 2
     }
+    param.student_class = ""
+    param.name = ""
+    param.major = ""
     param.type = ""
     item.value = ""
     await departmentManagerSearchEnroll(param).then(resp => {

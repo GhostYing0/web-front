@@ -1,6 +1,6 @@
 <template>
     <div class="app-container">
-      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleFilter">
+      <el-tabs v-model="activeName" class="demo-tabs">
         <el-tab-pane label="单人赛" name="first">
           <div class="filter-container" style="margin-bottom: 15px">
               <!-- 用户名输入 -->
@@ -132,9 +132,19 @@
         label="竞赛"
         show-overflow-tooltip>
     </el-table-column>
+      <el-table-column
+          prop="contest_type"
+          label="竞赛类型"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="contest_level"
+          label="竞赛级别"
+          show-overflow-tooltip>
+      </el-table-column>
     <el-table-column
-        prop="create_time"
-        label="报名时间"
+        prop="reward_time"
+        label="获奖时间"
         show-overflow-tooltip>
     </el-table-column>
     <el-table-column
@@ -262,7 +272,7 @@
               timeout: 5000
             })
 
-            // 为这个特定的Axios实例设置请求拦截器
+          // 为这个特定的Axios实例设置请求拦截器
             uploadAxios.interceptors.request.use(config => {
               // 这里可以添加或覆盖头部信息
               config.headers["Content-Type"] = 'multipart/form-data'
@@ -371,6 +381,12 @@
 
             };
         },
+      watch: {
+        // 使用 watch 监听 contestID prop 的变化
+        activeName(newActiveName, oldActiveName) {
+          this.handleFilter(newActiveName);
+        }
+      },
         created() {
             return this.handleShowUser()
         },
@@ -381,7 +397,12 @@
             this.param.start_time = this.time_range[0]
           },
             // 搜索
-            handleFilter() {
+            handleFilter(newActiveName) {
+              if(newActiveName === "first") {
+                this.param.is_group = 2
+              } else if(newActiveName === "second") {
+                this.param.is_group = 1
+              }
                 this.param.page_number = 1
                 console.log("asda:",this.param.contest)
                 console.log("asda:",this.param.state)
@@ -393,7 +414,7 @@
                         if (resp.data.total === 0) {
                             ElMessage({
                                 type: 'info',
-                                message: '未搜索到该用户',
+                                message: '未搜索成绩信息',
                             })//
                         }
                     }

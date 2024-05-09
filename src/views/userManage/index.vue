@@ -205,7 +205,7 @@ export default {
           if(resp.data.total === 0){
             ElMessage({
               type: 'info',
-              message: '未搜索到该用户',
+              message: '未搜索到用户信息',
             })//
           }
         }
@@ -323,26 +323,26 @@ export default {
 
     // 删除记录
     handleDelete(row, index) {
-      ElMessageBox.confirm('确定要删除这条记录吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        const param = {ids:[row.id]};
-        console.log("index:", index)
-        console.log(param)
-        deleteManager(param).then(resp => {
-          if(resp.code === 200) {
-            ElMessage({
-              type: 'success',
-              message: '删除成功',
-            })//
-            //const index = this.multipleTable.value.findIndex(item => item === row);
-            console.log("index:", index)
-            this.tableData.splice(index, 1)
-            // 如果删完了，获取上一页
-            if(this.tableData.length === 0) {
-              this.page_number = this.handleCurrentChange - 1
+                ElMessageBox.confirm('确定要删除这条记录吗?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                  const param = {ids:[row.id]};
+                  console.log("index:", index)
+                  console.log(param)
+                  deleteManager(param).then(resp => {
+                    if(resp.code === 200) {
+                      ElMessage({
+                        type: 'success',
+                        message: '删除成功',
+                      })//
+                      //const index = this.multipleTable.value.findIndex(item => item === row);
+                      console.log("index:", index)
+                      this.tableData.splice(index, 1)
+                      // 如果删完了，获取上一页
+                      if(this.tableData.length === 0) {
+                        this.page_number = this.handleCurrentChange - 1
               this.handleCurrentChange(this.page_number)
             }
           }

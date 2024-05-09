@@ -1,11 +1,6 @@
 <template>
     <div class="navbar">
         <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-<!--        <el-breadcrumb :separator-icon="ArrowRight" class="breadcrumb-container">-->
-<!--          <el-breadcrumb-item v-for="item in routes" :key="item.path" :to="{ path: item?.path }">-->
-<!--            {{item?.meta?.title}}-->
-<!--          </el-breadcrumb-item>-->
-<!--        </el-breadcrumb>-->
       <el-avatar size="large"
                    :src=avatar
                   class="avatar-container"
@@ -62,10 +57,10 @@
                 this.$router.push(`/login`)
             },
             goToDashBoard() {
-              router.push("/dashboard")
+              this.$router.push("/dashboard")
             },
             goToProfile() {
-              router.push("/profile")
+              this.$router.push("/profile")
             }
         }
     }

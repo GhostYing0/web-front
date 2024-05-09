@@ -37,11 +37,6 @@
           height="435px"
           @selection-change="handleSelectionChange"
       >
-        <!--    <el-table-column-->
-        <!--        fixed-->
-        <!--        type="selection"-->
-        <!--        width="55">-->
-        <!--    </el-table-column>-->
         <el-table-column label="成绩审核表">
         <el-table-column
             fixed
@@ -54,15 +49,6 @@
               type="selection"
               width="55">
           </el-table-column>
-<!--          <el-table-column type="expand"-->
-<!--                          label="备注"-->
-<!--                          width="70px">-->
-<!--            <template #default="props">-->
-<!--              <div>-->
-<!--                <el-text>{{props.row.ps}}</el-text>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
         <el-table-column
             prop="contest"
             label="竞赛名称"
@@ -74,46 +60,44 @@
             width="55"
             show-overflow-tooltip>
         </el-table-column>
-        <!--    <el-table-column-->
-        <!--        prop="create_time"-->
-        <!--        label="创建时间"-->
-        <!--        show-overflow-tooltip>-->
-        <!--    </el-table-column>-->
-        <!--    <el-table-column-->
-        <!--        prop="start_time"-->
-        <!--        label="开赛时间"-->
-        <!--        show-overflow-tooltip>-->
-        <!--    </el-table-column>-->
-        <!--    <el-table-column-->
-        <!--        prop="deadline"-->
-        <!--        label="报名截至时间"-->
-        <!--        show-overflow-tooltip>-->
-        <!--    </el-table-column>-->
-  <!--      <el-table-column-->
-  <!--          prop="username"-->
-  <!--          label="用户名"-->
-  <!--          show-overflow-tooltip>-->
-  <!--      </el-table-column>-->
+          <el-table-column
+              prop="contest_level"
+              label="竞赛级别"
+              width="55"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="reward_time"
+              label="获奖时间"
+              width="55"
+              show-overflow-tooltip>
+          </el-table-column>
         <el-table-column
             prop="name"
             label="姓名"
             show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-            prop="school"
-            label="学校"
+            prop="college"
+            label="学院"
             show-overflow-tooltip>
         </el-table-column>
-  <!--      <el-table-column-->
-  <!--          prop="phone"-->
-  <!--          label="电话"-->
-  <!--          show-overflow-tooltip>-->
-  <!--      </el-table-column>-->
-  <!--      <el-table-column-->
-  <!--          prop="email"-->
-  <!--          label="邮箱"-->
-  <!--          show-overflow-tooltip>-->
-  <!--      </el-table-column>-->
+          <el-table-column
+              prop="major"
+              label="专业"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="student_class"
+              label="班级"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="grade"
+              label="奖项等级"
+              width="55"
+              show-overflow-tooltip>
+          </el-table-column>
         <el-table-column
             prop="certificate"
             label="证明材料"
@@ -127,6 +111,21 @@
                 </el-popover>
             </template>
         </el-table-column>
+          <el-table-column
+              prop="guidance_teacher_name"
+              label="指导教师"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="title"
+              label="指导教师职称"
+              show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+              prop="department"
+              label="指导教师系部"
+              show-overflow-tooltip>
+          </el-table-column>
         <el-table-column
             prop="state"
             label="审核状态"
@@ -246,16 +245,6 @@
           label="学校"
           show-overflow-tooltip>
       </el-table-column>
-<!--      <el-table-column-->
-<!--          prop="phone"-->
-<!--          label="电话"-->
-<!--          show-overflow-tooltip>-->
-<!--      </el-table-column>-->
-<!--      <el-table-column-->
-<!--          prop="email"-->
-<!--          label="邮箱"-->
-<!--          show-overflow-tooltip>-->
-<!--      </el-table-column>-->
       <el-table-column
           prop="certificate"
           label="证明材料"
@@ -285,6 +274,11 @@
           </el-tooltip>
         </template>
       </el-table-column>
+        <el-table-column
+            prop="reject_reason"
+            label="驳回原因"
+            show-overflow-tooltip>
+        </el-table-column>
       <el-table-column fixed="right" label="操作" width="150" type="index">
         <template #default="{ row, $index}">
           <el-button @click="handleRecover(row, $index)" type="primary" size="small"> 重新审核</el-button>
@@ -430,7 +424,8 @@
     name: "",
     state: 3
   })
-  
+
+
   // 搜索
   const handleFilter = () => {
     param.page_number = 1
@@ -444,7 +439,7 @@
         if (resp.data.total === 0) {
           ElMessage({
             type: 'info',
-            message: '未搜索到该用户',
+            message: '未搜索到成绩信息',
           })//
         }
       }

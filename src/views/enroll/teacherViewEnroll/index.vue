@@ -6,6 +6,8 @@
             <div class="filter">
               <div class="input-container">
                 <el-cascader
+                    style="width:150px"
+                    placeholder="选择竞赛类型"
                     v-model="item"
                     :options="options"
                     :props="props"
@@ -13,7 +15,8 @@
                     @change="handleFilter"
                 />
                 <el-cascader
-                    style="width: 300px;"
+                    style="margin-left: 10px; width: 300px;"
+                    placeholder="搜索竞赛名称"
                     v-model="contest"
                     :options="contestOptions"
                     :props="props"
@@ -82,7 +85,7 @@
                   show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                  prop="pass_count"
+                  prop="enroll_count"
                   label="报名成功人数"
                   width="95"
                   show-overflow-tooltip>
@@ -117,6 +120,8 @@
             <div class="filter">
               <div class="input-container">
                 <el-cascader
+                    style="width:150px"
+                    placeholder="选择竞赛类型"
                     v-model="item"
                     :options="options"
                     :props="props"
@@ -124,7 +129,8 @@
                     @change="handleFilter"
                 />
                 <el-cascader
-                    style="width: 300px;"
+                    style="margin-left: 10px; width: 300px;"
+                    placeholder="搜索竞赛名称"
                     v-model="contest"
                     :options="contestOptions"
                     :props="props"
@@ -193,7 +199,7 @@
                   show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                  prop="pass_count"
+                  prop="enroll_count"
                   label="报名成功人数"
                   width="95"
                   show-overflow-tooltip>
@@ -415,7 +421,7 @@
         if (resp.data.total === 0) {
           ElMessage({
             type: 'info',
-            message: '未搜索到该用户',
+            message: '未搜索到竞赛信息',
           })//
         }
       }

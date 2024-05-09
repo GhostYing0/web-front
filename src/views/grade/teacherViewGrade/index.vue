@@ -6,6 +6,8 @@
           <div class="filter">
             <div class="input-container">
               <el-cascader
+                  style="width:150px"
+                  placeholder="选择竞赛类型"
                   v-model="item"
                   :options="options"
                   :props="props"
@@ -13,7 +15,8 @@
                   @change="handleFilter"
               />
               <el-cascader
-                  style="width: 300px;"
+                  style="margin-left: 10px; width: 300px;"
+                  placeholder="搜索竞赛名称"
                   v-model="contest"
                   :options="contestOptions"
                   :props="props"
@@ -75,38 +78,19 @@
               </el-table-column>
               <el-table-column
                   prop="reward_count"
-                  label="获奖人数"
+                  label="获奖通过人数"
                   show-overflow-tooltip>
               </el-table-column>
-<!--              <el-table-column-->
-<!--                  prop="certificate"-->
-<!--                  label="证明材料"-->
-<!--                  show-overflow-tooltip>-->
-<!--                <template #default="{row}">-->
-<!--                  <el-popover trigger="hover" placement="top">-->
-<!--                    <template #reference>-->
-<!--                      <el-button type="primary" @click="handDown(row.certificate)">查看</el-button>-->
-<!--                    </template>-->
-<!--                    <el-image :src="row.certificate" fit="contain" />-->
-<!--                  </el-popover>-->
-<!--                </template>-->
-<!--              </el-table-column>-->
-<!--              <el-table-column-->
-<!--                  prop="state"-->
-<!--                  label="审核状态"-->
-<!--                  show-overflow-tooltip>-->
-<!--                <template #default="{ row }">-->
-<!--                  <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>-->
-<!--                  <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>-->
-<!--                  <el-tag v-else-if="row.state === 4" type="warning">已撤回</el-tag>-->
-<!--                  <el-tooltip-->
-<!--                      class="box-item"-->
-<!--                      effect="dark"-->
-<!--                      :content="row.reject_reason"-->
-<!--                      placement="top-start"-->
-<!--                  ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>-->
-<!--                  </el-tooltip>-->
-<!--                </template>-->
+              <el-table-column
+                  prop="process_count"
+                  label="审核中"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="rejected_count"
+                  label="被驳回"
+                  show-overflow-tooltip>
+              </el-table-column>
               </el-table-column>
               <el-table-column fixed="right" label="操作" width="150" type="index">
                 <template #default="{ row }">
@@ -146,6 +130,8 @@
             <div class="filter">
               <div class="input-container">
                 <el-cascader
+                    style="width:150px"
+                    placeholder="选择竞赛类型"
                     v-model="item"
                     :options="options"
                     :props="props"
@@ -153,7 +139,8 @@
                     @change="handleFilter"
                 />
                 <el-cascader
-                    style="width: 300px;"
+                    style="margin-left: 10px; width: 300px;"
+                    placeholder="搜索竞赛名称"
                     v-model="contest"
                     :options="contestOptions"
                     :props="props"
@@ -215,128 +202,24 @@
               </el-table-column>
               <el-table-column
                   prop="reward_count"
-                  label="获奖人数"
+                  label="获奖通过人数"
                   show-overflow-tooltip>
               </el-table-column>
-              <!--              <el-table-column-->
-              <!--                  prop="certificate"-->
-              <!--                  label="证明材料"-->
-              <!--                  show-overflow-tooltip>-->
-              <!--                <template #default="{row}">-->
-              <!--                  <el-popover trigger="hover" placement="top">-->
-              <!--                    <template #reference>-->
-              <!--                      <el-button type="primary" @click="handDown(row.certificate)">查看</el-button>-->
-              <!--                    </template>-->
-              <!--                    <el-image :src="row.certificate" fit="contain" />-->
-              <!--                  </el-popover>-->
-              <!--                </template>-->
-              <!--              </el-table-column>-->
-              <!--              <el-table-column-->
-              <!--                  prop="state"-->
-              <!--                  label="审核状态"-->
-              <!--                  show-overflow-tooltip>-->
-              <!--                <template #default="{ row }">-->
-              <!--                  <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>-->
-              <!--                  <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>-->
-              <!--                  <el-tag v-else-if="row.state === 4" type="warning">已撤回</el-tag>-->
-              <!--                  <el-tooltip-->
-              <!--                      class="box-item"-->
-              <!--                      effect="dark"-->
-              <!--                      :content="row.reject_reason"-->
-              <!--                      placement="top-start"-->
-              <!--                  ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>-->
-              <!--                  </el-tooltip>-->
-              <!--                </template>-->
+              <el-table-column
+                  prop="process_count"
+                  label="审核中"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="rejected_count"
+                  label="被驳回"
+                  show-overflow-tooltip>
+              </el-table-column>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="150" type="index">
-              <el-button type="primary" size="small">查看</el-button>
-              <!--                <template #default="{ row, $index}">-->
-              <!--                  <el-button v-if="row.state === 3" @click="handleRevoke(row, $index)" type="warning" size="small">撤销</el-button>-->
-              <!--                  <el-button v-else  type="danger" size="small" disabled>撤销</el-button>-->
-              <!--                </template>-->
-              <!--              </el-table-column>-->
-            </el-table-column>
-          </el-table>
-          <el-table
-              class="table"
-              ref="multipleTable"
-              :data="tableData"
-              border
-              height="435px"
-              style="width: 100%"
-              @selection-change="handleSelectionChange"
-          >
-            <el-table-column label="成绩信息表">
-              <el-table-column
-                  fixed
-                  prop="id"
-                  label="序号"
-                  width="55" v-if="store.getters.roles.includes('manager')">
-              </el-table-column>
-              <el-table-column
-                  prop="contest"
-                  label="竞赛名称"
-                  show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column
-                  prop="contest_type"
-                  label="竞赛类型"
-                  width="55"
-                  show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column
-                  prop="contest_level"
-                  label="竞赛级别"
-                  width="55"
-                  show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column
-                  prop="start_time"
-                  label="开赛时间"
-                  show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column
-                  prop="reward_count"
-                  label="获奖人数"
-                  show-overflow-tooltip>
-              </el-table-column>
-              <!--              <el-table-column-->
-              <!--                  prop="certificate"-->
-              <!--                  label="证明材料"-->
-              <!--                  show-overflow-tooltip>-->
-              <!--                <template #default="{row}">-->
-              <!--                  <el-popover trigger="hover" placement="top">-->
-              <!--                    <template #reference>-->
-              <!--                      <el-button type="primary" @click="handDown(row.certificate)">查看</el-button>-->
-              <!--                    </template>-->
-              <!--                    <el-image :src="row.certificate" fit="contain" />-->
-              <!--                  </el-popover>-->
-              <!--                </template>-->
-              <!--              </el-table-column>-->
-              <!--              <el-table-column-->
-              <!--                  prop="state"-->
-              <!--                  label="审核状态"-->
-              <!--                  show-overflow-tooltip>-->
-              <!--                <template #default="{ row }">-->
-              <!--                  <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>-->
-              <!--                  <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>-->
-              <!--                  <el-tag v-else-if="row.state === 4" type="warning">已撤回</el-tag>-->
-              <!--                  <el-tooltip-->
-              <!--                      class="box-item"-->
-              <!--                      effect="dark"-->
-              <!--                      :content="row.reject_reason"-->
-              <!--                      placement="top-start"-->
-              <!--                  ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>-->
-              <!--                  </el-tooltip>-->
-              <!--                </template>-->
-            </el-table-column>
-            <el-table-column fixed="right" label="操作" width="150" type="index">
-              <el-button type="primary" size="small">查看</el-button>
-              <!--                <template #default="{ row, $index}">-->
-              <!--                  <el-button v-if="row.state === 3" @click="handleRevoke(row, $index)" type="warning" size="small">撤销</el-button>-->
-              <!--                  <el-button v-else  type="danger" size="small" disabled>撤销</el-button>-->
-              <!--                </template>-->
-              <!--              </el-table-column>-->
+              <template #default="{ row }">
+                <el-button type="primary" size="small" @click="checkDetail(row)">查看</el-button>
+              </template>
             </el-table-column>
           </el-table>
 
@@ -481,7 +364,7 @@
         if (resp.data.total === 0) {
           ElMessage({
             type: 'info',
-            message: '未搜索到该用户',
+            message: '未搜索到竞赛信息',
           })//
         }
       }
