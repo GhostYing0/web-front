@@ -1,17 +1,24 @@
 <template>
   <div>
     <div class="title-item">
-      <div class="chart-title">
-      </div>
-      <el-form-item class="form-item" prop="school" label="竞赛" label-width="80px" style="width:500px">
+      <el-form-item class="form-item" prop="school" label="竞赛" label-width="80px" style="width:1000px">
           <el-cascader
               style="width: 300px;"
               v-model="contest"
               :options="contestOptions"
               :props="props"
               filterable
+              placeholder="请选择竞赛"
               @change="handleGetData"
           />
+          <el-date-picker
+            v-model="param.year"
+            type="year"
+            placeholder="选择年份"
+            @change="getContestAndType"
+            value-format="YYYY"
+            date-format="YYYY"
+        />
       </el-form-item>
     </div>
   </div>
@@ -48,10 +55,13 @@ import {studentContestSemester ,studentRewardRate, getContest} from "@/api/analy
 import {getContestType} from "@/api/contest"
 
 
+
+
 const contestOptions = ref([])
 const contest = ref("")
 const param = reactive({
-  contest: "演讲竞赛"
+  contest: "演讲竞赛",
+  year: ref(new Date().getFullYear()),
 })
 
 const contestType = reactive({})
@@ -73,7 +83,28 @@ const handleGetData = () => {
   initRewardRateChartData()
 }
 
+/*const getContestByYear = () => {
+  for (const key in contestType) {
+    contestType[key] =  {value:contestType[key].type, label: contestType[key].type, children:[]}
+    }
+  getContest(param).then(resp => {
+    let data = resp.data
+    data.forEach(element => {
+      contestType[element.type].children.push({value:element.contest, label:element.contest})
+    })
+
+    for (const key in contestType) {
+      let value = contestType[key]
+      contestOptions.value.push(value)
+    }
+  }).catch(error => {
+    console.error(error)
+  })
+}*/
+
 const getContestAndType = () => {
+  contestOptions.value = []
+  contestType.value = {}
   getContestType().then(resp => {
     let data = resp.data
     data.forEach(element => {
@@ -83,13 +114,16 @@ const getContestAndType = () => {
     console.error(error)
   })
 
-  getContest().then(resp => {
+  getContest(param).then(resp => {
     let data = resp.data
     data.forEach(element => {
       contestType[element.type].children.push({value:element.contest, label:element.contest})
     })
 
     for (const key in contestType) {
+      if(key === "value") {
+        continue
+      }
       let value = contestType[key]
       contestOptions.value.push(value)
     }
@@ -146,8 +180,20 @@ const initRewardRateChartData = () => {
   studentRewardRate(param).then(resp => {
     console.log(resp)
     rewardRateChartRate["rate"] = resp.data.rate
-    if(resp.data.reward_count > 0) {
+    /*if(resp.data.reward_count > 0) {
       rewardRateChartData.value.push({value: resp.data.reward_count, name: "获奖"})
+    }*/
+    if(resp.data.prize1 > 0) {
+      rewardRateChartData.value.push({value: resp.data.reward_count, name: "特等奖"})
+    }
+    if(resp.data.prize2 > 0) {
+      rewardRateChartData.value.push({value: resp.data.reward_count, name: "一等奖"})
+    }
+    if(resp.data.prize3 > 0) {
+      rewardRateChartData.value.push({value: resp.data.reward_count, name: "二等奖"})
+    }
+    if(resp.data.prize4 > 0) {
+      rewardRateChartData.value.push({value: resp.data.reward_count, name: "三等奖"})
     }
     if(resp.data.enroll_count - resp.data.reward_count > 0) {
       rewardRateChartData.value.push({value: resp.data.enroll_count - resp.data.reward_count, name: "未获奖"})
@@ -216,10 +262,13 @@ onMounted(initRewardRateChartData)
     }
     .title-item {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       .form-item {
-        float: left;
+        display: flex;
+        flex-direction: column;
         margin-right: 25px;
+        margin-left: 25px;
+        padding-left: 25px;
       }
       .chart-title {
         margin-left: 70px;

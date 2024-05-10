@@ -18,8 +18,6 @@
                 <el-dropdown-item @click="logout">
                   <span style="display:block;">退出登录</span>
                 </el-dropdown-item>
-                <el-dropdown-item>Action 4</el-dropdown-item>
-                <el-dropdown-item>Action 5</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>

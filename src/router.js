@@ -8,6 +8,13 @@ const asyncRoutes = [
         path:"/contestInformationManager",
         component:() => import("@/layout/AppLayout"),
         children:[
+                {
+                    title: "系统",
+                    path: '/contestInformationManager',
+                    component: () => import("@/views/dashboard/index"),
+                    meta: { title: "首页" }
+                },
+    
             {
                 path: "/enrollContest",
                 component: () => import("@/views/enroll/indexEnrollContest"),
@@ -233,27 +240,27 @@ const asyncRoutes = [
             {
                 path:"/analysis",
                 component: () => import("@/views/dataAnalysis/index.vue"),
-                roles: ["manager"],
+                roles: ["department_manager"],
                 children : [
                     {
                         path:"/contestStatistic",
                         component: () => import("@/views/dataAnalysis/contest/index.vue"),
-                        roles: ["manager"],
+                        roles: ["department_manager"],
                     },
                     {
                         path:"/contestTypeStatistic",
                         component: () => import("@/views/dataAnalysis/contestType/index.vue"),
-                        roles: ["manager"],
+                        roles: ["department_manager"],
                     },
                     {
                         path:"/enrollStatistic",
                         component: () => import("@/views/dataAnalysis/enroll/index.vue"),
-                        roles: ["manager"],
+                        roles: ["department_manager"],
                     },
                     {
                         path:"/schoolStatistic",
                         component: () => import("@/views/dataAnalysis/school/index.vue"),
-                        roles: ["manager"],
+                        roles: ["department_manager"],
                     }
                 ]
             },

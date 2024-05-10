@@ -45,7 +45,13 @@
                         <el-menu-item class="menu-item" index="/displayMyContest" v-if="store.getters.roles.includes('teacher')"><span class="text">查看上传竞赛</span></el-menu-item>
                         <el-menu-item class="menu-item" index="/uploadContest" v-if="store.getters.roles.includes('teacher')"><span class="text">上传竞赛</span></el-menu-item>
                     </el-sub-menu>
-            
+                    <el-sub-menu index="4" class="menu-border"  v-if="store.getters.roles.includes('department_manager')">
+                      <template #title>
+                          <el-icon style="color: white"><location /></el-icon>
+                          <span class="text">数据统计与分析</span>
+                      </template>
+                      <el-menu-item class="menu-item" index="/analysis"><span class="text">进入</span></el-menu-item>
+                    </el-sub-menu>
                 </el-menu>
             </div>
         </el-col>

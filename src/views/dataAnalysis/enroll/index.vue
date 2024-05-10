@@ -28,11 +28,12 @@ import { onMounted } from 'vue';
         <div class="chart-title">
           最近五年各类竞赛报名单年查看
         </div>
-        <el-form-item class="form-item" prop="school" label="年份" label-width="80px" style="width:180px">
+        <el-form-item class="form-item" prop="school" label-width="80px" style="width:180px">
         <div class="m-4">
           <el-cascader
               v-model="item_year"
               :options="yearOptions"
+              placeholder="选择年份"
               :props="props"
               filterable
               @change="handleYear"

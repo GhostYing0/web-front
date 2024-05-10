@@ -41,13 +41,13 @@
                     </template>
                         <el-menu-item class="menu-item" index="/gradeManage"><span class="text">进入</span></el-menu-item>
                 </el-sub-menu>
-              <el-sub-menu index="5" class="menu-border">
+             <!-- <el-sub-menu index="5" class="menu-border">
                 <template #title>
                     <el-icon style="color: white"><location /></el-icon>
                     <span class="text">数据统计与分析</span>
                 </template>
                 <el-menu-item class="menu-item" index="/analysis"><span class="text">进入</span></el-menu-item>
-                </el-sub-menu>
+                </el-sub-menu>-->
             </el-menu>
             </div>
         </el-col>

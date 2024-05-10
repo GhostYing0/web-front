@@ -3,28 +3,28 @@ import request from '@/http/axios'
 
 export function totalEnrollCountOfPerYear() {
     return request({
-        url: '/cms/totalEnrollCountOfPerYear',
+        url: '/totalEnrollCountOfPerYear',
         method: 'get',
     })
 }
 
 export function preTypeEnrollCountOfPerYear() {
     return request({
-        url: '/cms/preTypeEnrollCountOfPerYear',
+        url: '/preTypeEnrollCountOfPerYear',
         method: 'get',
     })
 }
 
 export function compareEnrollCount() {
     return request({
-        url: '/cms/compareEnrollCount',
+        url: '/compareEnrollCount',
         method: 'get',
     })
 }
 
 export function schoolEnrollCount(param) {
     return request({
-        url: '/cms/schoolEnrollCount',
+        url: '/schoolEnrollCount',
         method: 'get',
         params:param
     })
@@ -32,7 +32,7 @@ export function schoolEnrollCount(param) {
 
 export function studentContestSemester(param) {
     return request({
-        url: '/cms/studentContestSemester',
+        url: '/studentContestSemester',
         method: 'get',
         params:param
     })
@@ -40,15 +40,16 @@ export function studentContestSemester(param) {
 
 export function studentRewardRate(param) {
     return request({
-        url: '/cms/studentRewardRate',
+        url: '/studentRewardRate',
         method: 'get',
         params:param
     })
 }
 
-export function getContest() {
+export function getContest(param) {
     return request({
         url: '/public/getContest',
-        method: 'get'
+        method: 'get',
+        params:param
     })
 }
