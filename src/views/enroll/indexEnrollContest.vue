@@ -48,8 +48,8 @@
         <el-input v-model="form.teacher_title" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="Submit">提交</el-button>
-        <el-button @click="handleClearForm">清空表单</el-button>
+        <el-button class="enroll-detail-button" type="primary" @click="Submit">提交</el-button>
+        <el-button class="enroll-detail-button" @click="handleReturn">返回</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -132,18 +132,16 @@ const Submit = () => {
 }
 
 // 清除表单
-const handleClearForm = () => {
-  // form.username = store.getters.username;
-  // form.contest = '';
-  // form.grade = '';
-  // form.certificate = '';
-  // form.desc = '';
+const handleReturn = () => {
+  router.push("/displayContest")
 }
 
 onMounted(handleGetContest)
 </script>
 
 
-<style scoped>
-
+<style lang="scss">
+.enroll-detail-button {
+  margin-left: 300px;
+}
 </style>

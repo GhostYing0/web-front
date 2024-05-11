@@ -16,19 +16,18 @@
       <el-form-item label="获奖学生学号">
         <el-input v-model="form.student_school_id" disabled/>
       </el-form-item>
+      <el-form-item label="获奖时间">
       <div class="demo-date-picker">
-        <div class="block">
-          <span class="demonstration">获奖时间</span>
           <el-date-picker
               v-model="form.reward_time"
               type="datetime"
-              placeholder="Pick a day"
+              placeholder="选择时间"
               :size="size"
               format="YYYY-MM-DD HH:mm:ss"
               value-format="YYYY-MM-DD HH:mm:ss"
           />
-        </div>
       </div>
+      </el-form-item>
       <el-form-item label="所属学院">
         <el-input v-model="form.college" disabled/>
       </el-form-item>
@@ -72,8 +71,8 @@
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleCreate">提交</el-button>
-        <el-button @click="handleClearForm">清空表单</el-button>
+        <el-button class="doUploadGrade-button" type="primary" @click="handleCreate">提交</el-button>
+        <el-button class="doUploadGrade-button" @click="handleReturn()">返回</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -94,6 +93,7 @@ const route = ref(router)
 const form = reactive({
   enroll_id: -1,
   contest: "",
+  contest_id : 0,
   contest_type: "",
   contest_level: "",
   name: "",
@@ -130,6 +130,7 @@ const handleGetEnroll = async () => {
       form.contest_level = resp.data.list[0].contest_level
       form.college = resp.data.list[0].college
       form.student_school_id = resp.data.list[0].student_school_id
+      form.contest_id = resp.data.list[0].contest_id
     }
   })
 }
@@ -141,12 +142,8 @@ const formPic = reactive({
 })
 
 // 清除表单
-const handleClearForm = () => {
-  form.username = store.getters.username;
-  form.contest = '';
-  form.grade = '';
-  form.certificate = '';
-  form.desc = '';
+const handleReturn = () => {
+  router.push(`/uploadGradeDetail/${form.contest_id}`)
 };
 
 // 处理文件变化
@@ -178,7 +175,7 @@ const handleCreate = async () => {
   form.enroll_id = parseInt(route.value.currentRoute.params.enroll_information_id, 10)
   // 假设 uploadRef.value 是一个具有 submit 方法的上传组件实例
   //if (uploadRef.value && typeof uploadRef.value.submit === 'function') {
-  if (uploadRef.value) {
+  if (uploadRef.value && uploadRef.value.name !== "") {
     console.log("(((((((^^^^^^^^^^^^^^^^^^^676")
     formPic.file = uploadRef.value
     //发送请求到后端接口
@@ -215,6 +212,8 @@ onMounted(handleGetEnroll)
 </script>
 
 
-<style scoped>
-
+<style lang="scss">
+.doUploadGrade-button {
+  margin-left: 250px;
+}
 </style>

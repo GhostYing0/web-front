@@ -1,12 +1,13 @@
 <template>
-  编辑竞赛信息
+  <el-form-item>编辑竞赛信息</el-form-item>
   <el-form :model="form" label-width="auto" style="max-width: 600px">
+    <el-form-item label="竞赛状态">
     <el-tag class="form-tag" v-if="form.state === 3" type="primary">审核中</el-tag>
     <el-tag class="form-tag" v-else-if="form.state === 2" type="danger">未通过</el-tag>
     <el-tag class="form-tag" v-else-if="form.state === 1" type="success">通过</el-tag>
     <el-tag class="form-tag" v-else-if="form.state === 4" type="warning">被撤回</el-tag>
-    <div class="m-4">
-      竞赛所属项目
+    </el-form-item>
+    <el-form-item label="竞赛所属项目">
       <el-cascader
           v-model="contest_entry_item"
           :options="entryOptions"
@@ -14,7 +15,7 @@
           filterable
           @change="handleEntry"
       />
-    </div>
+    </el-form-item>
     <el-form-item label="竞赛名称">
       <el-input v-model="form.contest" />
     </el-form-item>
@@ -23,14 +24,13 @@
       <el-radio v-model="form.contest_level_id" :label="2" @change="handleFilter">省部级</el-radio>
       <el-radio v-model="form.contest_level_id" :label="3" @change="handleFilter">校级</el-radio>
     </el-form-item>
-    <el-form-item prop="role" class="filter-check">
+    <el-form-item prop="role" class="filter-check" label="竞赛规格">
       <el-radio v-model="form.is_group" :label="2" @change="handleFilter">单人赛</el-radio>
       <el-radio v-model="form.is_group" :label="1" @change="handleFilter">组队赛</el-radio>
       <el-form-item v-if="form.is_group === 1" label="队伍人数">
         <el-input-number v-model="form.max_group_number" :min="2" @change="handleChange" />
       </el-form-item>
     </el-form-item>
-    <el-text>奖项数量设置</el-text>
     <el-form-item label="特等奖">
       <el-input-number v-model="form.prize1" :min="0"  @change="handleChange" />
     </el-form-item>
@@ -43,8 +43,7 @@
     <el-form-item label="三等奖">
       <el-input-number v-model="form.prize4" :min="0"  @change="handleChange" />
     </el-form-item>
-    <div class="m-4">
-      竞赛类型
+    <el-form-item label="竞赛类型">
       <el-cascader
           v-model="contest_type_item"
           :options="typeOptions"
@@ -52,7 +51,7 @@
           filterable
           @change="handleType"
       />
-    </div>
+    </el-form-item>
     <el-form-item label="开赛时间" prop="create_time">
       <div class="block">
         <span class="demonstration"></span>
@@ -67,6 +66,7 @@
         />
       </div>
     </el-form-item>
+    <el-form-item label="报名时间段" prop="create_time">
     <el-date-picker
         class="block"
         v-model="time_range"
@@ -78,6 +78,7 @@
         time-format="HH:mm"
         @change="handleTime"
     />
+    </el-form-item>
     <el-form-item label="竞赛介绍">
       <el-input v-model="form.desc" type="textarea" />
     </el-form-item>
@@ -85,8 +86,11 @@
       <el-input v-model="form.ps" type="textarea" />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="handleCreate">提交</el-button>
-      <el-button @click="handleClearForm">清空表单</el-button>
+      <el-form-item v-if="form.state === 2" label="驳回原因">
+        <el-input v-model="form.reject_reason" type="textarea" disabled />
+      </el-form-item>
+      <el-button class="UpdateContest-button" type="primary" @click="handleCreate">提交</el-button>
+      <el-button class="UpdateContest-button" @click="handleReturn">返回</el-button>
     </el-form-item>
   </el-form>
 
@@ -125,6 +129,7 @@ const form = reactive({
   desc: "",
   ps: "",
   type: "",
+  reject_reason: "",
 })
 
 const handleCreate = () => {
@@ -138,6 +143,7 @@ const handleCreate = () => {
         type: 'success',
         message: '提交成功',
       })
+      handleReturn()
     } else {
       ElMessage({
         type: 'error',
@@ -150,6 +156,10 @@ const handleCreate = () => {
       message: '提交失败',
     })
   })
+}
+
+const handleReturn = () => {
+  router.push("/displayMyContest")
 }
 
 const handleType = () => {
@@ -221,6 +231,7 @@ const GetContestByID = () => {
         form.ps=resp.data.list[0].ps
         form.state = resp.data.list[0].state
         form.contest_entry = resp.data.list[0].contest_entry
+        form.reject_reason = resp.data.list[0].reject_reason
         contest_entry_item.value = resp.data.list[0].contest_entry
         contest_type_item.value = resp.data.list[0].contest_type
         time_range.value[0] = resp.data.list[0].enroll_time
@@ -233,6 +244,8 @@ onMounted(initOptions)
 onMounted(GetContestByID)
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.UpdateContest-button {
+  margin-left: 250px;
+}
 </style>

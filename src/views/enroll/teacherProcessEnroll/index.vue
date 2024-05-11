@@ -106,6 +106,22 @@
                 show-overflow-tooltip>
             </el-table-column>
             <el-table-column
+                prop="state"
+                label="审核状态"
+                show-overflow-tooltip>
+              <template #default="{ row }">
+                <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    :content="row.reject_reason"
+                    placement="top-start"
+                ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+                </el-tooltip>
+                <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+                <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column
                 label="操作"
                 width="240"
                 show-overflow-tooltip>
@@ -181,7 +197,7 @@
             :data="tableData"
             border
             height="435px"
-            style="width:100% font-size:14px"
+            style="width:100%; font-size:14px"
             @selection-change="handleSelectionChange"
         >
           <el-table-column label="竞赛列表" width="100%">
@@ -232,6 +248,22 @@
                 label="被驳回人数"
                 width="95"
                 show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column
+                prop="state"
+                label="审核状态"
+                show-overflow-tooltip>
+              <template #default="{ row }">
+                <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    :content="row.reject_reason"
+                    placement="top-start"
+                ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+                </el-tooltip>
+                <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+                <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
+              </template>
             </el-table-column>
             <el-table-column
                 label="操作"
@@ -299,7 +331,7 @@ const param = reactive({
   page_size: 10,
   contest: "",
   type: "",
-  state: -1,
+  state: 1,
   year: "",
   is_group: 2,
   contest_level: -1,

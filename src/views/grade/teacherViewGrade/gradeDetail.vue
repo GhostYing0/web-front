@@ -5,6 +5,7 @@
         <el-input v-model="param.name" placeholder="搜索学生姓名" class="filter-item" @keyup.enter="handleFilter" />
         <el-input v-model="param.major" placeholder="搜索专业" class="filter-item" @keyup.enter="handleFilter" />
         <el-input v-model="param.student_class" placeholder="搜索班级" class="filter-item" @keyup.enter="handleFilter" />
+        <el-input v-model="param.team_name" placeholder="搜索队伍" class="filter-item" @keyup.enter="handleFilter" />
         <div class="filter-button-container">
           <el-button class="filter-button" type="primary"  @click="handleFilter">
             搜索
@@ -79,6 +80,11 @@
       <el-table-column
           prop="grade"
           label="获得奖项"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="team_name"
+          label="所属队伍"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -260,6 +266,7 @@ const param = reactive( {
   student_school_id:"",
   major: "",
   student_class: "",
+  team_name: "",
 })
 
 
@@ -324,6 +331,7 @@ const handleShowContest = async () => {
   item.value = ""
   param.major = ""
   param.name = ""
+  param.team_name = ""
   param.student_classs = ""
   param.state = -1
   await teacherSearchGrade(param).then(resp => {

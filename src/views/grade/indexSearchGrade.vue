@@ -464,7 +464,9 @@
                     school: '',
                     phone: '',
                     email: '',
-                    state: -1
+                    state: -1,
+                  contest_level: -1,
+                  grade: -1,
                 }
                 searchGrade(this.param).then(resp => {
                     console.log(resp)

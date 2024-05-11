@@ -44,8 +44,8 @@
                 <el-select v-model="loginForm.role" placeholder="请选择" style="width:240px">
                   <el-option :key="0" label="学生" :value=1></el-option>
                   <el-option :key="1" label="教师" :value=2></el-option>
-                  <el-option :key="2" label="管理员" :value=0></el-option>
                   <el-option :key="3" label="系部管理员" :value=3></el-option>
+                  <el-option :key="2" label="管理员" :value=0></el-option>
                 </el-select>
             </el-form-item>
 

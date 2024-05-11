@@ -6,8 +6,8 @@
         <el-descriptions-item width="10vw" label="竞赛类型">{{contestType}}</el-descriptions-item>
         <el-descriptions-item width="10vw" label="竞赛级别">{{contestLevel}}</el-descriptions-item>
         <el-descriptions-item width="10vw" label="开赛时间">{{contestStartTime}}</el-descriptions-item>
-        <el-descriptions-item width="10vw" label="报名开始时间">{{contestEnrollTime}}</el-descriptions-item>
-        <el-descriptions-item width="10vw" label="报名截止时间">{{contestDeadline}}</el-descriptions-item>
+        <el-descriptions-item width="10vw" label="报名开始时间">{{ContestEnrollTime}}</el-descriptions-item>
+        <el-descriptions-item width="10vw" label="报名截止时间">{{contestDeadLine}}</el-descriptions-item>
         <el-descriptions-item width="10vw" label="竞赛介绍">{{contestDesc}}</el-descriptions-item>
       </el-descriptions>
     </div>

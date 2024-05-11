@@ -91,6 +91,23 @@
                   label="被驳回"
                   show-overflow-tooltip>
               </el-table-column>
+              <el-table-column
+                  prop="state"
+                  label="审核状态"
+                  show-overflow-tooltip>
+                <template #default="{ row }">
+                  <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+                  <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
+                  <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
+                  <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      :content="row.reject_reason"
+                      placement="top-start"
+                  ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
               </el-table-column>
               <el-table-column fixed="right" label="操作" width="150" type="index">
                 <template #default="{ row }">
@@ -215,6 +232,23 @@
                   label="被驳回"
                   show-overflow-tooltip>
               </el-table-column>
+              <el-table-column
+                  prop="state"
+                  label="审核状态"
+                  show-overflow-tooltip>
+                <template #default="{ row }">
+                  <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+                  <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
+                  <el-tag v-else-if="row.state === 4" type="warning">被撤回</el-tag>
+                  <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      :content="row.reject_reason"
+                      placement="top-start"
+                  ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="150" type="index">
               <template #default="{ row }">
@@ -319,7 +353,7 @@
     school: "",
     college: "",
     name: "",
-    state: -1,
+    state: 1,
     year: "",
     is_group: 2,
     contest_level: -1

@@ -28,6 +28,10 @@
               <el-radio v-model="param.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
               <el-radio v-model="param.contest_level" :label="3" @change="handleFilter">校级</el-radio>
             </el-form-item>
+            <el-form-item label="审核状态" prop="role" class="filter-check">
+              <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
+              <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
+            </el-form-item>
           </div>
         </div>
         <div class="handle-container">
@@ -101,13 +105,34 @@
               show-overflow-tooltip>
           </el-table-column>
           <el-table-column
+              prop="state"
+              label="审核状态"
+              show-overflow-tooltip>
+            <template #default="{ row }">
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  :content="row.reject_reason"
+                  placement="top-start"
+              ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+              </el-tooltip>
+              <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+              <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
               prop="contest_state"
-              label="状态"
+              label="报名状态"
               show-overflow-tooltip>
             <template #default="{ row }">
               <el-tag v-if="row.contest_state === 1" type="success" size="small">可报名</el-tag>
               <el-tag v-else type="info" size="small">不可报名</el-tag>
             </template>
+          </el-table-column>
+          <el-table-column
+              prop="reject_reason"
+              label="驳回原因"
+              show-overflow-tooltip>
           </el-table-column>
           <el-table-column
               prop="contest_state"
@@ -121,8 +146,9 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="150" type="index">
             <template #default="{ row, $index}">
-              <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
-              <el-button @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>
+              <el-button v-if="row.state === 3" @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
+              <el-button  v-if="row.state === 3" @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>
+              <el-button  v-if="row.state === 2" @click="handleRecover(row, $index)" type="primary" size="small">重新审核</el-button>
             </template>
           </el-table-column>
         </el-table-column>
@@ -169,6 +195,10 @@
               <el-radio v-model="param.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
               <el-radio v-model="param.contest_level" :label="3" @change="handleFilter">校级</el-radio>
             </el-form-item>
+            <el-form-item label="审核状态" prop="role" class="filter-check">
+              <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
+              <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
+            </el-form-item>
           </div>
         </div>
         <div class="handle-container">
@@ -193,105 +223,6 @@
           <el-button type="primary" @click="handleReject">确 定</el-button>
         </div>
       </el-dialog>
-
-<!--      <el-table-->
-<!--          ref="multipleTable"-->
-<!--          :data="tableData"-->
-<!--          border-->
-<!--          class="table"-->
-<!--          height="435px"-->
-<!--          @selection-change="handleSelectionChange"-->
-<!--      >-->
-<!--        <el-table-column label="待审核竞赛表">-->
-<!--          <el-table-column-->
-<!--              fixed-->
-<!--              type="selection"-->
-<!--              width="55">-->
-<!--          </el-table-column>-->
-<!--          <el-table-column type="expand"-->
-<!--                           label="简介"-->
-<!--                           width="70px">-->
-<!--            <template #default="props">-->
-<!--              <div>-->
-<!--                <el-text>{{props.row.desc}}</el-text>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--              fixed-->
-<!--              prop="id"-->
-<!--              label="序号"-->
-<!--              width="55">-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--              prop="contest"-->
-<!--              label="竞赛名称"-->
-<!--              show-overflow-tooltip>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--              prop="contest_type"-->
-<!--              label="竞赛类型"-->
-<!--              width="55"-->
-<!--              show-overflow-tooltip>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--              prop="create_time"-->
-<!--              label="创建时间"-->
-<!--              show-overflow-tooltip>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--              prop="start_time"-->
-<!--              label="开赛时间"-->
-<!--              show-overflow-tooltip>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--              prop="deadline"-->
-<!--              label="报名截至时间"-->
-<!--              show-overflow-tooltip>-->
-<!--          </el-table-column>-->
-<!--          &lt;!&ndash;    <el-table-column&ndash;&gt;-->
-<!--          &lt;!&ndash;        prop="username"&ndash;&gt;-->
-<!--          &lt;!&ndash;        label="用户名"&ndash;&gt;-->
-<!--          &lt;!&ndash;        show-overflow-tooltip>&ndash;&gt;-->
-<!--          &lt;!&ndash;    </el-table-column>&ndash;&gt;-->
-<!--          <el-table-column-->
-<!--              prop="name"-->
-<!--              label="姓名"-->
-<!--              show-overflow-tooltip>-->
-<!--          </el-table-column>-->
-<!--          &lt;!&ndash;    <el-table-column&ndash;&gt;-->
-<!--          &lt;!&ndash;        prop="school"&ndash;&gt;-->
-<!--          &lt;!&ndash;        label="学校"&ndash;&gt;-->
-<!--          &lt;!&ndash;        show-overflow-tooltip>&ndash;&gt;-->
-<!--          &lt;!&ndash;    </el-table-column>&ndash;&gt;-->
-<!--          &lt;!&ndash;    <el-table-column&ndash;&gt;-->
-<!--          &lt;!&ndash;        prop="college"&ndash;&gt;-->
-<!--          &lt;!&ndash;        label="学院"&ndash;&gt;-->
-<!--          &lt;!&ndash;        show-overflow-tooltip>&ndash;&gt;-->
-<!--          &lt;!&ndash;    </el-table-column>&ndash;&gt;-->
-<!--          <el-table-column-->
-<!--              prop="desc"-->
-<!--              label="简介"-->
-<!--              show-overflow-tooltip>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column-->
-<!--              prop="state"-->
-<!--              label="审核状态"-->
-<!--              show-overflow-tooltip>-->
-<!--            <template #default="{ row }">-->
-<!--              <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>-->
-<!--              <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>-->
-<!--              <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column fixed="right" label="操作" width="150" type="index">-->
-<!--            <template #default="{ row, $index}">-->
-<!--              <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>-->
-<!--              <el-button @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--        </el-table-column>-->
-<!--      </el-table>-->
 
       <el-table
           class="table"
@@ -341,13 +272,34 @@
               show-overflow-tooltip>
           </el-table-column>
           <el-table-column
+              prop="state"
+              label="审核状态"
+              show-overflow-tooltip>
+            <template #default="{ row }">
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  :content="row.reject_reason"
+                  placement="top-start"
+              ><el-tag v-if="row.state === 2" type="danger">未通过</el-tag>
+              </el-tooltip>
+              <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
+              <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
               prop="contest_state"
-              label="状态"
+              label="报名状态"
               show-overflow-tooltip>
             <template #default="{ row }">
               <el-tag v-if="row.contest_state === 1" type="success" size="small">可报名</el-tag>
               <el-tag v-else type="info" size="small">不可报名</el-tag>
             </template>
+          </el-table-column>
+          <el-table-column
+              prop="reject_reason"
+              label="驳回原因"
+              show-overflow-tooltip>
           </el-table-column>
           <el-table-column
               prop="contest_state"
@@ -391,7 +343,7 @@ import {
   updateContest,
   getContestCount,
   viewTeacherContest,
-  updateTeacherContest, getDepartmentContest, getContestType
+  updateTeacherContest, getDepartmentContest, getContestType, processRecoverContest
 } from '@/api/contest'
 import {computed, onMounted, reactive, ref, watch} from "vue"
 import {router} from "@/router"
@@ -444,8 +396,43 @@ const form = reactive( {
   school: "",
   college: "",
   name: "",
-  state: -1
+  state: 3
 })
+
+
+const handleRecover = (row, index) => {
+  ElMessageBox.confirm('确定要重新审核该竞赛吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    form.id = row.id
+    processRecoverContest(form).then(resp => {
+      if(resp.code === 200) {
+        ElMessage({
+          type: 'success',
+          message: '更新成功',
+        })//
+        tableData.value.splice(index, 1)
+        // 如果删完了，获取上一页
+        if(tableData.value.length === 0) {
+          param.page_number = handleCurrentChange - 1
+          handleCurrentChange(param.page_number)
+        }
+      } else {
+        ElMessage({
+          type: 'error',
+          message: '更新失败',
+        })//
+      }
+    })
+  }).catch(() => {
+    ElMessage({
+      type: 'error',
+      message: '删除失败',
+    })
+  })
+}
 
 
 const activeName = ref('first');
@@ -556,6 +543,7 @@ const handleReject = () => {
         type: 'success',
         message: '更新成功',
       })//
+      dialogFormVisible.value = false
       tableData.value.splice(delete_index.value, 1)
       // 如果删完了，获取上一页
       if(tableData.value.length === 0) {

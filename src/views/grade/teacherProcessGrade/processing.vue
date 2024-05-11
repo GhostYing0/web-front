@@ -172,6 +172,9 @@
     <el-button class="handle-button" type="primary" @click="handleShowContest">
       显示全部
     </el-button>
+    <el-button class="handle-button" type="primary" @click="returnDesktop()">
+      返回
+    </el-button>
   </div>
 
     <el-table

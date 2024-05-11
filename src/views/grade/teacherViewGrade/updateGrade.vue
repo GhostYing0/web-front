@@ -57,9 +57,11 @@
       </el-form-item>
       <el-form-item class="form-item" label="证明材料">
       <el-image style="width: 500px; height: 300px"
+                v-if="information.certificate"
                 :src="information.certificate"
                 fit="cover"
                 :preview-src-list="[information.certificate]"/>
+        <el-empty v-else description="无证明材料"/>
       </el-form-item>
       <el-form-item class="form-item" label="上传证明材料">
         <el-upload
@@ -193,7 +195,7 @@ const UpdateEnroll = async () => {
     // 接下来的代码在用户确认后执行
     form.enroll_id = parseInt(route.value.currentRoute.params.enroll_information_id, 10);
 
-    if (uploadRef.value && uploadRef.value.file) {
+    if (uploadRef.value && uploadRef.value.name !== undefined) {
       formPic.file = uploadRef.value;
       // 使用await等待上传的结果
       const resp = await uploadAxios.post('public/v1/upload', formPic);

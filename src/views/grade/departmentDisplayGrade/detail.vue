@@ -1,33 +1,17 @@
 <template>
   <div class="filter-container" style="margin-bottom: 15px">
     <div class="filter">
-      <div class="input-container">
-        <el-input v-model="param.contest" placeholder="搜索姓名" class="filter-item" @keyup.enter="handleFilter" />
-        <el-cascader
-            class="filter-item"
-            placeholder="选择专业"
-            v-model="contest"
-            :options="contestOptions"
-            :props="props"
-            filterable
-            @change="handleFilter"
-        />
-        <el-cascader
-            class="filter-item"
-            placeholder="入学年份"
-            v-model="contest"
-            :options="contestOptions"
-            :props="props"
-            filterable
-            @change="handleFilter"
-        />
-        <el-input v-model="param.contest" placeholder="班级" class="filter-item" @keyup.enter="handleFilter" />
-        <div class="filter-button-container">
-          <el-button class="filter-button" type="primary"  @click="handleFilter">
-            搜索
-          </el-button>
-        </div>
-      </div>
+          <div class="input-container">
+            <el-input v-model="param.name" placeholder="搜索姓名" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.major" placeholder="搜索专业" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.student_class" placeholder="搜索班级" class="filter-item" @keyup.enter="handleFilter" />
+            <div class="filter-button-container">
+              <el-button class="filter-button" type="primary"  @click="handleFilter">
+                搜索
+              </el-button>
+            </div>
+          </div>
+
       <el-form-item label="获奖级别" prop="role" class="filter-check">
         <el-radio v-model="param.prize" :label="-1" @change="handleFilter">全部</el-radio>
         <el-radio v-model="param.prize" :label="1" @change="handleFilter">特等奖</el-radio>
@@ -42,6 +26,14 @@
       显示全部
     </el-button>
   </div>
+
+  <!--查看图片-->
+  <el-dialog v-model="dialogPictureVisible" width="30%">
+    <!--普通表单-->
+    <div>
+      <el-image :src="picture" />
+    </div>
+  </el-dialog>
 
   <el-table
       class="table"
@@ -101,13 +93,51 @@
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-          prop="semester"
-          label="入学年份"
+          prop="major"
+          label="专业"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
           prop="student_class"
           label="班级"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="grade"
+          label="获奖等级"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="reward_time"
+          label="获奖时间"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="certificate"
+          label="证明材料"
+          show-overflow-tooltip>
+        <template #default="{row}">
+          <el-popover trigger="hover" placement="top">
+            <template #reference>
+              <el-button type="primary" @click="handDown(row.certificate)">查看</el-button>
+            </template>
+            <el-image :src="row.certificate" fit="contain" />
+          </el-popover>
+        </template>
+      </el-table-column>
+      <el-table-column
+          prop="guidance_teacher_name"
+          label="指导教师"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="student_class"
+          label="教师所属系部"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="title"
+          label="教师职称"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -159,6 +189,13 @@ import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
 import store from "@/store";
 import { defineProps, defineEmits, watch} from 'vue'
 
+const picture = ref()
+const dialogPictureVisible = ref(false)
+
+const handDown = (url) => {
+  picture.value = url
+  dialogPictureVisible.value = true
+}
 
 const emit = defineEmits(['sendToParent'])
 const props = defineProps({
@@ -237,7 +274,9 @@ const param = reactive( {
   reject_reason: "",
   name: "",
   prize: -1,
-  state: 1
+  state: 1,
+  major: "",
+  student_class: "",
 })
 
 
@@ -267,7 +306,7 @@ const handleFilter = () => {
       if (resp.data.total === 0) {
         ElMessage({
           type: 'info',
-          message: '为搜索到成绩信息',
+          message: '未搜索到成绩信息',
         })//
       }
     }
@@ -277,7 +316,7 @@ const handleFilter = () => {
 // 分页大小改变监听
 const handleSizeChange = (curSize) => {
   param.page_size = curSize
-  departmentManagerSearchEnroll(param).then(resp => {
+  departmentManagerSearchGrade(param).then(resp => {
     console.log('分页数据获取成功',resp)
     tableData.value = resp.data.list
     recordTotal.value = resp.data.total
@@ -300,6 +339,10 @@ const handleShowContest = async () => {
   param.page_number = 1
   param.type = ""
   item.value = ""
+  param.name = ""
+  param.student_class = ""
+  param.major = ""
+  param.prize = -1
   await departmentManagerSearchGrade(param).then(resp => {
     console.log(resp)
     if(resp.code === 200) {

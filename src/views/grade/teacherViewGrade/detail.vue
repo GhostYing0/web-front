@@ -5,6 +5,7 @@
         <el-input v-model="param.name" placeholder="搜索姓名" class="filter-item" @keyup.enter="handleFilter" />
         <el-input v-model="param.major" placeholder="搜索专业" class="filter-item" @keyup.enter="handleFilter" />
         <el-input v-model="param.student_class" placeholder="搜索班级" class="filter-item" @keyup.enter="handleFilter" />
+        <el-input v-model="param.team_name" placeholder="搜索队伍" class="filter-item" @keyup.enter="handleFilter" />
         <div class="filter-button-container">
           <el-button class="filter-button" type="primary"  @click="handleFilter">
             搜索
@@ -17,9 +18,9 @@
     <el-button class="handle-button" type="primary" @click="handleShowContest">
       显示全部
     </el-button>
-    <el-button class="handle-button" type="primary" @click="handleShowContest">
-      批量给成绩
-    </el-button>
+<!--    <el-button class="handle-button" type="primary" @click="handleShowContest">-->
+<!--      批量给成绩-->
+<!--    </el-button>-->
   </div>
 
   <el-table
@@ -74,11 +75,11 @@
           label="姓名"
           show-overflow-tooltip>
       </el-table-column>
-      <el-table-column
-          prop="school"
-          label="学校"
-          show-overflow-tooltip>
-      </el-table-column>
+<!--      <el-table-column-->
+<!--          prop="school"-->
+<!--          label="学校"-->
+<!--          show-overflow-tooltip>-->
+<!--      </el-table-column>-->
       <el-table-column
           prop="college"
           label="学院"
@@ -97,6 +98,26 @@
       <el-table-column
           prop="student_class"
           label="班级"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="teacher_name"
+          label="指导教师"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="department"
+          label="指导教师系部"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="title"
+          label="教师职称"
+          show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+          prop="team_name"
+          label="所属队伍"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -229,6 +250,7 @@ const param = reactive( {
   student_school_id: "",
   major:"",
   student_class: "",
+  team_name: "",
 })
 
 
@@ -293,6 +315,7 @@ const handleShowContest = async () => {
   param.major = ""
   param.name = ""
   param.student_class = ""
+  param.team_name = ""
   item.value = ""
   await teacherSearchEnroll(param).then(resp => {
     console.log(resp)

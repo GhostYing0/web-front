@@ -67,6 +67,7 @@
           @selection-change="handleSelectionChange"
       >
         <el-table-column :label="contestFullName + ' 竞赛审核表'">
+          <el-table-column type="selection" width="55" />
           <el-table-column
               fixed
               prop="id"
