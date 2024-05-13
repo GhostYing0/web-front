@@ -28,7 +28,7 @@ const asyncRoutes = [
             {
                 path: "/studentEnrollDetail/:enroll_information_id",
                 component: () => import("@/views/enroll/studentEnrollDetail.vue"),
-                roles: ["student"]
+                roles: ["student", "manager"]
             },
             {
                 path: "/studentEnrollUpdate/:enroll_information_id",

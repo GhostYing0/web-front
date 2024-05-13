@@ -125,12 +125,12 @@
                 label="姓名"
                 show-overflow-tooltip>
         </el-table-column>
-        <el-table-column
+        <!--<el-table-column
                 prop="student_id"
                 label="用户ID"
                 width="55"
                 show-overflow-tooltip>
-        </el-table-column>
+        </el-table-column>-->
 <!--        <el-table-column-->
 <!--                prop="team_id"-->
 <!--                label="队伍ID"-->
@@ -148,10 +148,25 @@
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
+                prop="major"
+                label="专业"
+                show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+                prop="student_class"
+                label="班级"
+                show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+                prop="student_school_id"
+                label="学号"
+                show-overflow-tooltip>
+        </el-table-column>
+        <!--<el-table-column
                 prop="school"
                 label="学校"
                 show-overflow-tooltip>
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column
                 prop="state"
                 label="审核状态"
@@ -170,6 +185,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="150" type="index">
             <template #default="{ row, $index }">
+                <el-button @click="CheckDetail(row)" type="primary" size="small">详情</el-button>
                 <el-button @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
                 <el-button @click="handleDelete(row, $index)" type="danger" size="small">删除</el-button>
             </template>
@@ -507,6 +523,9 @@
                         message: '删除失败',
                     })
                 })
+            },
+            CheckDetail(row) {
+                this.$router.push(`/studentEnrollDetail/${row.id}`)
             },
 
             // 删除一些
