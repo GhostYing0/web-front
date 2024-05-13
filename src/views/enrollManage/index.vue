@@ -4,20 +4,22 @@
             <!-- 用户名输入 -->
           <div class="filter">
             <div class="input-container">
-              <el-input v-model="param.name" placeholder="用户名"  class="filter-item" @keyup.enter="handleFilter" />
+              <el-input v-model="param.name" placeholder="学生姓名"  class="filter-item" @keyup.enter="handleFilter" />
               <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
-              <el-input v-model="param.school" placeholder="学校" class="filter-item" @keyup.enter="handleFilter" />
+<!--              <el-input v-model="param.school" placeholder="学校" class="filter-item" @keyup.enter="handleFilter" />-->
+              <el-form-item label="报名时间段">
               <el-date-picker
                   class="block"
                   v-model="time_range"
                   type="datetimerange"
-                  start-placeholder="报名截止时间"
-                  end-placeholder="开赛时间"
+                  start-placeholder="开始时间"
+                  end-placeholder="结束时间"
                   value-format="YYYY-MM-DD HH:mm:ss"
                   date-format="YYYY/MM/DD ddd"
                   time-format="HH:mm"
                   @change="handleTime"
               />
+              </el-form-item>
               <div class="filter-button-container">
                 <el-button class="filter-button" type="primary" @click="handleFilter">
                   搜索

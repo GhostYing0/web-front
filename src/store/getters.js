@@ -14,5 +14,6 @@ const getters = {
     phone: state => state.user.phone,
     email: state => state.user.email,
     avatar: state => state.user.avatar,
+    department: state => state.user.department,
 }
 export default getters

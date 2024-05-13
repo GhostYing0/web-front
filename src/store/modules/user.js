@@ -8,7 +8,7 @@ import {
     register,
     getProfileStudent,
     getProfileTeacher,
-    departmentLogin, departmentRegister
+    departmentLogin, departmentRegister,getProfileDepartmentManager
 } from "@/api/user";
 // import {getToken, setToken, removeToken} from "../../utils/auth";
 import {getToken, setToken, removeToken} from "../../utils/auth";
@@ -29,7 +29,8 @@ const getDefaultState = () => {
         student_class: "",
         phone: "",
         email: "",
-        avatar: ""
+        avatar: "",
+        department: "",
     }
 }
 
@@ -77,6 +78,9 @@ const mutations = {
     },
     SET_AVATAR: (state, avatar) => {
         state.avatar = avatar
+    },
+    SET_DEPARTMENT: (state, department) => {
+        state.department = department
     }
 }
 
@@ -302,6 +306,27 @@ const actions = {
                     commit('SET_AVATAR', avatar)
                     commit('SET_PHONE', phone)
                     commit('SET_EMAIL', email)
+
+                    resolve(data)
+                }).catch(error => {
+                    reject(error)
+                })
+            } else if (state.roles.includes("department_manager")) {
+                getProfileDepartmentManager(state.token).then(response => {
+                    const {data} = response
+                    if(!data) {
+                        reject("验证失败，请重新登录")
+                    }
+
+                    const {name, gender, school, college, phone, email, department} = data
+
+                    commit('SET_NAME', name)
+                    commit('SET_GENDER', gender)
+                    commit('SET_SCHOOL', school)
+                    commit('SET_COLLEGE', college)
+                    commit('SET_PHONE', phone)
+                    commit('SET_EMAIL', email)
+                    commit('SET_DEPARTMENT', department)
 
                     resolve(data)
                 }).catch(error => {

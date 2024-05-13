@@ -2,6 +2,7 @@
   <div>
     <el-avatar size="large"
         :src=avatar
+               v-if="!store.getters.roles.includes('department_manager')"
     />
   </div>
   <el-descriptions
@@ -12,10 +13,23 @@
         border
     >
       <template #extra>
-        <el-button type="primary" @click="updateUserAvatar">更换头像</el-button>
+        <el-button type="primary" @click="updateUserAvatar" v-if="!store.getters.roles.includes('department_manager')">更换头像</el-button>
         <el-button type="primary" @click="updateUserProfile">编辑</el-button>
         <el-button type="warning" @click="updateUserPassword">修改密码</el-button>
       </template>
+    <el-descriptions-item>
+      <template #label>
+        <div class="cell-item">
+          <el-icon :style="iconStyle">
+            <user />
+          </el-icon>
+          角色
+        </div>
+      </template>
+      <el-text v-if="store.getters.roles.includes('student')">学生</el-text>
+      <el-text v-if="store.getters.roles.includes('teacher')">教师</el-text>
+      <el-text v-if="store.getters.roles.includes('department_manager')">系部管理员</el-text>
+    </el-descriptions-item>
       <el-descriptions-item>
         <template #label>
           <div class="cell-item">
@@ -72,17 +86,17 @@
         <el-text v-text=college></el-text>
         <el-tag size="small">School</el-tag>
       </el-descriptions-item>
-      <el-descriptions-item>
-        <template #label>
-          <div class="cell-item">
-            <el-icon :style="iconStyle">
-              <office-building />
-            </el-icon>
-            性别
-          </div>
-        </template>
-        <el-text v-text=gender></el-text>
-      </el-descriptions-item>
+<!--      <el-descriptions-item>-->
+<!--        <template #label>-->
+<!--          <div class="cell-item">-->
+<!--            <el-icon :style="iconStyle">-->
+<!--              <office-building />-->
+<!--            </el-icon>-->
+<!--            性别-->
+<!--          </div>-->
+<!--        </template>-->
+<!--        <el-text v-text=gender></el-text>-->
+<!--      </el-descriptions-item>-->
       <el-descriptions-item v-if="store.getters.roles.includes('student')">
         <template #label>
           <div class="cell-item">
@@ -94,6 +108,17 @@
         </template>
         <el-text v-text=student_class></el-text>
       </el-descriptions-item>
+    <el-descriptions-item v-if="store.getters.roles.includes('department_manager')">
+      <template #label>
+        <div class="cell-item">
+          <el-icon :style="iconStyle">
+            <office-building />
+          </el-icon>
+          系部
+        </div>
+      </template>
+      <el-text v-text=department></el-text>
+    </el-descriptions-item>
     <el-descriptions-item v-if="store.getters.roles.includes('student')">
       <template #label>
         <div class="cell-item">
@@ -212,6 +237,9 @@
   })
   const avatar = computed(()=>{
     return store.getters.avatar
+  })
+  const department = computed(()=>{
+    return store.getters.department
   })
 
   const size = ref('default')

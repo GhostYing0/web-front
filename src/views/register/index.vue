@@ -106,17 +106,17 @@
           <el-radio v-model="registerForm.gender" :label="1">男</el-radio>
           <el-radio v-model="registerForm.gender" :label="2">女</el-radio>
         </el-form-item>
-        <el-form-item prop="school" label="学校" label-width="80px" style="width:300px">
-          <div class="m-4">
-            <el-cascader
-                v-model="item_school"
-                :options="schoolOptions"
-                :props="props"
-                filterable
-                @change="handleSchool"
-            />
-          </div>
-        </el-form-item>
+<!--        <el-form-item prop="school" label="学校" label-width="80px" style="width:300px">-->
+<!--          <div class="m-4">-->
+<!--            <el-cascader-->
+<!--                v-model="item_school"-->
+<!--                :options="schoolOptions"-->
+<!--                :props="props"-->
+<!--                filterable-->
+<!--                @change="handleSchool"-->
+<!--            />-->
+<!--          </div>-->
+<!--        </el-form-item>-->
         <el-form-item prop="college" label="所属学院" label-width="80px" style="width:300px">
           <div class="m-4">
             <el-cascader

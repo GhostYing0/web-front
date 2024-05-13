@@ -159,7 +159,7 @@ const asyncRoutes = [
             {
                 path: "/profile",
                 component: () => import("@/views/profile/index"),
-                roles: ["student","teacher"]
+                roles: ["student","teacher", "department_manager"]
             },
             {
                 path:"/displayContest",

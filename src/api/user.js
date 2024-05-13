@@ -173,6 +173,13 @@ export function getProfileTeacher() {
     })
 }
 
+export function getProfileDepartmentManager() {
+    return request({
+        url: '/profileDepartmentManager',
+        method: 'get',
+    })
+}
+
 export function updateAvatar(data) {
     return request({
         url: '/updateAvatar',

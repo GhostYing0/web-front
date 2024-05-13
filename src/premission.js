@@ -36,7 +36,7 @@ router.beforeEach(async(to, from, next) => {
                     const { roles } = await store.dispatch("user/getInfo")
                     console.log(roles[0])
                     // 先不展示系部管理员的简介
-                    if(!roles.includes("manager") && !roles.includes("department_manager")) {
+                    if(!roles.includes("manager")) {
                         await store.dispatch("user/getProfile")
                     }
                         //await store.dispatch("user/getProfile", 1)

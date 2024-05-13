@@ -44,7 +44,10 @@
         <el-input v-model="information.title" disabled />
       </el-form-item>
       <el-form-item label="审核状态">
-        <el-input v-model="information.state" disabled />
+        <el-tag v-if="information.state === 3" type="primary">审核中</el-tag>
+        <el-tag v-else-if="information.state === 1" type="success">通过</el-tag>
+        <el-tag v-else-if="information.state === 2" type="danger">未通过</el-tag>
+        <el-tag v-else-if="information.state === 4" type="warning">已撤回</el-tag>
       </el-form-item>
       <el-form-item label="驳回原因" v-if="information.state === 2">
         <el-input v-model="information.reject_reason" disabled />
