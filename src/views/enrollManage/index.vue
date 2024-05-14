@@ -6,6 +6,7 @@
             <div class="input-container">
               <el-input v-model="param.name" placeholder="学生姓名"  class="filter-item" @keyup.enter="handleFilter" />
               <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+              <el-input v-model="param.major" placeholder="专业" class="filter-item" @keyup.enter="handleFilter" />
 <!--              <el-input v-model="param.school" placeholder="学校" class="filter-item" @keyup.enter="handleFilter" />-->
               <el-form-item label="报名时间段">
               <el-date-picker
@@ -287,7 +288,8 @@
                     school: '',
                     phone: '',
                     email: '',
-                    state: -1
+                    state: -1,
+                    major: "",
                 },
 
 
@@ -431,7 +433,8 @@
                         school: '',
                         phone: '',
                         email: '',
-                        state: -1
+                        state: -1,
+                        major: "",
                 }
                 this.time_range[0] = ''
                 this.time_range[1] = ''

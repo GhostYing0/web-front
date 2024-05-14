@@ -81,13 +81,13 @@
             <el-table-column
                 prop="contest_type"
                 label="竞赛类型"
-                width="55"
+                width="90"
                 show-overflow-tooltip>
             </el-table-column>
             <el-table-column
                 prop="contest_level"
                 label="竞赛级别"
-                width="55"
+                width="90"
                 show-overflow-tooltip>
             </el-table-column>
             <el-table-column
@@ -436,6 +436,7 @@ const handleShowContest = async () => {
   param.page_size=10
   param.contest=''
   param.type=''
+  param.contest_level = -1
   item.value = ""
 
   param.page_number = 1

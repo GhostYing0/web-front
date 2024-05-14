@@ -32,7 +32,8 @@
                     </template>
                         <el-menu-item class="menu-item" index="/studentManage"><span class="text">学生信息</span></el-menu-item>
                         <el-menu-item class="menu-item" index="/teacherManage"><span class="text">教师信息</span></el-menu-item>
-                        <el-menu-item class="menu-item" index="/managerManage"><span class="text">管理员账号管理</span></el-menu-item>
+                        <el-menu-item class="menu-item" index="/managerManage"><span class="text">系统管理员账号管理</span></el-menu-item>
+                        <el-menu-item class="menu-item" index="/departmentManagerManage"><span class="text">系部管理员账号管理</span></el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="4" class="menu-border">
                     <template #title>
