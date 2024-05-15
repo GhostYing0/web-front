@@ -1,20 +1,28 @@
 <template>
   <div>
-    <el-form :model="form" label-width="auto" style="max-width: 600px">
-      <el-form-item label="报名竞赛名称">
-        <el-input v-model="form.contest" disabled/>
-      </el-form-item>
-      <el-form-item label="竞赛类型">
-        <el-input v-model="form.contest_type" disabled/>
-      </el-form-item>
-      <el-form-item label="报名竞赛级别">
-        <el-input v-model="form.contest_level" disabled/>
-      </el-form-item>
+    <el-form :model="form" label-width="auto" style="max-width: 800px">
+      <div class="contest-form">
+        <el-form-item label="报名竞赛名称">
+          <el-input v-model="form.contest" disabled/>
+        </el-form-item>
+        <el-form-item label="竞赛类型">
+          <el-input v-model="form.contest_type" disabled/>
+        </el-form-item>
+        <el-form-item label="报名竞赛级别">
+          <el-input v-model="form.contest_level" disabled/>
+        </el-form-item>
+      </div>
       <el-form-item label="获奖学生姓名">
-        <el-input v-model="form.name" disabled/>
+        <el-input v-model="form.name" disabled style="max-width: 200px"/>
       </el-form-item>
       <el-form-item label="获奖学生学号">
-        <el-input v-model="form.student_school_id" disabled/>
+        <el-input v-model="form.student_school_id" disabled style="max-width: 200px"/>
+      </el-form-item>
+      <el-form-item label="所属学院">
+        <el-input v-model="form.college" disabled style="max-width: 300px"/>
+      </el-form-item>
+      <el-form-item label="所属专业">
+        <el-input v-model="form.major" disabled style="max-width: 300px"/>
       </el-form-item>
       <el-form-item label="获奖时间">
       <div class="demo-date-picker">
@@ -28,20 +36,14 @@
           />
       </div>
       </el-form-item>
-      <el-form-item label="所属学院">
-        <el-input v-model="form.college" disabled/>
-      </el-form-item>
-      <el-form-item label="所属专业">
-        <el-input v-model="form.major" disabled/>
-      </el-form-item>
       <el-form-item label="指导老师姓名">
-        <el-input v-model="form.guidance_teacher" />
+        <el-input v-model="form.guidance_teacher" style="max-width: 300px"/>
       </el-form-item>
       <el-form-item label="指导老师所属院系">
-        <el-input v-model="form.teacher_department" />
+        <el-input v-model="form.teacher_department" style="max-width: 300px"/>
       </el-form-item>
       <el-form-item label="指导老师职称">
-        <el-input v-model="form.teacher_title" />
+        <el-input v-model="form.teacher_title" style="max-width: 300px"/>
       </el-form-item>
       <el-form-item label="获奖级别" class="filter-check">
         <el-radio v-model="form.prize" :label="1" @change="handleFilter">特等奖</el-radio>
@@ -51,21 +53,23 @@
       </el-form-item>
       <el-form-item label="证书">
         <el-upload
+            style="width: 800px"
             ref="uploadRef"
-            class="upload-demo"
             drag
             action="http://localhost:9006/api/public/v1/upload"
             :on-change="handleChange"
+            :on-remove="handleRemove"
             :auto-upload="false"
+            list-type="picture"
             name="file"
         >
-          <el-icon class="esl-icon--upload"><upload-filled /></el-icon>
+          <el-icon class="esl-icon--upload" ><upload-filled /></el-icon>
           <div class="el-upload__text">
-            Drop file here or <em>click to upload</em>
+            <em>上传图片</em>
           </div>
           <template #tip>
             <div class="el-upload__tip">
-              jpg/png files with a size less than 500kb
+              点击或拖拽上传证明材料
             </div>
           </template>
         </el-upload>
@@ -82,7 +86,6 @@
 import {teacherGetOneEnroll} from "@/api/enroll";
 import {onMounted, reactive, ref} from "vue";
 import {router} from "@/router";
-import store from "@/store";
 import axios from "axios";
 import {getToken} from "@/utils/auth";
 import {uploadGrade} from "@/api/grade";
@@ -146,6 +149,11 @@ const handleReturn = () => {
   router.push(`/uploadGradeDetail/${form.contest_id}`)
 };
 
+const handleRemove = () => {
+  uploadRef.value = null
+  console.log("文件变化:", uploadRef.value)
+}
+
 // 处理文件变化
 const handleChange = (file) => {
   console.log("文件变化：", file);
@@ -197,7 +205,7 @@ const handleCreate = async () => {
     } else {
       ElMessage({
         type: 'error',
-        message: '提交失败',
+        message: resp.message,
       });
     }
   } catch (error) {
@@ -214,6 +222,11 @@ onMounted(handleGetEnroll)
 
 <style lang="scss">
 .doUploadGrade-button {
-  margin-left: 250px;
+  margin-left: 120px;
+}
+.contest-form {
+  display: flex;
+  flex-direction: row;
+  gap: 1px;
 }
 </style>

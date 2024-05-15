@@ -64,6 +64,7 @@
             :data="tableData"
             border
             height="435px"
+            width="100%"
             style="width: 100vw"
             @selection-change="handleSelectionChange"
         >

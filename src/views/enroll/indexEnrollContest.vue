@@ -1,51 +1,56 @@
 <template>
   <div>
-    <el-form :model="form" label-width="auto" style="max-width: 600px">
+    <el-form :model="form" label-width="auto" style="max-width: 800px">
+      <el-form-item>
+        <el-text style="font-size: 20px">请填写报名信息</el-text>
+      </el-form-item>
+      <div class="contest-form">
+        <el-form-item label="报名竞赛名称">
+          <el-input v-model="form.contest" disabled style="max-width: 300px" />
+        </el-form-item>
+        <el-form-item label="竞赛类型">
+          <el-input v-model="form.contest_type" style="max-width: 90px" disabled/>
+        </el-form-item>
+        <el-form-item label="报名竞赛级别">
+          <el-input v-model="form.contest_level" style="max-width: 80px" disabled/>
+        </el-form-item>
+      </div>
       <el-form-item label="报名学生姓名">
-        <el-input v-model="form.student_name" disabled/>
+        <el-input v-model="form.student_name" style="max-width: 150px" disabled/>
       </el-form-item>
       <el-form-item label="报名学生学号">
-        <el-input v-model="form.student_school_id"/>
+        <el-input v-model="form.student_school_id" style="max-width: 150px" />
       </el-form-item>
-      <el-form-item label="电话号码">
-        <el-input v-model="form.phone"/>
+      <el-form-item label="电话号码" >
+        <el-input v-model="form.phone" style="max-width: 400px"/>
       </el-form-item>
       <el-form-item label="电子邮箱">
-        <el-input v-model="form.email"/>
+        <el-input v-model="form.email" style="max-width: 400px"/>
       </el-form-item>
       <el-form-item v-if="form.is_group === 1" label="组队操作" prop="role" class="filter-check">
         <el-radio v-model="form.handle_team" :label="1">创建队伍</el-radio>
         <el-radio v-model="form.handle_team" :label="2">加入队伍</el-radio>
       </el-form-item>
       <el-form-item  label="创建队伍名" v-if="form.is_group === 1 && form.handle_team === 1">
-        <el-input v-model="form.team_name"/>
+        <el-input v-model="form.team_name" style="max-width: 250px"/>
       </el-form-item>
       <el-form-item label="加入队伍名" v-if="form.handle_team === 2">
-        <el-input v-model="form.team_name"/>
-      </el-form-item>
-      <el-form-item label="报名竞赛名称">
-        <el-input v-model="form.contest" disabled/>
-      </el-form-item>
-      <el-form-item label="竞赛类型">
-        <el-input v-model="form.contest_type" disabled/>
-      </el-form-item>
-      <el-form-item label="报名竞赛级别">
-        <el-input v-model="form.contest_level" disabled/>
+        <el-input v-model="form.team_name" style="max-width: 250px"/>
       </el-form-item>
       <el-form-item label="学生所属学院">
-        <el-input v-model="form.college"/>
+        <el-input v-model="form.college" style="max-width: 250px"/>
       </el-form-item>
       <el-form-item label="学生所属专业">
-        <el-input v-model="form.major"/>
+        <el-input v-model="form.major" style="max-width: 250px"/>
       </el-form-item>
       <el-form-item label="指导老师姓名">
-        <el-input v-model="form.guidance_teacher" />
+        <el-input v-model="form.guidance_teacher" style="max-width: 150px"/>
       </el-form-item>
       <el-form-item label="指导老师所属院系">
-        <el-input v-model="form.teacher_department" />
+        <el-input v-model="form.teacher_department" style="max-width: 150px"/>
       </el-form-item>
       <el-form-item label="指导老师职称">
-        <el-input v-model="form.teacher_title" />
+        <el-input v-model="form.teacher_title" style="max-width: 150px"/>
       </el-form-item>
       <el-form-item>
         <el-button class="enroll-detail-button" type="primary" @click="Submit">提交</el-button>
@@ -142,6 +147,11 @@ onMounted(handleGetContest)
 
 <style lang="scss">
 .enroll-detail-button {
-  margin-left: 300px;
+  margin-left: 10px;
+}
+.contest-form {
+  display: flex;
+  flex-direction: row;
+  gap: 1px;
 }
 </style>
