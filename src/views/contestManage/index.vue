@@ -4,30 +4,54 @@
             <!-- 用户名输入 -->
           <div class="filter">
             <div class="input-container">
+              <el-input v-model="param.contest_entry" placeholder="竞赛项目" class="filter-item" @keyup.enter="handleFilter" />
               <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
-              <el-input v-model="param.contest_type" placeholder="类型"  class="filter-item" @keyup.enter="handleFilter" />
+                <el-cascader
+                    class="filter-item"
+                    v-model="item"
+                    :options="options"
+                    :props="props"
+                    placeholder="竞赛类别"
+                    filterable
+                    @change="handleFilter"
+                />
               <el-date-picker
                   class="block"
                   v-model="time_range"
                   type="datetimerange"
-                  start-placeholder="报名截止时间"
-                  end-placeholder="开赛时间"
+                  start-placeholder="创建开始时间"
+                  end-placeholder="结束时间"
                   value-format="YYYY-MM-DD HH:mm:ss"
                   date-format="YYYY/MM/DD ddd"
                   time-format="HH:mm"
                   @change="handleTime"
               />
+              <el-date-picker
+                  style="width: 100px"
+                  v-model="year"
+                  type="year"
+                  placeholder="选择年份"
+                  @change="handleFilter"
+                  value-format="YYYY"
+                  date-format="YYYY"
+              />
               <div class="filter-button-container">
                 <el-button class="filter-button" type="primary"  @click="handleFilter">
                   搜索
                 </el-button>
-              </div>
+            </div>
             </div>
             <el-form-item label="审核状态" prop="role" class="filter-check">
               <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
               <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
               <el-radio v-model="param.state" :label="3" @change="handleFilter">审核中</el-radio>
               <el-radio v-model="param.state" :label="2" @change="handleFilter">未通过</el-radio>
+            </el-form-item>
+            <el-form-item label="竞赛级别" prop="role" class="filter-check">
+              <el-radio v-model="param.contest_level" :label="-1" @change="handleFilter">全部</el-radio>
+              <el-radio v-model="param.contest_level" :label="1" @change="handleFilter">国家级</el-radio>
+              <el-radio v-model="param.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
+              <el-radio v-model="param.contest_level" :label="3" @change="handleFilter">校级</el-radio>
             </el-form-item>
           </div>
         </div>
@@ -36,9 +60,10 @@
         <el-button class="handle-button" type="primary"  @click="handleShowALL">
           显示全部
         </el-button>
-        <el-button class="handle-button" type="primary" @click="handleCreate">
-          添加竞赛信息
-        </el-button>
+        <el-radio-group v-model="param.is_group" size="large" style="margin-left: 20px">
+          <el-radio-button  size="default" :label="2" @change="handleFilter">单人赛</el-radio-button>
+          <el-radio-button  size="default" :label="1" @change="handleFilter">组队赛</el-radio-button>
+        </el-radio-group>
         <el-button class="handle-delete-button"  type="danger"  @click="handleDeleteSome">
           批量删除
         </el-button>
@@ -110,15 +135,6 @@
                 type="selection"
                 width="55">
         </el-table-column>
-        <el-table-column type="expand"
-                         label="简介"
-                         width="70px">
-          <template #default="props">
-            <div>
-              <el-text>{{props.row.desc}}</el-text>
-            </div>
-          </template>
-        </el-table-column>
         <el-table-column
                 fixed
                 prop="id"
@@ -126,49 +142,45 @@
                 width="55">
         </el-table-column>
         <el-table-column
+            width="100"
+            prop="contest_entry"
+            label="竞赛所属项目"
+            show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
                 prop="contest"
                 label="竞赛名称"
+                width="150"
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
                 prop="contest_type"
                 label="竞赛类型"
-                width="55"
+                width="90"
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
+            prop="contest_level"
+            label="竞赛级别"
+            width="90"
+            show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+            width="170"
                 prop="create_time"
                 label="创建时间"
                 show-overflow-tooltip>
         </el-table-column>
-        <el-table-column
-                prop="start_time"
-                label="开赛时间"
-                show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-                prop="deadline"
-                label="报名截至时间"
-                show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-            prop="username"
-            label="用户名"
-            show-overflow-tooltip>
-        </el-table-column>
       <el-table-column
           prop="name"
-          label="姓名"
+          width="80"
+          label="上传者"
           show-overflow-tooltip>
       </el-table-column>
         <el-table-column
-            prop="school"
-            label="学校"
-            show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-            prop="college"
-            label="学院"
+            prop="department"
+            width="80"
+            label="上传者系部"
             show-overflow-tooltip>
         </el-table-column>
         <el-table-column
@@ -188,9 +200,10 @@
                 </el-tooltip>
             </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="150" type="index">
+        <el-table-column fixed="right" label="操作" width="200" type="index">
             <template #default="{ row, $index }">
-                <el-button @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
+                <el-button @click="checkDetail(row)" type="success" size="small">详情</el-button>
+                <el-button @click="DoUpdate(row)" type="primary" size="small">编辑</el-button>
                 <el-button @click="handleDelete(row, $index)" type="danger" size="small">删除</el-button>
             </template>
         </el-table-column>
@@ -212,13 +225,16 @@
 </template>
 
 <script>
-    import {getContest, addContest, deleteContest, updateContest, getContestCount} from '@/api/contest'
+import {getContest, addContest, deleteContest, updateContest, getContestCount, getContestType} from '@/api/contest'
     import {computed, ref} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
+    import {router} from "@/router";
 
     export default {
         //创建后
         setup() {
+            const item = ref()
+            const options = ref([])
             const formType = ref(0);
             const formTitle = computed(() => {
                 console.log("computed")
@@ -228,6 +244,7 @@
             const time_range = ref([])
             const multipleTable = ref()
             const multipleSelection = ref([])
+            const year = ref(new Date().getFullYear())
 
             const handleSelectionChange = (selection) => {
                 multipleSelection.value = selection
@@ -238,6 +255,9 @@
             const defaultTime = new Date(2000, 1, 1, 12, 0, 0);
 
             return {
+                item,
+                options,
+                year,
                 value,
                time_range,
                 defaultTime,
@@ -288,7 +308,11 @@
                     school: "",
                     college: "",
                     name: "",
-                    state: -1
+                    state: -1,
+                    year: ref(new Date().getFullYear()),
+                    contest_level: -1,
+                    contest_entry: "",
+                    is_group: 2,
                 },
 
 
@@ -323,7 +347,25 @@
         created() {
             return this.handleShowContest()
         },
-        methods: {
+      mounted() {
+        getContestType().then(resp => {
+          try {
+            resp.data.forEach(unit => {
+              console.log(unit.type)
+              this.options.push({
+                value:unit.type,
+                label:unit.type
+              })
+            })
+          } catch (error) {
+            console.error(error)
+          }
+        })
+      },
+      methods: {
+          checkDetail(row) {
+            router.push(`processContestDetail/${row.id}`)
+          },
           handleTime() {
             // form.start_time = time_range.value[0]
             this.param.end_time = this.time_range[1]
@@ -332,6 +374,10 @@
             // 搜索
             handleFilter() {
                 this.param.page_number = 1
+                this.param.year = this.year
+                if(this.item) {
+                  this.param.type = this.item[0]
+                }
                 console.log("asd:",this.param)
                 getContest(this.param).then(resp => {
                     console.log(resp)
@@ -347,7 +393,9 @@
                     }
                 })
             },
-
+            DoUpdate(row) {
+              router.push(`/UpdateContest/${row.id}`)
+            },
             submitForm() {
                 if (this.formType === 0) {  // 添加记录
                     console.log("addUser:", this.form)
@@ -433,8 +481,13 @@
                     school: "",
                     college: "",
                     name: "",
-                    state: -1
+                    state: -1,
+                    year: this.year,
+                    contest_level: -1,
+                    contest_entry: "",
+                   is_group: 2,
                 }
+                this.item = ""
                 this.time_range[0] = ''
                 this.time_range[1] = ''
                 getContest(this.param).then(resp => {
@@ -519,15 +572,19 @@
                         }
                     })
                 }).catch(() => {
-                    ElMessage({
-                        type: 'error',
-                        message: '删除失败',
-                    })
+
                 })
             },
 
             // 删除一些
             handleDeleteSome() {
+              if (this.multipleSelection.length === 0) {
+                ElMessage({
+                  type: 'info',
+                  message: '未选中要删除的竞赛信息',
+                })
+                return
+              }
                 ElMessageBox.confirm('确定要删除这些记录吗?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -563,10 +620,7 @@
                         }
                     })
                 }).catch(() => {
-                    ElMessage({
-                        type: 'info',
-                        message: '取消',
-                    })
+
                 })
             },
         },

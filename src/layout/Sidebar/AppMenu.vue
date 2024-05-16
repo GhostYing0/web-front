@@ -15,14 +15,16 @@
                         <el-icon style="color: white"><location /></el-icon>
                         <span class="text">报名信息管理</span>
                     </template>
-                        <el-menu-item class="menu-item" index="/enrollManage"><span class="text">进入</span></el-menu-item>
+                        <el-menu-item class="menu-item" index="/enrollManage"><span class="text">报名信息预览</span></el-menu-item>
+                        <el-menu-item class="menu-item" index="/enrollManage"><span class="text">添加报名信息</span></el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="2" class="menu-border">
                     <template #title>
                         <el-icon style="color: white"><location /></el-icon>
                         <span class="text">竞赛信息管理</span>
                     </template>
-                        <el-menu-item class="menu-item" index="/contestManage"><span class="text">竞赛信息展示</span></el-menu-item>
+                        <el-menu-item class="menu-item" index="/contestManage"><span class="text">竞赛信息预览</span></el-menu-item>
+                        <el-menu-item class="menu-item" index="/contestManage"><span class="text">添加竞赛信息</span></el-menu-item>
                         <!--<el-menu-item class="menu-item" index="/contestProcess"><span class="text">竞赛信息审核</span></el-menu-item>-->
                 </el-sub-menu>
                 <el-sub-menu index="3" class="menu-border">
@@ -32,7 +34,7 @@
                     </template>
                         <el-menu-item class="menu-item" index="/studentManage"><span class="text">学生信息</span></el-menu-item>
                         <el-menu-item class="menu-item" index="/teacherManage"><span class="text">教师信息</span></el-menu-item>
-                        <el-menu-item class="menu-item" index="/managerManage"><span class="text">系统管理员账号管理</span></el-menu-item>
+                        <el-menu-item class="menu-item" index="/managerManage"><span class="text">系统管理人员账号管理</span></el-menu-item>
                         <el-menu-item class="menu-item" index="/departmentManagerManage"><span class="text">系部管理员账号管理</span></el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="4" class="menu-border">
@@ -40,7 +42,8 @@
                         <el-icon style="color: white"><location /></el-icon>
                         <span class="text">成绩信息管理</span>
                     </template>
-                        <el-menu-item class="menu-item" index="/gradeManage"><span class="text">进入</span></el-menu-item>
+                        <el-menu-item class="menu-item" index="/gradeManage"><span class="text">成绩信息预览</span></el-menu-item>
+                        <el-menu-item class="menu-item" index="/gradeManage"><span class="text">添加成绩信息</span></el-menu-item>
                 </el-sub-menu>
              <!-- <el-sub-menu index="5" class="menu-border">
                 <template #title>

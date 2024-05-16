@@ -7,26 +7,36 @@
               <el-input v-model="param.name" placeholder="学生姓名"  class="filter-item" @keyup.enter="handleFilter" />
               <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
               <el-input v-model="param.major" placeholder="专业" class="filter-item" @keyup.enter="handleFilter" />
-<!--              <el-input v-model="param.school" placeholder="学校" class="filter-item" @keyup.enter="handleFilter" />-->
-              <el-form-item label="报名时间段">
-              <el-date-picker
-                  class="block"
-                  v-model="time_range"
-                  type="datetimerange"
-                  start-placeholder="开始时间"
-                  end-placeholder="结束时间"
-                  value-format="YYYY-MM-DD HH:mm:ss"
-                  date-format="YYYY/MM/DD ddd"
-                  time-format="HH:mm"
-                  @change="handleTime"
-              />
+              <el-form-item>
+                <el-date-picker
+                    class="block"
+                    v-model="time_range"
+                    type="datetimerange"
+                    start-placeholder="报名起始时间"
+                    end-placeholder="结束时间"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    date-format="YYYY/MM/DD ddd"
+                    time-format="HH:mm"
+                    @change="handleTime"
+                />
               </el-form-item>
+                <el-date-picker
+                    style="width: 100px"
+                    v-model="year"
+                    type="year"
+                    placeholder="选择年份"
+                    @change="handleFilter"
+                    value-format="YYYY"
+                    date-format="YYYY"
+                />
               <div class="filter-button-container">
                 <el-button class="filter-button" type="primary" @click="handleFilter">
                   搜索
                 </el-button>
               </div>
-          </div>
+            </div>
+<!--              <el-input v-model="param.school" placeholder="学校" class="filter-item" @keyup.enter="handleFilter" />-->
+
             <el-form-item label="审核状态" prop="state" class="filter-check">
               <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
               <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
@@ -37,9 +47,9 @@
     </div>
         <div class="handle-container">
           <!-- 一些按钮 -->
-          <el-button class="handle-button"  type="primary"  @click="handleCreate">
-            添加报名信息
-          </el-button>
+<!--          <el-button class="handle-button"  type="primary"  @click="handleCreate">-->
+<!--            添加报名信息-->
+<!--          </el-button>-->
           <el-button  class="handle-button" type="primary"  @click="handleShowALL">
             显示全部
           </el-button>
@@ -184,10 +194,10 @@
                 </el-tooltip>
             </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="150" type="index">
+        <el-table-column fixed="right" label="操作" width="200" type="index">
             <template #default="{ row, $index }">
-                <el-button @click="CheckDetail(row)" type="primary" size="small">详情</el-button>
-                <el-button @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
+                <el-button @click="CheckDetail(row)" type="success" size="small">详情</el-button>
+                <el-button @click="DoUpdate(row)" type="primary" size="small">编辑</el-button>
                 <el-button @click="handleDelete(row, $index)" type="danger" size="small">删除</el-button>
             </template>
         </el-table-column>
@@ -222,6 +232,7 @@
                 return formType.value === 0 ? '添加记录' : '修改记录';
             });
 
+           const year = ref(new Date().getFullYear())
             const time_range = ref([])
 
             const multipleTable = ref()
@@ -236,6 +247,7 @@
             const defaultTime = new Date(2000, 1, 1, 12, 0, 0);
 
             return {
+                year,
                 value,
                 time_range,
                 defaultTime,
@@ -290,6 +302,7 @@
                     email: '',
                     state: -1,
                     major: "",
+                    year: ref(new Date().getFullYear()),
                 },
 
 
@@ -329,9 +342,13 @@
               this.param.end_time = this.time_range[1]
               this.param.start_time = this.time_range[0]
             },
+            DoUpdate(row) {
+              this.$router.push(`/studentEnrollUpdate/${row.id}`)
+            },
             // 搜索
             handleFilter() {
                 this.param.page_number = 1
+                this.param.year = this.year
                 console.log("asd:",this.param)
                 getEnroll(this.param).then(resp => {
                     console.log(resp)
@@ -435,6 +452,7 @@
                         email: '',
                         state: -1,
                         major: "",
+                        year: this.year,
                 }
                 this.time_range[0] = ''
                 this.time_range[1] = ''

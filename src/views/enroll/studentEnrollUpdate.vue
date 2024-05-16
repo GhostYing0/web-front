@@ -155,6 +155,10 @@ const UpdateEnroll = () => {
 }
 
 const returnDesktop = () => {
+  if(store.getters.roles.includes("manager")) {
+    router.push("/enrollManage")
+    return
+  }
   router.push("/searchEnrollResult")
 }
 

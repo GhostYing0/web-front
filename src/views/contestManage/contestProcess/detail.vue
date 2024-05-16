@@ -54,7 +54,11 @@ import store from "@/store";
 import {enrollContest} from "@/api/enroll";
 
 const returnDesktop = () => {
- router.push("/contestProcess")
+  if(store.getters.roles.includes("manager")) {
+    router.push("/contestManage")
+    return
+  }
+  router.push("/contestProcess")
 }
 
 const param = reactive({

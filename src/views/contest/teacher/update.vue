@@ -1,6 +1,17 @@
 <template>
   <el-form-item>编辑竞赛信息</el-form-item>
-  <el-form :model="form" label-width="auto" style="max-width: 600px">
+  <el-form :model="form" label-width="auto" style="max-width: 800px">
+    <div style="display: flex; flex-direction: row">
+    <el-form-item label="上传教师">
+      <el-input v-model="form.name" disabled/>
+    </el-form-item>
+    <el-form-item label="所属系部">
+      <el-input v-model="form.department" disabled/>
+    </el-form-item>
+    <el-form-item label="职称">
+      <el-input v-model="form.title" disabled/>
+    </el-form-item>
+    </div>
     <el-form-item label="竞赛状态">
     <el-tag class="form-tag" v-if="form.state === 3" type="primary">审核中</el-tag>
     <el-tag class="form-tag" v-else-if="form.state === 2" type="danger">未通过</el-tag>
@@ -17,7 +28,7 @@
       />
     </el-form-item>
     <el-form-item label="竞赛名称">
-      <el-input v-model="form.contest" />
+      <el-input v-model="form.contest" style="width: 250px"/>
     </el-form-item>
     <el-form-item label="竞赛级别" prop="role" class="filter-check">
       <el-radio v-model="form.contest_level_id" :label="1" @change="handleFilter">国家级</el-radio>
@@ -31,19 +42,7 @@
         <el-input-number v-model="form.max_group_number" :min="2" @change="handleChange" />
       </el-form-item>
     </el-form-item>
-    <el-form-item label="特等奖">
-      <el-input-number v-model="form.prize1" :min="0"  @change="handleChange" />
-    </el-form-item>
-    <el-form-item label="一等奖">
-      <el-input-number v-model="form.prize2" :min="0"  @change="handleChange" />
-    </el-form-item>
-    <el-form-item label="二等奖">
-      <el-input-number v-model="form.prize3" :min="0"  @change="handleChange" />
-    </el-form-item>
-    <el-form-item label="三等奖">
-      <el-input-number v-model="form.prize4" :min="0"  @change="handleChange" />
-    </el-form-item>
-    <el-form-item label="竞赛类型">
+    <el-form-item label="竞赛类型" style="width: 200px;">
       <el-cascader
           v-model="contest_type_item"
           :options="typeOptions"
@@ -52,6 +51,24 @@
           @change="handleType"
       />
     </el-form-item>
+    <div style="display: flex; flex-direction: column">
+      <div style="display: flex; flex-direction: row">
+        <el-form-item label="特等奖">
+          <el-input-number v-model="form.prize1" :min="0"  @change="handleChange" />
+        </el-form-item>
+        <el-form-item label="一等奖">
+          <el-input-number v-model="form.prize2" :min="0"  @change="handleChange" />
+        </el-form-item>
+      </div>
+      <div style="display: flex; flex-direction: row">
+        <el-form-item label="二等奖">
+          <el-input-number v-model="form.prize3" :min="0"  @change="handleChange" />
+        </el-form-item>
+        <el-form-item label="三等奖">
+          <el-input-number v-model="form.prize4" :min="0"  @change="handleChange" />
+        </el-form-item>
+      </div>
+    </div>
     <el-form-item label="开赛时间" prop="create_time">
       <div class="block">
         <span class="demonstration"></span>
@@ -66,7 +83,7 @@
         />
       </div>
     </el-form-item>
-    <el-form-item label="报名时间段" prop="create_time">
+    <el-form-item label="报名时间段" prop="create_time" style="width: 500px">
     <el-date-picker
         class="block"
         v-model="time_range"
@@ -130,6 +147,9 @@ const form = reactive({
   ps: "",
   type: "",
   reject_reason: "",
+  name: "",
+  title: "",
+  department: "",
 })
 
 const handleCreate = () => {
@@ -159,12 +179,15 @@ const handleCreate = () => {
 }
 
 const handleReturn = () => {
+  if(store.getters.roles.includes("manager")) {
+    router.push("/contestManage")
+    return
+  }
   router.push("/displayMyContest")
 }
 
 const handleType = () => {
   form.type = contest_type_item.value[0]
-  console.log(form.contest_type)
 }
 
 const initOptions = async () => {
@@ -232,10 +255,13 @@ const GetContestByID = () => {
         form.state = resp.data.list[0].state
         form.contest_entry = resp.data.list[0].contest_entry
         form.reject_reason = resp.data.list[0].reject_reason
-        contest_entry_item.value = resp.data.list[0].contest_entry
+        contest_entry_item.value = resp.data.list[0].contest_entry_id
         contest_type_item.value = resp.data.list[0].contest_type
         time_range.value[0] = resp.data.list[0].enroll_time
         time_range.value[1] = resp.data.list[0].deadline
+        form.name = resp.data.list[0].name
+        form.title = resp.data.list[0].title
+        form.department = resp.data.list[0].department
       }
     })
 }
