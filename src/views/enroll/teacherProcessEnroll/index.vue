@@ -126,7 +126,7 @@
                 width="240"
                 show-overflow-tooltip>
               <template #default="{ row }">
-                <el-button type="primary" @click="DoProcessing(row)">进入审核</el-button>
+                <el-button type="primary" @click="DoProcessing(row)" size="small">进入审核</el-button>
               </template>
             </el-table-column>
           </el-table-column>
@@ -270,7 +270,7 @@
                 width="240"
                 show-overflow-tooltip>
               <template #default="{ row }">
-                <el-button type="primary" @click="DoProcessing(row)">进入审核</el-button>
+                <el-button type="primary" @click="DoProcessing(row)" size="small">进入审核</el-button>
               </template>
             </el-table-column>
           </el-table-column>

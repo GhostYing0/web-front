@@ -47,29 +47,18 @@
           <el-table-column
               fixed
               type="selection"
-              width="55">
+              width="40">
           </el-table-column>
         <el-table-column
             prop="contest"
             label="竞赛名称"
+            width="90"
             show-overflow-tooltip>
         </el-table-column>
-        <el-table-column
-            prop="contest_type"
-            label="竞赛类型"
-            width="55"
-            show-overflow-tooltip>
-        </el-table-column>
-          <el-table-column
-              prop="contest_level"
-              label="竞赛级别"
-              width="55"
-              show-overflow-tooltip>
-          </el-table-column>
           <el-table-column
               prop="reward_time"
               label="获奖时间"
-              width="55"
+              width="170"
               show-overflow-tooltip>
           </el-table-column>
         <el-table-column
@@ -80,22 +69,13 @@
         <el-table-column
             prop="college"
             label="学院"
+            width="100"
             show-overflow-tooltip>
         </el-table-column>
           <el-table-column
-              prop="major"
-              label="专业"
-              show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-              prop="student_class"
-              label="班级"
-              show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
               prop="grade"
               label="奖项等级"
-              width="55"
+              width="90"
               show-overflow-tooltip>
           </el-table-column>
         <el-table-column
@@ -117,13 +97,8 @@
               show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-              prop="title"
-              label="指导教师职称"
-              show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
               prop="department"
-              label="指导教师系部"
+              label="所属系部"
               show-overflow-tooltip>
           </el-table-column>
         <el-table-column
@@ -136,8 +111,9 @@
             <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="150" type="index">
+        <el-table-column fixed="right" label="操作" width="200" type="index">
           <template #default="{ row, $index}">
+            <el-button @click="checkDetail(row.id)" type="success" size="small">详情</el-button>
             <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
             <el-button @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>
           </template>
@@ -198,15 +174,6 @@
           label="序号"
           width="55" v-if="store.getters.roles.includes('manager')">
       </el-table-column>
-        <el-table-column type="expand"
-                         label="备注"
-                         width="70px">
-          <template #default="props">
-            <div>
-              <el-text>{{props.row.ps}}</el-text>
-            </div>
-          </template>
-        </el-table-column>
       <el-table-column
           prop="contest"
           label="竞赛名称"
@@ -215,37 +182,12 @@
       <el-table-column
           prop="contest_type"
           label="竞赛类型"
-          width="55"
+          width="90"
           show-overflow-tooltip>
       </el-table-column>
-      <!--    <el-table-column-->
-      <!--        prop="create_time"-->
-      <!--        label="创建时间"-->
-      <!--        show-overflow-tooltip>-->
-      <!--    </el-table-column>-->
-      <!--    <el-table-column-->
-      <!--        prop="start_time"-->
-      <!--        label="开赛时间"-->
-      <!--        show-overflow-tooltip>-->
-      <!--    </el-table-column>-->
-      <!--    <el-table-column-->
-      <!--        prop="deadline"-->
-      <!--        label="报名截至时间"-->
-      <!--        show-overflow-tooltip>-->
-      <!--    </el-table-column>-->
-<!--      <el-table-column-->
-<!--          prop="username"-->
-<!--          label="用户名"-->
-<!--          show-overflow-tooltip>-->
-<!--      </el-table-column>-->
       <el-table-column
           prop="name"
           label="姓名"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="school"
-          label="学校"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -282,8 +224,9 @@
             label="驳回原因"
             show-overflow-tooltip>
         </el-table-column>
-      <el-table-column fixed="right" label="操作" width="150" type="index">
+      <el-table-column fixed="right" label="操作" width="200" type="index">
         <template #default="{ row, $index}">
+          <el-button @click="checkDetail(row.id)" type="success" size="small">详情</el-button>
           <el-button @click="handleRecover(row, $index)" type="primary" size="small"> 重新审核</el-button>
         </template>
       </el-table-column>
@@ -330,6 +273,7 @@
   import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
   import store from "@/store";
   import {processPassEnroll} from "@/api/enroll";
+  import {router} from "@/router";
   
   const emit = defineEmits(['sendToParent'])
   const props = defineProps({
@@ -343,7 +287,11 @@
   
   const handleClick = (tab, event) => {  
     console.log(tab, event);  
-  };  
+  };
+
+  const checkDetail = (id) => {
+    router.push(`/gradeDetail/${id}`)
+  }
 
   // 定义一个函数，该函数将在 contestID prop 变化时执行  
   const handleContestIDChange = (newContestID) => {  

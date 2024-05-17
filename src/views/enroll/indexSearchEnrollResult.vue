@@ -7,6 +7,15 @@
             <div class="filter">
               <div class="input-container">
                 <el-input v-model="param.contest_name" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+                <el-cascader
+                    class="filter-item"
+                    v-model="item"
+                    :options="options"
+                    :props="props"
+                    placeholder="竞赛类别"
+                    filterable
+                    @change="handleFilter"
+                />
                 <el-date-picker
                     class="block"
                     v-model="time_range"
@@ -58,6 +67,18 @@
               <el-table-column
                   prop="contest"
                   label="竞赛"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="contest_type"
+                  label="竞赛类型"
+                  width="100"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="contest_level"
+                  label="竞赛级别"
+                  width="90"
                   show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -126,6 +147,15 @@
             <div class="filter">
               <div class="input-container">
                 <el-input v-model="param.contest_name" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
+                <el-cascader
+                    class="filter-item"
+                    v-model="item"
+                    :options="options"
+                    :props="props"
+                    placeholder="竞赛类别"
+                    filterable
+                    @change="handleFilter"
+                />
                 <el-date-picker
                     class="block"
                     v-model="time_range"
@@ -175,6 +205,18 @@
               <el-table-column
                   prop="contest"
                   label="竞赛"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="contest_type"
+                  label="竞赛类型"
+                  width="100"
+                  show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                  prop="contest_level"
+                  label="竞赛级别"
+                  width="90"
                   show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -298,6 +340,7 @@
     import { getToken } from '@/utils/auth'
     import axios from "axios";
     import store from "@/store";
+    import {getContestType} from "@/api/contest";
 
     export default {
         //创建后
@@ -368,6 +411,8 @@
             form.ps = '';
             uploadRef.value = null
           }
+          const item = ref()
+          const options = ref([])
 
           // 创建表单
           const handleCreate = async () => {
@@ -411,6 +456,8 @@
           const dialogFormVisible = ref(false)
 
             return {
+              item,
+              options,
               activeName,
                 value,
                 form,
@@ -479,6 +526,21 @@
         created() {
             return this.handleShowUser()
         },
+      mounted() {
+        getContestType().then(resp => {
+          try {
+            resp.data.forEach(unit => {
+              console.log(unit.type)
+              this.options.push({
+                value:unit.type,
+                label:unit.type
+              })
+            })
+          } catch (error) {
+            console.error(error)
+          }
+        })
+      },
       watch : {
         // 使用 watch 监听 contestID prop 的变化
         activeName(newActiveName, oldActiveName) {
@@ -503,6 +565,9 @@
                 this.param.is_group = 2
               } else if(newActiveName === "second") {
                 this.param.is_group = 1
+              }
+              if(this.item) {
+                this.param.type = this.item[0]
               }
                 this.param.page_number = 1
                 console.log("asda:",this.param.contest_name)
@@ -567,6 +632,7 @@
                     email: '',
                     state: -1,
                     contest_level: -1,
+                    type: "",
                 }
               if(this.activeName === "first") {
                 this.param.is_group = 2
@@ -576,6 +642,9 @@
                 if (this.time_range) {
                   this.time_range[0] = ''
                   this.time_range[1] = ''
+                }
+                if (this.item) {
+                  this.item = ""
                 }
                 getUserEnroll(this.param).then(resp => {
                     console.log(resp)

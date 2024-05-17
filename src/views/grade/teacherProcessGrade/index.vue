@@ -15,11 +15,6 @@
                   @change="handleFilter"
               />
               <!--<el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />-->
-              <div class="filter-button-container">
-                <el-button class="filter-button" type="primary"  @click="handleFilter">
-                  搜索
-                </el-button>
-              </div>
             </div>
             <el-form-item label="竞赛级别" prop="role" class="filter-check">
               <el-radio v-model="param.contest_level" :label="-1" @change="handleFilter">全部</el-radio>
@@ -136,11 +131,6 @@
                   @change="handleFilter"
               />
               <!--<el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />-->
-              <div class="filter-button-container">
-                <el-button class="filter-button" type="primary"  @click="handleFilter">
-                  搜索
-                </el-button>
-              </div>
             </div>
             <el-form-item label="竞赛级别" prop="role" class="filter-check">
               <el-radio v-model="param.contest_level" :label="-1" @change="handleFilter">全部</el-radio>

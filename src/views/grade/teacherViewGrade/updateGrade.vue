@@ -5,6 +5,12 @@
       <el-tag class="form-tag" v-else-if="information.state === 2" type="danger">未通过</el-tag>
       <el-tag class="form-tag" v-else-if="information.state === 1" type="success">通过</el-tag>
       <el-tag class="form-tag" v-else-if="information.state === 4" type="warning">被撤回</el-tag>
+      <el-form-item v-if= "store.getters.roles.includes('manager')" label="修改审核状态" prop="role" class="filter-check">
+        <el-radio v-model="form.state" :label="1" >通过</el-radio>
+        <el-radio v-model="form.state" :label="2" >未通过</el-radio>
+        <el-radio v-model="form.state" :label="3" >审核中</el-radio>
+        <el-radio v-model="form.state" :label="4" >已撤回</el-radio>
+      </el-form-item>
       <div class="form-item-group">
       <el-form-item class="form-item" label="竞赛名称">
         <el-input v-model="information.contest" disabled />
@@ -59,7 +65,7 @@
       <el-image style="width: 500px; height: 300px"
                 v-if="information.certificate"
                 :src="information.certificate"
-                fit="cover"
+                fit="contain"
                 :preview-src-list="[information.certificate]"/>
         <el-empty v-else description="无证明材料"/>
       </el-form-item>
@@ -125,6 +131,7 @@ const form = reactive({
   title: "",
   prize_id: 0,
   certificate: "",
+  state: 3,
 })
 
 const handleContestIDChange = (newContestID) => {
@@ -269,7 +276,8 @@ uploadAxios.interceptors.request.use(config => {
 });
 
 const returnDesktop = () => {
-  router.push(`/teacherDisplayGradeDetail/${return_id.value}`)
+  //router.push(`/teacherDisplayGradeDetail/${return_id.value}`)
+  router.back()
 }
 
 onMounted(handleShowContest)

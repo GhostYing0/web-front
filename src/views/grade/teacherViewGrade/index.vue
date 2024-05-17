@@ -62,18 +62,19 @@
               <el-table-column
                   prop="contest_type"
                   label="竞赛类型"
-                  width="55"
+                  width="90"
                   show-overflow-tooltip>
               </el-table-column>
               <el-table-column
                   prop="contest_level"
                   label="竞赛级别"
-                  width="55"
+                  width="90"
                   show-overflow-tooltip>
               </el-table-column>
               <el-table-column
                   prop="start_time"
                   label="开赛时间"
+                  width="200"
                   show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -203,18 +204,19 @@
               <el-table-column
                   prop="contest_type"
                   label="竞赛类型"
-                  width="55"
+                  width="90"
                   show-overflow-tooltip>
               </el-table-column>
               <el-table-column
                   prop="contest_level"
                   label="竞赛级别"
-                  width="55"
+                  width="90"
                   show-overflow-tooltip>
               </el-table-column>
               <el-table-column
                   prop="start_time"
                   label="开赛时间"
+                  width="200"
                   show-overflow-tooltip>
               </el-table-column>
               <el-table-column

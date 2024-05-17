@@ -4,37 +4,16 @@
       <!-- 用户名输入 -->
       <div class="filter">
         <div class="input-container">
-          <el-input v-model="param.name" placeholder="用户名"  class="filter-item" @keyup.enter="handleFilter" />
-          <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
-          <el-input v-model="param.school" placeholder="学校" class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.name" placeholder="姓名"  class="filter-item" @keyup.enter="handleFilter" />
           <el-input v-model="param.searchUser" placeholder="用户名"  class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.college" placeholder="学院"  class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.department" placeholder="所属系部"  class="filter-item" @keyup.enter="handleFilter" />
           <div class="filter-button-container">
             <el-button class="filter-button" type="primary" @click="handleFilter">
               搜索
             </el-button>
           </div>
         </div>
-        <div class="input-container">
-          <el-input v-model="param.name" placeholder="姓名"  class="filter-item" @keyup.enter="handleFilter" />
-          <el-input v-model="param.school" placeholder="学校"  class="filter-item" @keyup.enter="handleFilter" />
-          <el-input v-model="param.college" placeholder="学院"  class="filter-item" @keyup.enter="handleFilter" />
-          <el-date-picker
-              class="block"
-              v-model="time_range"
-              type="datetimerange"
-              start-placeholder="报名截止时间"
-              end-placeholder="开赛时间"
-              value-format="YYYY-MM-DD HH:mm:ss"
-              date-format="YYYY/MM/DD ddd"
-              time-format="HH:mm"
-              @change="handleTime"
-          />
-        </div>
-        <el-form-item label="性别" prop="gender" class="filter-check">
-          <el-radio v-model="param.gender" :label="''" @change="handleFilter">全部</el-radio>
-          <el-radio v-model="param.gender" :label="'男'" @change="handleFilter">男</el-radio>
-          <el-radio v-model="param.gender" :label="'女'" @change="handleFilter">女</el-radio>
-        </el-form-item>
       </div>
     </div>
   </div>
@@ -68,15 +47,11 @@
       <el-form-item label="姓名" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="性别" prop="gender">
-        <el-radio v-model="form.gender" :label="'男'">男</el-radio>
-        <el-radio v-model="form.gender" :label="'女'">女</el-radio>
-      </el-form-item>
-      <el-form-item label="学校" prop="school">
-        <el-input v-model="form.school"></el-input>
-      </el-form-item>
       <el-form-item label="学院" prop="college">
         <el-input v-model="form.college"></el-input>
+      </el-form-item>
+      <el-form-item label="所属系部" prop="college">
+        <el-input v-model="form.department"></el-input>
       </el-form-item>
     </el-form>
 
@@ -96,7 +71,7 @@
       border style="width: 100%"
       @selection-change="handleSelectionChange"
   >
-    <el-table-column label="教师用户管理界面">
+    <el-table-column label="系部管理员用户管理界面">
       <el-table-column
           fixed
           type="selection"
@@ -119,33 +94,18 @@
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-          prop="gender"
-          label="性别"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="username"
-          label="用户名称"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="teacher_id"
-          label="教师id"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
           prop="password"
           label="用户密码"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-          prop="school"
-          label="学校"
+          prop="college"
+          label="学院"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-          prop="college"
-          label="学院"
+          prop="department"
+          label="所属系部"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="150" type="index">
@@ -172,7 +132,7 @@
 </template>
 
 <script>
-import {getTeacher, addTeacher, deleteTeacher, updateTeacher,getTeacherCount} from '@/api/user'
+import {getDepartmentManager, addDepartmentManager, deleteDepartmentManager, updateDepartmentManager,getDepartmentManagerCount} from '@/api/user'
 import {computed, ref} from "vue"
 import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
 
@@ -216,6 +176,7 @@ export default {
         gender: "",
         school: "",
         college: "",
+        department: "",
       },
 
 
@@ -232,6 +193,7 @@ export default {
         gender: "",
         school: "",
         college: "",
+        department: "",
       },
 
       rules: {
@@ -252,7 +214,7 @@ export default {
     // 搜索
     handleFilter() {
       this.param.page_number = 1
-      getTeacher(this.param).then(resp => {
+      getDepartmentManager(this.param).then(resp => {
         console.log(resp)
         if(resp.code === 200) {
           this.tableData = resp.data.list
@@ -270,12 +232,12 @@ export default {
     submitForm() {
       if (this.formType === 0) {  // 添加记录
         console.log("addUser:", this.form)
-        addTeacher(this.form).then(resp => {
+        addDepartmentManager(this.form).then(resp => {
           console.log("addUser:", resp)
           if(resp.code === 200) {
             this.$message.success('添加记录成功')
             // 跳转到末尾
-            getTeacherCount().then(resp => {
+            getDepartmentManagerCount().then(resp => {
               console.log("getCount:", resp)
               this.recordTotal = resp.data.count
               this.page_number = Math.ceil(this.recordTotal / this.page_size)
@@ -291,7 +253,7 @@ export default {
         })
       } else if(this.formType === 1) {  //更新记录
         console.log("update:",this.form)
-        updateTeacher(this.form).then(resp => {
+        updateDepartmentManager(this.form).then(resp => {
           if(resp.code === 200) {
             ElMessage({
               type: 'success',
@@ -312,7 +274,7 @@ export default {
     // 分页大小改变监听
     handleSizeChange(curSize) {
       this.param.page_size = curSize
-      getTeacher(this.param).then(resp => {
+      getDepartmentManager(this.param).then(resp => {
         console.log('分页数据获取成功',resp)
         this.tableData = resp.data.list
         this.recordTotal = resp.data.total
@@ -322,7 +284,7 @@ export default {
     // 点击分页监听方法
     handleCurrentChange(curPage) {
       this.param.page_number = curPage
-      getTeacher(this.param).then(resp => {
+      getDepartmentManager(this.param).then(resp => {
         console.log('分页数据获取成功',resp)
         this.tableData = resp.data.list
         this.recordTotal = resp.data.total
@@ -338,8 +300,9 @@ export default {
         gender: "",
         school: "",
         college: "",
+        department: "",
       }
-      getTeacher(this.param).then(resp => {
+      getDepartmentManager(this.param).then(resp => {
         console.log(resp)
         if(resp.code === 200) {
           this.tableData = resp.data.list
@@ -378,7 +341,7 @@ export default {
         school: row.school,
         semester: row.semester,
         college: row.college,
-        class: row.class
+        department: row.department,
       }
       // 显示表单框
       this.dialogFormVisible = true
@@ -395,7 +358,7 @@ export default {
         const param = {ids:[row.id]};
         console.log("index:", index)
         console.log(param)
-        deleteTeacher(param).then(resp => {
+        deleteDepartmentManager(param).then(resp => {
           if(resp.code === 200) {
             ElMessage({
               type: 'success',
@@ -433,7 +396,7 @@ export default {
         });
         console.log(param)
 
-        deleteTeacher(param).then(resp => {
+        deleteDepartmentManager(param).then(resp => {
           console.log("deletes:",resp)
           if(resp.code === 200) {
             ElMessage({

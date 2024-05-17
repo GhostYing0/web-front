@@ -4,37 +4,17 @@
       <!-- 用户名输入 -->
       <div class="filter">
         <div class="input-container">
-          <el-input v-model="param.name" placeholder="用户名"  class="filter-item" @keyup.enter="handleFilter" />
-          <el-input v-model="param.contest" placeholder="竞赛名称" class="filter-item" @keyup.enter="handleFilter" />
-          <el-input v-model="param.school" placeholder="学校" class="filter-item" @keyup.enter="handleFilter" />
-          <el-input v-model="param.searchUser" placeholder="用户名"  class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.name" placeholder="姓名" style="width: 100px" class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.searchUser" placeholder="用户名" style="width: 100px" class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.college" placeholder="学院" style="width: 100px" class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.department" placeholder="院系" style="width: 100px" class="filter-item" @keyup.enter="handleFilter" />
+          <el-input v-model="param.title" placeholder="职称" style="width: 100px" class="filter-item" @keyup.enter="handleFilter" />
           <div class="filter-button-container">
             <el-button class="filter-button" type="primary" @click="handleFilter">
               搜索
             </el-button>
           </div>
         </div>
-        <div class="input-container">
-          <el-input v-model="param.name" placeholder="姓名"  class="filter-item" @keyup.enter="handleFilter" />
-          <el-input v-model="param.school" placeholder="学校"  class="filter-item" @keyup.enter="handleFilter" />
-          <el-input v-model="param.college" placeholder="学院"  class="filter-item" @keyup.enter="handleFilter" />
-          <el-date-picker
-              class="block"
-              v-model="time_range"
-              type="datetimerange"
-              start-placeholder="报名截止时间"
-              end-placeholder="开赛时间"
-              value-format="YYYY-MM-DD HH:mm:ss"
-              date-format="YYYY/MM/DD ddd"
-              time-format="HH:mm"
-              @change="handleTime"
-          />
-        </div>
-        <el-form-item label="性别" prop="gender" class="filter-check">
-            <el-radio v-model="param.gender" :label="''" @change="handleFilter">全部</el-radio>
-            <el-radio v-model="param.gender" :label="'男'" @change="handleFilter">男</el-radio>
-            <el-radio v-model="param.gender" :label="'女'" @change="handleFilter">女</el-radio>
-          </el-form-item>
         </div>
       </div>
     </div>
@@ -68,15 +48,14 @@
       <el-form-item label="姓名" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="性别" prop="gender">
-        <el-radio v-model="form.gender" :label="'男'">男</el-radio>
-        <el-radio v-model="form.gender" :label="'女'">女</el-radio>
-      </el-form-item>
-      <el-form-item label="学校" prop="school">
-        <el-input v-model="form.school"></el-input>
-      </el-form-item>
       <el-form-item label="学院" prop="college">
         <el-input v-model="form.college"></el-input>
+      </el-form-item>
+      <el-form-item label="院系" prop="department">
+        <el-input v-model="form.department"></el-input>
+      </el-form-item>
+      <el-form-item label="职称" prop="title">
+        <el-input v-model="form.title"></el-input>
       </el-form-item>
     </el-form>
 
@@ -89,7 +68,7 @@
   </el-dialog>
 
   <el-table
-      height="435px"
+      height="500px"
       class="table"
       ref="multipleTable"
       :data="tableData"
@@ -105,27 +84,17 @@
     <el-table-column
         fixed
         prop="id"
-        label="序号"
-        width="100">
+        label="用户ID"
+        width="70">
     </el-table-column>
     <el-table-column
         prop="username"
-        label="用户名称"
+        label="用户名"
         show-overflow-tooltip>
     </el-table-column>
     <el-table-column
         prop="name"
-        label="姓名"
-        show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
-        prop="gender"
-        label="性别"
-        show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
-        prop="username"
-        label="用户名称"
+        label="教师姓名"
         show-overflow-tooltip>
     </el-table-column>
     <el-table-column
@@ -138,16 +107,21 @@
         label="用户密码"
         show-overflow-tooltip>
     </el-table-column>
+      <el-table-column
+          prop="college"
+          label="学院"
+          show-overflow-tooltip>
+      </el-table-column>
     <el-table-column
-        prop="school"
-        label="学校"
+        prop="department"
+        label="院系"
         show-overflow-tooltip>
     </el-table-column>
-    <el-table-column
-        prop="college"
-        label="学院"
-        show-overflow-tooltip>
-    </el-table-column>
+      <el-table-column
+          prop="title"
+          label="职称"
+          show-overflow-tooltip>
+      </el-table-column>
     <el-table-column fixed="right" label="操作" width="150" type="index">
       <template #default="{ row, $index }">
         <el-button @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
@@ -216,6 +190,8 @@ export default {
         gender: "",
         school: "",
         college: "",
+        department: "",
+        title: "",
       },
 
 
@@ -232,6 +208,8 @@ export default {
         gender: "",
         school: "",
         college: "",
+        department: "",
+        title: "",
       },
 
       rules: {
@@ -285,7 +263,7 @@ export default {
               this.handleCurrentChange(this.page_number)
             })
           } else {
-            this.$message.error('添加记录失败')
+            this.$message.error(resp.message)
           }
           this.dialogFormVisible = false  // 关闭对话框
         })
@@ -301,7 +279,7 @@ export default {
           } else {
             ElMessage({
               type: 'error',
-              message: '更新失败',
+              message: resp.message,
             })//
           }
           this.dialogFormVisible = false  // 关闭对话框
@@ -338,6 +316,8 @@ export default {
         gender: "",
         school: "",
         college: "",
+        department: "",
+        title: "",
       }
       getTeacher(this.param).then(resp => {
         console.log(resp)
@@ -378,7 +358,9 @@ export default {
         school: row.school,
         semester: row.semester,
         college: row.college,
-        class: row.class
+        class: row.class,
+        department: row.department,
+        title: row.title,
       }
       // 显示表单框
       this.dialogFormVisible = true

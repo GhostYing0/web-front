@@ -6,16 +6,16 @@
             <div class="input-container">
               <el-input v-model="param.name" placeholder="姓名" class="filter-item" @keyup.enter="handleFilter" />
               <el-input v-model="param.username" placeholder="用户名"  class="filter-item" @keyup.enter="handleFilter" />
-              <el-input v-model="param.school" placeholder="学校" class="filter-item" @keyup.enter="handleFilter" />
               <el-input v-model="param.contest" placeholder="竞赛名称"  class="filter-item" @keyup.enter="handleFilter" />
+              <el-input v-model="param.major" placeholder="专业"  class="filter-item" @keyup.enter="handleFilter" />
                 <!--<el-input v-model="param.grade" placeholder="成绩" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />-->
               <div>
                 <el-date-picker
                     class="block"
                     v-model="time_range"
                     type="datetimerange"
-                    start-placeholder="报名截止时间"
-                    end-placeholder="开赛时间"
+                    start-placeholder="起始获奖时间"
+                    end-placeholder="结束时间"
                     value-format="YYYY-MM-DD HH:mm:ss"
                     date-format="YYYY/MM/DD ddd"
                     time-format="HH:mm"
@@ -28,6 +28,13 @@
                 </el-button>
               </div>
               </div>
+            <el-form-item label="获奖级别" prop="role" class="filter-check">
+              <el-radio v-model="param.prize_id" :label="-1" @change="handleFilter">全部</el-radio>
+              <el-radio v-model="param.prize_id" :label="1" @change="handleFilter">特等奖</el-radio>
+              <el-radio v-model="param.prize_id" :label="2" @change="handleFilter">一等奖</el-radio>
+              <el-radio v-model="param.prize_id" :label="3" @change="handleFilter">二等奖</el-radio>
+              <el-radio v-model="param.prize_id" :label="4" @change="handleFilter">三等奖</el-radio>
+            </el-form-item>
               <el-form-item label="审核状态" prop="role" class="filter-check">
                 <el-radio v-model="param.state" :label="-1" @change="handleFilter">全部</el-radio>
                 <el-radio v-model="param.state" :label="1" @change="handleFilter">通过</el-radio>
@@ -40,9 +47,9 @@
         <el-button class="handle-button" type="primary" @click="handleShowALL">
           显示全部
         </el-button>
-        <el-button class="handle-button" type="primary" @click="handleCreate">
-          添加成绩信息
-        </el-button>
+<!--        <el-button class="handle-button" type="primary" @click="handleCreate">-->
+<!--          添加成绩信息-->
+<!--        </el-button>-->
         <el-button class="handle-delete-button" type="danger" @click="handleDeleteSome">
           批量删除
         </el-button>
@@ -114,16 +121,7 @@
         <el-table-column
                 fixed
                 type="selection"
-                width="55">
-        </el-table-column>
-        <el-table-column type="expand"
-                         label="备注"
-                         width="70px">
-          <template #default="props">
-            <div>
-              <el-text>{{props.row.ps}}</el-text>
-            </div>
-          </template>
+                width="40">
         </el-table-column>
         <el-table-column
                 fixed
@@ -147,19 +145,26 @@
                 show-overflow-tooltip>
         </el-table-column>
       <el-table-column
-          prop="school"
-          label="学校"
+          prop="major"
+          label="专业"
           show-overflow-tooltip>
       </el-table-column>
         <el-table-column
-                prop="create_time"
-                label="报名时间"
+                prop="reward_time"
+                width="170"
+                label="获奖时间"
                 show-overflow-tooltip>
         </el-table-column>
         <el-table-column
                 prop="grade"
-                label="成绩"
+                label="获奖级别"
                 show-overflow-tooltip>
+          <template #default="{row}">
+            <p v-if="row.prize_id === 1">特等奖</p>
+            <p v-else-if="row.prize_id === 2">一等奖</p>
+            <p v-else-if="row.prize_id === 3">二等奖</p>
+            <p v-else-if="row.prize_id === 4">三等奖</p>
+          </template>
         </el-table-column>
         <el-table-column
                 prop="certificate"
@@ -175,7 +180,7 @@
             <template #default="{row}">
             <el-popover trigger="hover" placement="top">
                 <template #reference>
-                    <el-button type="primary" @click="handDown(row.certificate)">查看</el-button>-->
+                    <el-button type="primary" @click="handDown(row.certificate)" size="small">查看</el-button>-->
                 </template>
                 <el-image :src="row.certificate" fit="contain" />
             </el-popover>
@@ -197,9 +202,10 @@
                 </el-tooltip>
             </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="150" type="index">
+        <el-table-column fixed="right" label="操作" width="200" type="index">
             <template #default="{ row, $index }">
-                <el-button @click="handleUpdate(row)" type="primary" size="small">编辑</el-button>
+                <el-button type="success" @click="checkGradeDetail(row.id)" size="small">详情</el-button>
+                <el-button type="primary" size="small" @click="UpdateGrade(row)">编辑</el-button>
                 <el-button @click="handleDelete(row, $index)" type="danger" size="small">删除</el-button>
             </template>
         </el-table-column>
@@ -224,6 +230,7 @@
     import {getGrade, addGrade, deleteGrade, updateGrade,getGradeCount} from '@/api/grade'
     import {computed, ref} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
+    import {router} from "@/router";
 
     export default {
         //创建后
@@ -296,7 +303,9 @@
                     contest: '',
                     start_time: '',
                     end_time: '',
-                    state: -1
+                    state: -1,
+                    major : "",
+                    prize_id : -1,
                 },
 
 
@@ -330,10 +339,16 @@
             return this.handleShowUser()
         },
         methods: {
+            UpdateGrade(row) {
+              router.push(`/UpdateGrade/${row.id}`)
+            },
             handleTime() {
               // form.start_time = time_range.value[0]
               this.param.end_time = this.time_range[1]
               this.param.start_time = this.time_range[0]
+            },
+            checkGradeDetail(id) {
+              router.push(`/gradeDetail/${id}`)
             },
             // 搜索
             handleFilter() {
@@ -439,7 +454,9 @@
                     school: '',
                     phone: '',
                     email: '',
-                    state: -1
+                    state: -1,
+                    prize: -1,
+                    major: "",
                 }
                 this.time_range[0] = ''
                 this.time_range[1] = ''

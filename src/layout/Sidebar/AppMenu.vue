@@ -65,12 +65,16 @@
         Location,
         Setting,
     } from '@element-plus/icons-vue'
+    import {ref, computed} from "vue"
+    const route = ref(router)
+    import {router} from "@/router"
     const handleOpen = (key, keyPath) => {
         console.log(key, keyPath)
     }
     const handleClose = (key, keyPath) => {
         console.log(key, keyPath)
     }
+
 </script>
 
 <style>

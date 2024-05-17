@@ -142,6 +142,11 @@
           label="竞赛级别"
           show-overflow-tooltip>
       </el-table-column>
+      <el-table-column
+          prop="guidance_teacher_name"
+          label="指导教师"
+          show-overflow-tooltip>
+      </el-table-column>
     <el-table-column
         prop="reward_time"
         label="获奖时间"
@@ -154,7 +159,7 @@
     </el-table-column>
     <el-table-column
         prop="certificate"
-        label="证书"
+        label="证明材料"
         show-overflow-tooltip>
       <!--<div>-->
       <!--<el-image style="width: 100px; height: 100px" :src="form.certificate" :fit="fit" />-->
@@ -166,12 +171,20 @@
       <template #default="{row}">
         <el-popover trigger="hover" placement="top">
           <template #reference>
-            <el-button type="primary" @click="handDown(row.certificate)">查看</el-button>-->
+            <el-button type="primary" @click="handDown(row.certificate)" size="small">查看</el-button>
           </template>
           <el-image :src="row.certificate" fit="contain" />
         </el-popover>
       </template>
     </el-table-column>
+      <el-table-column
+          prop="grade"
+          label="详情"
+          show-overflow-tooltip>
+        <template #default="{row}">
+          <el-button type="success" @click="checkGradeDetail(row.id)" size="small">查看详情</el-button>
+        </template>
+      </el-table-column>
     <!--<el-table-column
         prop="state"
         label="审核状态"
@@ -261,6 +274,7 @@
     import {getToken} from "@/utils/auth";
     import store from "@/store";
     import {updateAvatar, updateProfile} from "@/api/user";
+    import {router} from "@/router";
 
     export default {
         //创建后
@@ -569,6 +583,9 @@
             // this.downloadPicture(url, "pic")
             this.picture = url
             this.dialogPictureVisible = true
+          },
+          checkGradeDetail(id) {
+            router.push(`/gradeDetail/${id}`)
           }
         }
     };

@@ -58,18 +58,8 @@
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-          prop="college"
-          label="学院"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
           prop="major"
           label="专业"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="student_school_id"
-          label="学号"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -94,7 +84,7 @@
         <template #default="{row}">
           <el-popover trigger="hover" placement="top">
             <template #reference>
-              <el-button type="primary" @click="handDown(row.certificate)">查看</el-button>
+              <el-button type="primary" @click="handDown(row.certificate)" size="small">查看</el-button>
             </template>
             <el-image :src="row.certificate" fit="contain" />
           </el-popover>
@@ -107,12 +97,7 @@
       </el-table-column>
       <el-table-column
           prop="department"
-          label="指导教师所属院系"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="title"
-          label="指导教师职称"
+          label="所属院系"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -126,8 +111,9 @@
           <el-tag v-else-if="row.state === 4" type="warning">已撤回</el-tag>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="150" type="index">
+      <el-table-column fixed="right" label="操作" width="200" type="index">
         <template #default="{ row, $index}">
+          <el-button type="success" size="small" @click="checkDetail(row.id)">详情</el-button>
           <el-button type="primary" size="small" v-if="row.state === 1" disabled>编辑</el-button>
           <el-button type="primary" size="small" v-else @click="UpdateGrade(row)">编辑</el-button>
           <el-button type="warning" size="small" v-if="row.state === 3" @click="handleRevoke(row)">撤回</el-button>
@@ -282,6 +268,10 @@ const form = reactive( {
   name: "",
   state: 1
 })
+
+const checkDetail = (id) => {
+  router.push(`/gradeDetail/${id}`)
+}
 
 // 搜索
 const handleFilter = () => {

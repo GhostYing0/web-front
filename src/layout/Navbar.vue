@@ -3,6 +3,7 @@
       <div class="left-menu">
       <p class="navbar-text">高校学科竞赛信息管理系统</p>
         <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+        {{currentRoute}}
         <div class="right-menu">
           <p class="welcome">{{store.getters.username}} 欢迎使用</p>
           <el-avatar size="large"
@@ -35,7 +36,9 @@
     import { mapGetters } from 'vuex'
     import Hamburger from '@/components/Hamburger'
     import store from "@/store";
+    import {router} from "@/router"
     import { ArrowRight } from '@element-plus/icons-vue'
+    import {computed} from "vue";
     export default {
         components: {
             Hamburger
@@ -48,7 +51,10 @@
                 'sidebar',
                 'avatar',
                 'name'
-            ])
+            ]),
+           currentRoute() {
+             return this.$route.name
+           }
         },
         methods: {
             toggleSideBar() {
@@ -66,7 +72,7 @@
               this.$router.push("/profile")
             }
         }
-    }
+        }
 </script>
 
 <style lang="scss" scoped>

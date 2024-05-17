@@ -1,61 +1,76 @@
 <template>
   <div>
-    <el-form :model="information" label-width="auto" style="max-width: 600px">
+    <el-form :model="information" label-width="auto" style="max-width: 800px">
       <el-form-item label="竞赛名称">
-        <el-input v-model="information.contest" disabled />
+        <el-input v-model="information.contest" style="width: 200px" disabled />
       </el-form-item>
       <el-form-item label="竞赛所属项目">
-        <el-input v-model="information.contest_entry" disabled />
+        <el-input v-model="information.contest_entry" style="width: 200px" disabled />
       </el-form-item>
       <el-form-item label="报名时间">
-        <el-input v-model="information.create_time" disabled />
-      </el-form-item>
-      <el-form-item label="所属队伍" v-if="information.is_group === 1">
-        <el-input v-model="form.team_name" />
-      </el-form-item>
-      <el-form-item label="学生姓名">
-        <el-input v-model="information.name" disabled />
-      </el-form-item>
-      <el-form-item label="学生所属学院">
-        <el-input v-model="information.college" disabled />
-      </el-form-item>
-      <el-form-item label="学生专业">
-        <el-input v-model="information.major" disabled />
-      </el-form-item>
-      <el-form-item label="学号">
-        <el-input v-model="information.student_school_id" disabled />
-      </el-form-item>
-      <el-form-item label="电话号码">
-        <el-input v-model="form.phone" />
-      </el-form-item>
-      <el-form-item label="电子邮箱">
-        <el-input v-model="form.email" />
-      </el-form-item>
-      <el-form-item label="班级">
-        <el-input v-model="information.student_class" disabled/>
-      </el-form-item>
-      <el-form-item label="指导教师姓名">
-        <el-input v-model="form.teacher_name" />
-      </el-form-item>
-      <el-form-item label="指导教师所在系">
-        <el-input v-model="form.department" />
-      </el-form-item>
-      <el-form-item label="指导教师职称">
-        <el-input v-model="form.title" />
+        <el-input v-model="information.create_time" style="width: 200px" disabled />
       </el-form-item>
       <el-form-item label="审核状态">
-        <el-input v-model="information.state" disabled />
+        <el-tag v-if="information.state === 3" type="primary">审核中</el-tag>
+        <el-tag v-else-if="information.state === 1" type="success">通过</el-tag>
+        <el-tag v-else-if="information.state === 2" type="danger">未通过</el-tag>
+        <el-tag v-else-if="information.state === 4" type="warning">已撤回</el-tag>
+      </el-form-item>
+      <el-form-item v-if= "store.getters.roles.includes('manager')" label="修改审核状态" prop="role" class="filter-check">
+        <el-radio v-model="form.state" :label="1" >通过</el-radio>
+        <el-radio v-model="form.state" :label="2" >未通过</el-radio>
+        <el-radio v-model="form.state" :label="3" >审核中</el-radio>
+        <el-radio v-model="form.state" :label="4" >已撤回</el-radio>
+      </el-form-item>
+      <div style="display: flex; flex-direction: column">
+        <div style="display: flex; flex-direction: row">
+      <el-form-item label="学生姓名">
+        <el-input v-model="information.name" style="width: 150px" disabled />
+      </el-form-item>
+      <el-form-item label="学生所属学院">
+        <el-input v-model="information.college" style="width: 150px" disabled />
+      </el-form-item>
+      <el-form-item label="学生专业">
+        <el-input v-model="information.major" style="width: 150px"  disabled />
+      </el-form-item>
+        </div>
+        <div style="display: flex; flex-direction: row">
+          <el-form-item label="班级">
+            <el-input v-model="information.student_class" style="width: 150px" disabled/>
+          </el-form-item>
+          <el-form-item label="学号">
+            <el-input v-model="information.student_school_id" style="width: 150px" disabled />
+          </el-form-item>
+        </div>
+      </div>
+      <el-form-item label="电话号码">
+        <el-input v-model="form.phone" style="width: 200px" />
+      </el-form-item>
+      <el-form-item label="电子邮箱">
+        <el-input v-model="form.email" style="width: 200px"/>
+      </el-form-item>
+      <el-form-item label="所属队伍" v-if="information.is_group === 1">
+        <el-input v-model="form.team_name" style="width: 200px"/>
+      </el-form-item>
+      <el-form-item label="指导教师姓名">
+        <el-input v-model="form.teacher_name" style="width: 200px"/>
+      </el-form-item>
+      <el-form-item label="指导教师所在系">
+        <el-input v-model="form.department" style="width: 200px"/>
+      </el-form-item>
+      <el-form-item label="指导教师职称">
+        <el-input v-model="form.title" style="width: 200px"/>
       </el-form-item>
       <el-form-item label="驳回原因" v-if="information.state === 2">
-        <el-input v-model="information.reject_reason" disabled />
+        <el-input v-model="information.reject_reason" disabled style="width: 200px"/>
       </el-form-item>
     </el-form>
 
     <div>
     </div>
 
-    <el-button @click="returnDesktop()" type="info" size="small" >返回</el-button>
-    <el-button @click="UpdateEnroll()" type="success" size="small" >提交</el-button>
+    <el-button @click="returnDesktop()" type="info" size="default" >返回</el-button>
+    <el-button @click="UpdateEnroll()" type="success" size="default" >提交</el-button>
   </div>
 
 </template>
@@ -84,6 +99,7 @@ const form = reactive({
   teacher_name: "",
   department: "",
   title: "",
+  state: 3,
 })
 
 const handleContestIDChange = (newContestID) => {

@@ -4,25 +4,24 @@
             <!-- 用户名输入 -->
           <div class="filter">
             <div class="input-container">
-            <el-input v-model="param.searchUser" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-            <el-input v-model="param.name" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-            <el-input v-model="param.class" placeholder="班级" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.searchUser" placeholder="用户名" style="width: 100px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.name" placeholder="姓名" style="width: 100px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.student_school_id" placeholder="学号" style="width: 100px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.college" placeholder="学院" style="width: 100px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.major" placeholder="专业" style="width: 100px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.class" placeholder="班级" style="width: 100px;" class="filter-item" @keyup.enter="handleFilter" />
+            <el-input v-model="param.semester" placeholder="入学年份" style="width: 100px;" class="filter-item" @keyup.enter="handleFilter" />
+            <div class="filter-button-container">
+              <el-button class="filter-button" type="primary"  @click="handleFilter">
+                搜索
+              </el-button>
             </div>
-            <div class="input-container">
-            <el-input v-model="param.school" placeholder="学校" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-            <el-input v-model="param.college" placeholder="学院" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-            <el-input v-model="param.semester" placeholder="入学年份" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
-              <div class="filter-button-container">
-                <el-button class="filter-button" type="primary"  @click="handleFilter">
-                  搜索
-                </el-button>
-              </div>
             </div>
-            <el-form-item label="性别" prop="gender" class="filter-check">
-              <el-radio v-model="param.gender" :label="''" @change="handleFilter">全部</el-radio>
-              <el-radio v-model="param.gender" :label="'男'" @change="handleFilter">男</el-radio>
-              <el-radio v-model="param.gender" :label="'女'" @change="handleFilter">女</el-radio>
-            </el-form-item>
+<!--            <el-form-item label="性别" prop="gender" class="filter-check">-->
+<!--              <el-radio v-model="param.gender" :label="''" @change="handleFilter">全部</el-radio>-->
+<!--              <el-radio v-model="param.gender" :label="'男'" @change="handleFilter">男</el-radio>-->
+<!--              <el-radio v-model="param.gender" :label="'女'" @change="handleFilter">女</el-radio>-->
+<!--            </el-form-item>-->
           </div>
         </div>
       <div class="handle-container">
@@ -56,18 +55,17 @@
           <el-form-item label="姓名" prop="name">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="性别" prop="gender">
-            <el-radio v-model="form.gender" :label="'男'">男</el-radio>
-            <el-radio v-model="form.gender" :label="'女'">女</el-radio>
-          </el-form-item>
-          <el-form-item label="学校" prop="school">
-            <el-input v-model="form.school"></el-input>
+          <el-form-item label="学号" prop="semester">
+            <el-input v-model="form.student_school_id"></el-input>
           </el-form-item>
           <el-form-item label="入学年份" prop="semester">
             <el-input v-model="form.semester"></el-input>
           </el-form-item>
           <el-form-item label="学院" prop="college">
             <el-input v-model="form.college"></el-input>
+          </el-form-item>
+          <el-form-item label="专业" prop="major">
+            <el-input v-model="form.major"></el-input>
           </el-form-item>
           <el-form-item label="班级" prop="class">
             <el-input v-model="form.class"></el-input>
@@ -88,7 +86,7 @@
             :data="tableData"
             @selection-change="handleSelectionChange"
             border
-            height="435px"
+            height="490"
         >
       <el-table-column label="学生用户管理界面">
         <el-table-column
@@ -99,43 +97,48 @@
         <el-table-column
                 fixed
                 prop="id"
-                label="序号">
+                width="70"
+                label="用户ID">
         </el-table-column>
       <el-table-column
           prop="name"
           label="姓名"
           show-overflow-tooltip>
       </el-table-column>
-      <el-table-column
-          prop="gender"
-          label="性别"
-          show-overflow-tooltip>
-      </el-table-column>
         <el-table-column
                 prop="username"
-                label="用户名称"
+                label="用户名"
                 show-overflow-tooltip>
         </el-table-column>
       <el-table-column
           prop="student_id"
-          label="学生id"
+          width="90"
+          label="学生ID"
           show-overflow-tooltip>
       </el-table-column>
         <el-table-column
+            prop="student_school_id"
+            label="学号"
+            width="100"
+            show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
                 prop="password"
+                width="90"
                 label="用户密码"
                 show-overflow-tooltip>
         </el-table-column>
       <el-table-column
-          prop="school"
-          label="学校"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
           prop="college"
           label="学院"
+          width="130"
           show-overflow-tooltip>
       </el-table-column>
+        <el-table-column
+            prop="major"
+            label="专业"
+            show-overflow-tooltip>
+        </el-table-column>
       <el-table-column
           prop="class"
           label="班级"
@@ -215,7 +218,9 @@
                     class: "",
                     school: "",
                     college: "",
-                    semester: ""
+                    semester: "",
+                    major: "",
+                  student_school_id: "",
                 },
 
 
@@ -233,7 +238,9 @@
                   school: "",
                   semester: "",
                   college: "",
-                  class: ""
+                  student_school_id: "",
+                  class: "",
+                  major: "",
                 },
 
                 rules: {
@@ -341,7 +348,9 @@
                   class: "",
                   school: "",
                   college: "",
-                  semester: ""
+                  semester: "",
+                  major: "",
+                  student_school_id: "",
                 }
                 getStudent(this.param).then(resp => {
                     console.log(resp)
@@ -382,7 +391,9 @@
                   school: row.school,
                   semester: row.semester,
                   college: row.college,
-                  class: row.class
+                  class: row.class,
+                  student_school_id: row.student_school_id,
+                  major: row.major,
                 }
                 // 显示表单框
                 this.dialogFormVisible = true

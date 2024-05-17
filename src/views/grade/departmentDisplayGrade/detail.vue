@@ -47,11 +47,6 @@
     <el-table-column label="报名审核表">
       <el-table-column
           fixed
-          type="selection"
-          width="55">
-      </el-table-column>
-      <el-table-column
-          fixed
           prop="id"
           label="序号"
           width="55" v-if="store.getters.roles.includes('manager')">
@@ -59,12 +54,13 @@
       <el-table-column
           prop="contest"
           label="竞赛名称"
+          width="140"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
           prop="contest_type"
           label="竞赛类型"
-          width="55"
+          width="80"
           show-overflow-tooltip>
       </el-table-column>
       <!--    <el-table-column-->
@@ -95,31 +91,30 @@
       <el-table-column
           prop="major"
           label="专业"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="student_class"
-          label="班级"
+          width="100"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
           prop="grade"
           label="获奖等级"
+          width="90"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
           prop="reward_time"
           label="获奖时间"
+          width="160"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
           prop="certificate"
           label="证明材料"
+          width="90"
           show-overflow-tooltip>
         <template #default="{row}">
           <el-popover trigger="hover" placement="top">
             <template #reference>
-              <el-button type="primary" @click="handDown(row.certificate)">查看</el-button>
+              <el-button type="primary" @click="handDown(row.certificate)" size="small">查看</el-button>
             </template>
             <el-image :src="row.certificate" fit="contain" />
           </el-popover>
@@ -128,21 +123,13 @@
       <el-table-column
           prop="guidance_teacher_name"
           label="指导教师"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="student_class"
-          label="教师所属系部"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="title"
-          label="教师职称"
+          width="90"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
           prop="state"
           label="审核状态"
+          width="90"
           show-overflow-tooltip>
         <template #default="{ row }">
           <el-tag v-if="row.state === 3" type="primary">审核中</el-tag>
@@ -150,8 +137,9 @@
           <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="150" type="index">
+      <el-table-column fixed="right" label="操作" width="200" type="index">
         <template #default="{ row, $index}">
+          <el-button @click="checkDetail(row.id)" type="success" size="small">详情</el-button>
           <el-button @click="handleProcess(row, $index)" type="primary" size="small">重新审核</el-button>
         </template>
       </el-table-column>
@@ -216,6 +204,10 @@ const handleContestIDChange = (newContestID) => {
   param.id = newContestID
   handleShowContest()
   // 在这里添加你想要执行的代码
+}
+
+const checkDetail = (id) => {
+  router.push(`/gradeDetail/${id}`)
 }
 
 const handleActiveNameChange = (newActiveName) => {

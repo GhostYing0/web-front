@@ -251,13 +251,43 @@ export function departmentLogin(data) {
     })
 }
 
-export function departmentRegister(data) {
+export function getDepartmentManager(params) {
     return request({
-        url: '/department_register',
+        url: '/cms/getDepartmentManager',
+        method: 'get',
+        params: params
+    })
+}
+
+export function updateDepartmentManager(data) {
+    return request({
+        url: '/cms/updateDepartmentManager',
         method: 'post',
         data: data
     })
 }
 
+export function deleteDepartmentManager(data) {
+    return request({
+        url: '/cms/deleteDepartmentManager',
+        method: 'delete',
+        data: data
+    })
+}
+
+export function getDepartmentManagerCount() {
+    return request({
+        url: '/cms/getDepartmentManagerCount',
+        method: 'get',
+    })
+}
+
+export function addDepartmentManager(data) {
+    return request({
+        url: '/cms/addDepartmentManager',
+        method: 'post',
+        data: data
+    })
+}
 
 
