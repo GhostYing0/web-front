@@ -1,32 +1,40 @@
 <template>
-  上传竞赛
-  <el-form :model="form" label-width="auto" class="contest-form-container">
-      <div class="form-item-group">
-      <el-input class="form-item" v-model="form.contest" placeholder="竞赛名称" />
-      </div>
-      <div class="form-item-group">
+  <el-form :model="form" label-width="auto" style="max-width: 800px">
+    <div style="display: flex; flex-direction: column">
+      <el-form-item label="上传教师ID" v-if="store.getters.roles.includes('manager')">
+        <el-input v-model="form.teacher_id" style="width: 400px"/>
+      </el-form-item>
+      <el-form-item label="审核状态" v-if="store.getters.roles.includes('manager')" class="filter-check">
+        <el-radio v-model="form.state" :label="1" >通过</el-radio>
+        <el-radio v-model="form.state" :label="2" >未通过</el-radio>
+        <el-radio v-model="form.state" :label="3" >审核中</el-radio>
+      </el-form-item>
+      <el-form-item label="报名状态" v-if="store.getters.roles.includes('manager')" class="filter-check">
+        <el-radio v-model="form.contest_state" :label="1" >可报名</el-radio>
+        <el-radio v-model="form.contest_state" :label="2" >不可报名</el-radio>
+      </el-form-item>
+      <el-form-item label="竞赛名称">
+        <el-input v-model="form.contest" style="width: 200px"/>
+      </el-form-item>
+      <el-form-item label="竞赛所属项目">
         <el-cascader
-            class="form-item"
-            placeholder="竞赛所属项目"
             v-model="contest_entry_item"
             :options="entryOptions"
             :props="props"
             filterable
             @change="handleEntry"
         />
-      </div>
-      <div class="form-item-group">
+      </el-form-item>
+      <el-form-item label="竞赛类型">
         <el-cascader
-            class="form-item"
             v-model="contest_type_item"
-            placeholder="竞赛类型"
             :options="typeOptions"
             :props="props"
             filterable
             @change="handleType"
         />
-
-      </div>
+      </el-form-item>
+    </div>
     <el-form-item label="竞赛级别" prop="role" class="filter-check">
       <el-radio v-model="form.contest_level" :label="1" @change="handleFilter">国家级</el-radio>
       <el-radio v-model="form.contest_level" :label="2" @change="handleFilter">省部级</el-radio>
@@ -39,26 +47,25 @@
         <el-input-number v-model="form.max_group_number" :min="2" @change="handleChange" />
       </el-form-item>
     </el-form-item>
-    <div class="form-prize-group">
-      <div class="form-group">
-    <el-form-item  class="form-item" label="特等奖数量">
-        <el-input-number v-model="form.prize1" :min="0"  @change="handleChange" />
-    </el-form-item>
-    <el-form-item class="form-item" label="一等奖数量">
-      <el-input-number v-model="form.prize2" :min="0"  @change="handleChange" />
-    </el-form-item>
-      </div>
-      <div class="form-group">
-    <el-form-item class="form-item" label="二等奖数量">
-      <el-input-number v-model="form.prize3" :min="0"  @change="handleChange" />
-    </el-form-item>
-    <el-form-item class="form-item" label="三等奖数量">
-      <el-input-number v-model="form.prize4" :min="0"  @change="handleChange" />
-    </el-form-item>
+    <div style="display:flex; flex-direction: column">
+       <div style="display:flex; flex-direction: row">
+          <el-form-item  class="form-item" label="特等奖数量">
+              <el-input-number v-model="form.prize1" :min="0"  @change="handleChange" />
+          </el-form-item>
+          <el-form-item class="form-item" label="一等奖数量">
+            <el-input-number v-model="form.prize2" :min="0"  @change="handleChange" />
+          </el-form-item>
+       </div>
+      <div style="display:flex; flex-direction: row">
+        <el-form-item class="form-item" label="二等奖数量">
+          <el-input-number v-model="form.prize3" :min="0"  @change="handleChange" />
+        </el-form-item>
+        <el-form-item class="form-item" label="三等奖数量">
+          <el-input-number v-model="form.prize4" :min="0"  @change="handleChange" />
+        </el-form-item>
         </div>
     </div>
-    <div class="form-item-group">
-      <el-form-item class="form-item" label="开赛时间">
+      <el-form-item class="form-item" label="开赛时间" style="width: 350px">
         <el-date-picker
             v-model="form.start_time"
             type="datetime"
@@ -69,19 +76,18 @@
             :shortcuts="shortcuts"
         />
       </el-form-item>
-      <el-form-item class="form-time-range" label="报名时间段">
+      <el-form-item class="form-time-range" label="报名时间段" style="width: 500px">
         <el-date-picker
                 v-model="time_range"
                 type="datetimerange"
-                start-placeholder="选择报名时间"
-                end-placeholder="选择截止时间"
+                start-placeholder="报名开始时间"
+                end-placeholder="报名截止时间"
                 value-format="YYYY-MM-DD HH:mm:ss"
                 date-format="YYYY/MM/DD ddd"
                 time-format="HH:mm"
                 @change="handleTime"
       />
       </el-form-item>
-      </div>
 
     <el-form-item label="竞赛介绍">
       <el-input style="width:500px" v-model="form.desc" type="textarea" />
@@ -103,7 +109,7 @@ import {uploadContest} from '@/api/enroll'
 import {ElMessage} from 'element-plus';
 import store from "@/store";
 import {onMounted, reactive, ref} from "vue";
-import {getContestEntry, getContestType} from "@/api/contest";
+import {getContestEntry, getContestType, addContest} from "@/api/contest";
 
 const entryOptions = ref([])
 const contest_entry_item = ref()
@@ -114,6 +120,7 @@ const contest_type_item = ref()
 const time_range = ref([])
 
 const form = reactive({
+  teacher_id: "",
   contest_entry: 0,
   contest: "",
   contest_level: 0,
@@ -128,6 +135,8 @@ const form = reactive({
   enroll_time: "",
   deadline: "",
   desc: "",
+  state: 3,
+  contest_state: 2,
   ps: "",
 })
 
@@ -145,25 +154,47 @@ const handleClearForm = () => {
 const handleCreate = () => {
   // 表单是添加状态
   console.log("handleCreate")
-  uploadContest(form).then(resp => {
-    console.log("addUser:", resp)
-    if (resp.code === 200) {
-      ElMessage({
-        type: 'success',
-        message: '提交成功',
-      })
-    } else {
+  if(store.getters.roles.includes("teacher")) {
+    uploadContest(form).then(resp => {
+      console.log("addUser:", resp)
+      if (resp.code === 200) {
+        ElMessage({
+          type: 'success',
+          message: '提交成功',
+        })
+      } else {
+        ElMessage({
+          type: 'error',
+          message: '提交失败',
+        })
+      }
+    }).catch(() => {
       ElMessage({
         type: 'error',
         message: '提交失败',
       })
-    }
-  }).catch(() => {
-    ElMessage({
-      type: 'error',
-      message: '提交失败',
     })
-  })
+  } else if (store.getters.roles.includes("manager")) {
+    addContest(form).then(resp => {
+      console.log("addUser:", resp)
+      if (resp.code === 200) {
+        ElMessage({
+          type: 'success',
+          message: '提交成功',
+        })
+      } else {
+        ElMessage({
+          type: 'error',
+          message: '提交失败',
+        })
+      }
+    }).catch(() => {
+      ElMessage({
+        type: 'error',
+        message: '提交失败',
+      })
+    })
+  }
 }
 
 const handleType = () => {
@@ -204,8 +235,10 @@ const handleEntry = () => {
   form.contest_entry = contest_entry_item.value[0]}
 
 const handleTime = () => {
-  form.enroll_time = time_range.value[0]
-  form.deadline = time_range.value[1]
+  if(time_range.value) {
+    form.enroll_time = time_range.value[0]
+    form.deadline = time_range.value[1]
+  }
 }
 
 onMounted(initOptions)

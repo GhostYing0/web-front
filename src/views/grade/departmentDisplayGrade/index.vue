@@ -444,7 +444,7 @@ const handleShowMyContest = () => {
 }
 
 const checkDetail = (row) => {
-  router.push(`departmentDisplayGradeDetail/${row.id}`)
+  router.push(`/departmentDisplayGradeDetail/${row.id}`)
   propContestID.value = row.id
   // emit('showDetail', row.id)
   //router.push("contestDetail")

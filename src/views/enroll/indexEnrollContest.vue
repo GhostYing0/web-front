@@ -69,7 +69,7 @@ import axios from "axios";
 import {getToken} from "@/utils/auth";
 import {uploadGrade} from "@/api/grade";
 import {ElMessage} from "element-plus";
-import {enrollContest} from "@/api/enroll";
+import {enrollContest, addEnrollInformation} from "@/api/enroll";
 
 const route = ref(router)
 
@@ -115,25 +115,27 @@ const handleGetContest = async () => {
 }
 
 const Submit = () => {
-  enrollContest(form).then(resp => {
-    console.log("addUser:", resp)
-    if(resp.code === 200) {
-      ElMessage({
-        type: 'success',
-        message: '报名成功',
-      })
-    } else {
+  if(store.getters.roles.includes("student")) {
+    enrollContest(form).then(resp => {
+      console.log("addUser:", resp)
+      if (resp.code === 200) {
+        ElMessage({
+          type: 'success',
+          message: '报名成功',
+        })
+      } else {
+        ElMessage({
+          type: 'error',
+          message: resp.message,
+        })
+      }
+    }).catch(() => {
       ElMessage({
         type: 'error',
-        message: resp.message,
+        message: '报名失败',
       })
-    }
-  }).catch(() => {
-    ElMessage({
-      type: 'error',
-      message: '报名失败',
     })
-  })
+  }
 }
 
 // 清除表单

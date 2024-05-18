@@ -2,15 +2,11 @@
     <div class="common-layout">
         <el-container class="master-container">
             <!--<AppMenu/>-->
-          <el-header class="header"><Navbar/></el-header>
+          <el-header class="header"><el-affix><Navbar/></el-affix></el-header>
             <el-container class="container">
               <el-aside class="aside" v-if="store.getters.sidebar.opened">
-                <template v-if="store.getters.roles.includes('manager')">
-                  <AppMenu/>
-                </template>
-                <template v-else-if="store.getters.roles.includes('student') || store.getters.roles.includes('teacher')|| store.getters.roles.includes('department_manager')" >
-                  <UserAppMenu/>
-                </template>
+                  <AppMenu v-if="store.getters.roles.includes('manager')"/>
+                  <UserAppMenu v-if="store.getters.roles.includes('student') || store.getters.roles.includes('teacher')|| store.getters.roles.includes('department_manager')"/>
               </el-aside>
               <el-main class="main"><router-view/></el-main>
             </el-container>

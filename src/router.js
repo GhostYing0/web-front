@@ -8,18 +8,17 @@ const asyncRoutes = [
         path:"/contestInformationManager",
         component:() => import("@/layout/AppLayout"),
         children:[
-                {
-                    title: "系统",
-                    path: '/contestInformationManager',
-                    component: () => import("@/views/dashboard/index"),
-                    meta: { title: "首页" },
-                    name: "首页"
-                },
-    
+            {
+                title: "系统",
+                path: '/home',
+                component: () => import("@/views/dashboard/index"),
+                meta: { title: "首页" },
+                name: "首页"
+            },
             {
                 path: "/enrollContest",
                 component: () => import("@/views/enroll/indexEnrollContest"),
-                roles: ["student"],
+                roles: ["student", "manager"],
                 name:"报名竞赛"
             },
             {
@@ -124,6 +123,12 @@ const asyncRoutes = [
                 roles: ["teacher"],
                 name:"上传成绩"
             },
+            // {
+            //     path: "/doUploadGrade",
+            //     component: () => import("@/views/grade/teacherViewGrade/doUploadGrade.vue"),
+            //     roles: ["manager"],
+            //     name:"上传成绩"
+            // },
             {
                 path: "/UpdateGrade/:contest_id/:grade_id",
                 component: () => import("@/views/grade/teacherViewGrade/updateGrade.vue"),
@@ -204,7 +209,7 @@ const asyncRoutes = [
             {
                 path:"/displayContest",
                 component: () => import("@/views/contest/index"),
-                roles: ["student","teacher", "department_manager"],
+                roles: ["student","teacher", "department_manager", "manager"],
                 name:"竞赛信息预览",
                 children : [
                     {
@@ -224,7 +229,7 @@ const asyncRoutes = [
             {
                 path:"/uploadContest",
                 component: () => import("@/views/contest/teacher/upload/index"),
-                roles: ["teacher"],
+                roles: ["teacher", "manager"],
                 name:"上传竞赛信息"
             },
             {

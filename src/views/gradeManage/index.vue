@@ -47,9 +47,9 @@
         <el-button class="handle-button" type="primary" @click="handleShowALL">
           显示全部
         </el-button>
-<!--        <el-button class="handle-button" type="primary" @click="handleCreate">-->
-<!--          添加成绩信息-->
-<!--        </el-button>-->
+        <el-button class="handle-button" type="primary" @click="handleCreate">
+          添加成绩信息
+        </el-button>
         <el-button class="handle-delete-button" type="danger" @click="handleDeleteSome">
           批量删除
         </el-button>
@@ -66,27 +66,52 @@
     </el-dialog>
 
     <!--弹出框-->
-    <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
+    <el-dialog :title="formTitle" v-model="dialogFormVisible" width="50%">
         <!--普通表单-->
-        <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
-            <el-form-item label="用户名" prop="username">
-                <el-input v-model="form.username"></el-input>
+        <el-form :model="form" :rules="rules" ref="ruleForm" label-width="100px">
+            <el-form-item label="获奖学生ID" prop="student_id">
+                <el-input v-model="form.student_id"></el-input>
             </el-form-item>
-            <el-form-item label="竞赛" prop="contest">
-                <el-input v-model="form.contest"></el-input>
-            </el-form-item>
-            <el-form-item label="成绩" prop="grade">
-                <el-input v-model="form.grade"></el-input>
-            </el-form-item>
-            <el-form-item label="证书" prop="certificate">
-                <el-input v-model="form.certificate"></el-input>
-            </el-form-item>
-            <el-form-item label="上传时间" prop="create_time">
+          <el-form-item label="指导教师ID" prop="teacher_id">
+            <el-input v-model="form.teacher_id"></el-input>
+          </el-form-item>
+          <el-form-item label="报名信息ID" prop="enroll_id">
+            <el-input v-model="form.enroll_id"></el-input>
+          </el-form-item>
+          <el-form-item label="获奖等级" prop="state">
+            <el-radio v-model="form.grade" :label="1">特等奖</el-radio>
+            <el-radio v-model="form.grade" :label="2">一等奖</el-radio>
+            <el-radio v-model="form.grade" :label="3">二等奖</el-radio>
+            <el-radio v-model="form.grade" :label="4">三等奖</el-radio>
+          </el-form-item>
+          <el-form-item class="form-item" label="上传证明材料">
+            <el-upload
+                style="width: 500px; height: 300px"
+                ref="uploadRef"
+                class="upload-demo"
+                drag
+                action="http://localhost:9006/api/public/v1/upload"
+                :on-change="handleChange"
+                :auto-upload="false"
+                name="file"
+            >
+              <el-icon class="esl-icon--upload"><upload-filled /></el-icon>
+              <div class="el-upload__text">
+                点击此处上传
+              </div>
+              <template #tip>
+                <div class="el-upload__tip">
+                  请导入证明材料图片
+                </div>
+              </template>
+            </el-upload>
+          </el-form-item>
+            <el-form-item label="获奖时间" prop="reward_time">
                 <!--<el-input v-model="form.create_time"></el-input>-->
                 <div class="block">
                     <span class="demonstration"></span>
                     <el-date-picker
-                            v-model="form.create_time"
+                            v-model="form.reward_time"
                             type="datetime"
                             placeholder="Select date and time"
                             :shortcuts="shortcuts"
@@ -228,9 +253,11 @@
 
 <script>
     import {getGrade, addGrade, deleteGrade, updateGrade,getGradeCount} from '@/api/grade'
-    import {computed, ref} from "vue"
+    import {computed, reactive, ref} from "vue"
     import { ElMessageBox, ElMessage ,ElTable} from 'element-plus';
     import {router} from "@/router";
+    import axios from "axios";
+    import {getToken} from "@/utils/auth";
 
     export default {
         //创建后
@@ -241,6 +268,7 @@
                 return formType.value === 0 ? '添加记录' : '修改记录';
             });
 
+            const uploadRef = ref(null); // 上传组件的引用，需要是 null，因为组件可能还没有挂载
             const time_range = ref([])
 
             const multipleTable = ref()
@@ -251,13 +279,45 @@
                 console.log(multipleSelection.value)
             }
 
+            const formPic = reactive({
+              file: '',
+            })
+
             const value = ref('');
             const defaultTime = new Date(2000, 1, 1, 12, 0, 0);
 
+            // 处理文件变化
+            const handleChange = (file) => {
+              console.log("文件变化：", file);
+              uploadRef.value = file
+              // 如果这里是要引用某个上传组件的实例，请确保该组件正确传递了引用
+              // uploadRef.value = file; // 这一步取决于你的上传组件API，可能需要的是文件对象，而不是组件实例
+            };
+
+            // 创建Axios实例，用于特定的请求配置
+            const uploadAxios = axios.create({
+              baseURL: "http://localhost:9006/api/",
+              timeout: 5000
+            })
+
+            // 为这个特定的Axios实例设置请求拦截器
+            uploadAxios.interceptors.request.use(config => {
+              // 这里可以添加或覆盖头部信息
+              config.headers["Content-Type"] = 'multipart/form-data'
+              config.headers["BackServer-token"] = getToken()
+              return config;
+            }, error => {
+              return Promise.reject(error);
+            });
+
             return {
+                handleChange,
                 value,
                 time_range,
                 defaultTime,
+                uploadRef,
+                formPic,
+                uploadAxios,
 
                 formType,
                 formTitle,
@@ -315,11 +375,15 @@
                 // 表单类型（添加数据:0,修改数据:1）
 
                 form: {
+                    student_id: "",
+                    enroll_id: 0,
+                    teacher_id: "",
                     id: '',
                     username: '',
                     contest: '',
                     create_time: '',
-                    grade: '',
+                    grade: 0,
+                    reward_time: "",
                     certificate: '',
                     state: -1
                 },
@@ -369,9 +433,26 @@
                 })
             },
 
-            submitForm() {
+            async submitForm() {
                 if (this.formType === 0) {  // 添加记录
+                    if (this.uploadRef.name !== "") {
+                      console.log("(((((((^^^^^^^^^^^^^^^^^^^676")
+                      console.log(this.uploadRef)
+                      this.formPic.file = this.uploadRef
+                      //发送请求到后端接口
+                      const resp = await this.uploadAxios.post('public/v1/upload', this.formPic)
+                      console.log("resp:",resp)
+                      if(resp.data.code === 200) {
+                        this.form.certificate = resp.data.data.imageurl
+                      } else {
+
+                        return
+                      }
+                    } else{
+                      return
+                    }
                     console.log("addUser:", this.form)
+                   this.form.enroll_id = parseInt(this.form.enroll_id, 10)
                     addGrade(this.form).then(resp => {
                         console.log("addUser:", resp)
                         if(resp.code === 200) {
@@ -476,6 +557,9 @@
                 console.log("handleCreate")
                 // 将空数据置入form
                 this.form = {
+                    enroll_id: 35,
+                    student_id: "5a811726-1e28-320c-911f-10fe44b67f62",
+                    teacher_id: "4e20355d-bf1a-3728-90c4-c6718a0b441e",
                     username: '',
                     team_id: '',
                     contest: '',

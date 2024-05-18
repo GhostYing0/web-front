@@ -2,7 +2,7 @@
     <el-row class="tac">
         <el-col :span="24">
             <div class="content">
-              <h2 class="mb-2" style="background-color: #2c3e50;"><span class="text">导航栏</span></h2>
+              <h2 class="mb-2" style="background-color: #2c3e50;"><span class="text"><el-icon><MapLocation /></el-icon>导航栏</span></h2>
             <el-menu
                     default-active="2"
                     class="el-menu-vertical-demo"
@@ -16,7 +16,6 @@
                         <span class="text">报名信息管理</span>
                     </template>
                         <el-menu-item class="menu-item" index="/enrollManage"><span class="text">报名信息预览</span></el-menu-item>
-                        <el-menu-item class="menu-item" index="/enrollManage"><span class="text">添加报名信息</span></el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="2" class="menu-border">
                     <template #title>
@@ -24,7 +23,7 @@
                         <span class="text">竞赛信息管理</span>
                     </template>
                         <el-menu-item class="menu-item" index="/contestManage"><span class="text">竞赛信息预览</span></el-menu-item>
-                        <el-menu-item class="menu-item" index="/contestManage"><span class="text">添加竞赛信息</span></el-menu-item>
+                        <el-menu-item class="menu-item" index="/uploadContest"><span class="text">添加竞赛信息</span></el-menu-item>
                         <!--<el-menu-item class="menu-item" index="/contestProcess"><span class="text">竞赛信息审核</span></el-menu-item>-->
                 </el-sub-menu>
                 <el-sub-menu index="3" class="menu-border">
@@ -43,7 +42,6 @@
                         <span class="text">成绩信息管理</span>
                     </template>
                         <el-menu-item class="menu-item" index="/gradeManage"><span class="text">成绩信息预览</span></el-menu-item>
-                        <el-menu-item class="menu-item" index="/gradeManage"><span class="text">添加成绩信息</span></el-menu-item>
                 </el-sub-menu>
              <!-- <el-sub-menu index="5" class="menu-border">
                 <template #title>
@@ -60,10 +58,11 @@
 
 <script setup>
     import {
-        Document,
-        Menu as IconMenu,
-        Location,
-        Setting,
+      Document,
+      Menu as IconMenu,
+      Location,
+      Setting,
+      MapLocation
     } from '@element-plus/icons-vue'
     import {ref, computed} from "vue"
     const route = ref(router)

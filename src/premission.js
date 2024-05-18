@@ -29,7 +29,13 @@ router.beforeEach(async(to, from, next) => {
             const hasRoles = store.getters.roles && store.getters.roles.length > 0
             console.log("roles:",store.getters.roles)
             if(hasRoles){
-                next()
+                console.log("path:", to.path)
+                if(to.path === "/dashboard") {
+                    next("/contestInformationManager")
+                } else {
+                    console.log(to.path)
+                    next()
+                }
             } else {
                 console.log("进行添加路由")
                 try {

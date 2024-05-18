@@ -1,9 +1,11 @@
 <template>
     <div class="navbar">
       <div class="left-menu">
-      <p class="navbar-text">高校学科竞赛信息管理系统</p>
+      <span class="navbar-text">高校学科竞赛信息管理系统</span>
         <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-        {{currentRoute}}
+        <div class="current-route">
+          {{currentRoute}}
+        </div>
         <div class="right-menu">
           <p class="welcome">{{store.getters.username}} 欢迎使用</p>
           <el-avatar size="large"
@@ -66,7 +68,7 @@
                 this.$router.push(`/login`)
             },
             goToDashBoard() {
-              this.$router.push("/dashboard")
+              this.$router.push("/home")
             },
             goToProfile() {
               this.$router.push("/profile")
@@ -83,7 +85,7 @@
         align-items: center;
     }
     .navbar {
-        width: 100%;
+        width: 100vw;
         height: 80px;
         overflow: hidden;
         display: flex;
@@ -95,7 +97,20 @@
         flex: 1;
         display: flex;
         flex-direction: row;
+        .current-route {
+          font-size: 25px;
+          margin-top: auto;
+          margin-bottom: auto;
+          max-width: 300px;
+          min-width: 200px;
+          border-right-width: 3px;
+          border-left-width: 3px;
+          border-top: 0px;
+          border-bottom: 0px;
+          border-style: solid;
+        }
         .navbar-text {
+          width: 230px;
           font-size: 19px;
           margin-top: auto;
           margin-bottom: auto;
@@ -133,7 +148,7 @@
           .welcome {
             margin-top: auto;
             margin-bottom: auto;
-            margin-left: 60vw;
+            margin-left: 44vw;
             font-size: 14px;
           }
           .dropdown-button {

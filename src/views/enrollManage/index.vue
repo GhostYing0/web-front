@@ -47,9 +47,9 @@
     </div>
         <div class="handle-container">
           <!-- 一些按钮 -->
-<!--          <el-button class="handle-button"  type="primary"  @click="handleCreate">-->
-<!--            添加报名信息-->
-<!--          </el-button>-->
+          <el-button class="handle-button"  type="primary"  @click="handleCreate">
+            添加报名信息
+          </el-button>
           <el-button  class="handle-button" type="primary"  @click="handleShowALL">
             显示全部
           </el-button>
@@ -60,20 +60,20 @@
       </div>
 
     <!--弹出框-->
-    <el-dialog :title="formTitle" v-model="dialogFormVisible" width="30%">
+    <el-dialog :title="formTitle" v-model="dialogFormVisible" width="50%">
         <!--普通表单-->
-        <el-form :model="form" :rules="rules" ref="ruleForm" label-width="80px">
-            <el-form-item label="用户名称" prop="username">
-                <el-input v-model="form.username"></el-input>
+        <el-form :model="form" :rules="rules" ref="ruleForm" label-width="100px">
+            <el-form-item label="报名学生ID" prop="student_id">
+                <el-input v-model="form.student_id"></el-input>
             </el-form-item>
-            <el-form-item label="姓名" prop="name">
-                <el-input v-model="form.name"></el-input>
+            <el-form-item label="报名竞赛ID" prop="contest_id">
+                <el-input v-model="form.contest_id"></el-input>
             </el-form-item>
-<!--            <el-form-item label="队伍ID" prop="team_id">-->
-<!--                <el-input v-model="form.team_id"></el-input>-->
-<!--            </el-form-item>-->
-            <el-form-item label="报名竞赛" prop="contest">
-                <el-input v-model="form.contest"></el-input>
+          <el-form-item label="参赛队伍ID" prop="team_id">
+            <el-input v-model="form.team_id"></el-input>
+          </el-form-item>
+            <el-form-item label="指导教师ID" prop="teacher_id">
+                <el-input v-model="form.teacher_id"></el-input>
             </el-form-item>
             <el-form-item label="报名时间" prop="create_time">
                 <!--<el-input v-model="form.create_time"></el-input>-->
@@ -86,9 +86,6 @@
                             :shortcuts="shortcuts"
                     />
                 </div>
-            </el-form-item>
-            <el-form-item label="学校" prop="school">
-                <el-input v-model="form.school"></el-input>
             </el-form-item>
 <!--            <el-form-item label="电话号码" prop="phone">-->
 <!--                <el-input v-model="form.phone"></el-input>-->
@@ -293,7 +290,7 @@
                     page_size: 10,
                     name:"",
                     //username: '',
-                    team_id: '',
+                    team_id: 0,
                     contest: '',
                     start_time: '',
                     end_time: '',
@@ -310,10 +307,13 @@
                 dialogFormVisible: false,
 
                 form: {
+                    contest_id: 0,
+                    student_id: "",
+                    teacher_id: "",
                     id: -1,
                     name:"",
                     username: '',
-                    team_id: '',
+                    team_id: 0,
                     contest: '',
                     create_time: '',
                     school: '',
@@ -368,6 +368,7 @@
             submitForm() {
                 if (this.formType === 0) {  // 添加记录
                     console.log("addUser:", this.form)
+                    this.form.contest_id = parseInt(this.form.contest_id, 10)
                     addEnroll(this.form).then(resp => {
                         console.log("addUser:", resp)
                         if(resp.code === 200) {
@@ -475,7 +476,10 @@
                     id: -1,
                     name: "",
                     username: '',
-                    team_id: '',
+                    team_id: 0,
+                    student_id: "",
+                    teacher_id: "",
+                    contest_id: 0,
                     contest: '',
                     create_time: '',
                     school: '',
