@@ -2,7 +2,8 @@
     <div class="common-layout">
         <el-container class="master-container">
             <!--<AppMenu/>-->
-          <el-header class="header"><el-affix><Navbar/></el-affix></el-header>
+          <!--<el-header class="header"><el-affix><Navbar/></el-affix></el-header>-->
+          <el-header class="header"><Navbar/></el-header>
             <el-container class="container">
               <el-aside class="aside" v-if="store.getters.sidebar.opened">
                   <AppMenu v-if="store.getters.roles.includes('manager')"/>
