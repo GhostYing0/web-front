@@ -94,16 +94,28 @@ const asyncRoutes = [
                 name:"成绩信息管理"
             },
             {
+                path: "/teacherDisplayEnrollDetail/:contest_id",
+                component: () => import("@/views/enroll/teacherViewEnroll/detail.vue"),
+                roles: ["teacher"],
+                name:"竞赛报名信息"
+            },
+            {
                 path: "/uploadGrade",
                 component: () => import("@/views/grade/teacherViewGrade/upload.vue"),
                 roles: ["teacher"],
                 name:"上传成绩竞赛信息"
             },
             {
-                path: "/uploadGradeDetail/:contest_id",
+                path: "/testtest/",
+                component: () => import("@/views/HelloWorld.vue"),
+                roles: ["teacher"],
+                name:"testtest"
+            },
+            {
+                path: "/uploadGradeDetailA/:contest_id",
                 component: () => import("@/views/grade/teacherViewGrade/detail.vue"),
                 roles: ["teacher"],
-                name:"上传成绩"
+                name:"上传成绩2"
             },
             {
                 path: "/teacherDisplayGradeDetail/:contest_id",
@@ -112,25 +124,13 @@ const asyncRoutes = [
                 name:"竞赛成绩信息"
             },
             {
-                path: "/teacherDisplayEnrollDetail/:contest_id",
-                component: () => import("@/views/enroll/teacherViewEnroll/detail.vue"),
-                roles: ["teacher"],
-                name:"竞赛报名信息"
-            },
-            {
                 path: "/doUploadGrade/:enroll_information_id",
                 component: () => import("@/views/grade/teacherViewGrade/doUploadGrade.vue"),
                 roles: ["teacher"],
                 name:"上传成绩"
             },
-            // {
-            //     path: "/doUploadGrade",
-            //     component: () => import("@/views/grade/teacherViewGrade/doUploadGrade.vue"),
-            //     roles: ["manager"],
-            //     name:"上传成绩"
-            // },
             {
-                path: "/UpdateGrade/:contest_id/:grade_id",
+                path: "/UpdateGrade1/:contest_id/:grade_id",
                 component: () => import("@/views/grade/teacherViewGrade/updateGrade.vue"),
                 roles: ["teacher","manager"],
                 name:"修改成绩"
@@ -139,7 +139,7 @@ const asyncRoutes = [
                 path: "/UpdateGrade/:grade_id",
                 component: () => import("@/views/grade/teacherViewGrade/updateGrade.vue"),
                 roles: ["teacher", "manager"],
-                name:"修改成绩"
+                name:"修改成绩1"
             },
             {
                 path: "/UpdateContest/:contest_id",
@@ -151,7 +151,7 @@ const asyncRoutes = [
                 path: "/departmentDisplayGrade",
                 component: () => import("@/views/grade/departmentDisplayGrade/index"),
                 roles: ["department_manager"],
-                name:"竞赛成绩信息"
+                name:"竞赛成绩信息1"
             },
             {
                 path: "/departmentDisplayGradeDetail/:contest_id",
@@ -163,7 +163,7 @@ const asyncRoutes = [
                 path: "/departmentDisplayEnroll",
                 component: () => import("@/views/enroll/departmentDisplayEnroll/index"),
                 roles: ["department_manager"],
-                name:"竞赛报名信息"
+                name:"竞赛报名信息1"
             },
             {
                 path: "/departmentDisplayEnrollDetail/:contest_id",
@@ -171,11 +171,6 @@ const asyncRoutes = [
                 roles: ["department_manager"],
                 name:"报名信息详情"
             },
-            // {
-            //     path: "/uploadGrade",
-            //     component: () => import("@/views/grade/indexUploadGrade"),
-            //     roles: ["student"]
-            // },
             {
                 path: "/searchGrade",
                 component: () => import("@/views/grade/indexSearchGrade"),
@@ -186,19 +181,19 @@ const asyncRoutes = [
                 path: "/processEnroll",
                 component: () => import("@/views/process/processEnroll"),
                 roles: ["teacher"],
-                name:"竞赛报名信息"
+                name:"竞赛报名信息2"
             },
             {
                 path: "/gradeDetail/:grade_id",
                 component: () => import("@/views/grade/gradeDetail"),
                 roles: ["student","teacher","department_manager", "manager"],
-                name:"成绩信息详情"
+                name:"成绩信息详情1"
             },
             {
                 path: "/processGrade",
                 component: () => import("@/views/process/processGrade"),
                 roles: ["teacher"],
-                name:"竞赛成绩信息"
+                name:"竞赛成绩信息2"
             },
             {
                 path: "/profile",
@@ -238,11 +233,6 @@ const asyncRoutes = [
                 roles: ["department_manager"],
                 name:"竞赛信息审核"
             },
-            // {
-            //     path:"/managerContestDetail/:contest_id",
-            //     component: () => import("@/views/contestManage/detail.vue"),
-            //     roles: ["manager"]
-            // },
             {
                 path:"/processContestDetail/:contest_id",
                 component: () => import("@/views/contestManage/contestProcess/detail.vue"),
@@ -311,25 +301,25 @@ const asyncRoutes = [
                         path:"/contestStatistic",
                         component: () => import("@/views/dataAnalysis/contest/index.vue"),
                         roles: ["department_manager"],
-                        name:"数据统计与分析",
+                        name:"数据统计与分析1",
                     },
                     {
                         path:"/contestTypeStatistic",
                         component: () => import("@/views/dataAnalysis/contestType/index.vue"),
                         roles: ["department_manager"],
-                        name:"数据统计与分析",
+                        name:"数据统计与分析2",
                     },
                     {
                         path:"/enrollStatistic",
                         component: () => import("@/views/dataAnalysis/enroll/index.vue"),
                         roles: ["department_manager"],
-                        name:"数据统计与分析",
+                        name:"数据统计与分析3",
                     },
                     {
                         path:"/schoolStatistic",
                         component: () => import("@/views/dataAnalysis/school/index.vue"),
                         roles: ["department_manager"],
-                        name:"数据统计与分析",
+                        name:"数据统计与分析4",
                     }
                 ]
             },

@@ -338,7 +338,7 @@ const form = reactive( {
 })
 
 const checkDetail = (row) => {
-  router.push(`/uploadGradeDetail/${row.id}`)
+  router.push(`/uploadGradeDetailA/${row.id}`)
   //propContestID.value = row.id
   // emit('showDetail', row.id)
   //router.push("contestDetail")

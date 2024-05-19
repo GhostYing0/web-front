@@ -362,7 +362,7 @@ const initOptions = async () => {
 }
 
 const UpdateGrade = (row) => {
-  route.value.push(`/UpdateGrade/${param.id}/${row.id}`)
+  route.value.push(`/UpdateGrade1/${param.id}/${row.id}`)
 }
 
 const handleRevoke = (row) => {

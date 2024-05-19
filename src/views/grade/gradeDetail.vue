@@ -105,7 +105,7 @@ const handleReturn = () => {
     router.push(`/SearchGrade`)
     return
   } else if(store.getters.roles.includes("teacher")) {
-    router.push(`/uploadGradeDetail/${form.contest_id}`)
+    router.push(`/uploadGradeDetailA/${form.contest_id}`)
     return
   } else if(store.getters.roles.includes("manager")) {
     router.back()

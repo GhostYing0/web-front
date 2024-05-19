@@ -432,7 +432,8 @@
   };
 
   const checkDetail = (row) => {
-    router.push(`teacherDisplayEnrollDetail/${row.id}`)
+    let contest_id = row.id
+    router.push(`/teacherDisplayEnrollDetail/${contest_id}`)
     // emit('showDetail', row.id)
     //router.push("contestDetail")
   }

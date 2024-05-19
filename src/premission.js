@@ -33,7 +33,7 @@ router.beforeEach(async(to, from, next) => {
                 if(to.path === "/dashboard") {
                     next("/contestInformationManager")
                 } else {
-                    console.log(to.path)
+                    console.log("path:", to.path)
                     next()
                 }
             } else {
@@ -55,10 +55,18 @@ router.beforeEach(async(to, from, next) => {
                     //console.log("accessedRoutes:", accessedRoutes)
                     //
                     // // dynamically add accessible routes
-                    router.addRoute(accessedRoutes)
+                    //router.addRoute(accessedRoutes)
                     accessedRoutes.forEach(route => {
+                        console.log("++++++++++++++++++++++++:", route)
                         router.addRoute(route)
+                        router.options.routes = store.getters.routes
                     })
+
+                    console.log("asdasdasdada:",router.getRoutes)
+                    /*const routes = router.getRoutes
+                    for (let route of routes) {  
+                        console.log("000:", route)
+                    } */ 
 
                     // hack method to ensure that addRoutes is complete
                     // set the replace: true, so the navigation will not leave a history record
@@ -93,3 +101,4 @@ router.afterEach(() => {
     // finish progress bar
     NProgress.done()
 })
+

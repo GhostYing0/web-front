@@ -146,7 +146,7 @@ const formPic = reactive({
 
 // 清除表单
 const handleReturn = () => {
-  router.push(`/uploadGradeDetail/${form.contest_id}`)
+  router.push(`/uploadGradeDetailA/${form.contest_id}`)
 };
 
 const handleRemove = () => {
