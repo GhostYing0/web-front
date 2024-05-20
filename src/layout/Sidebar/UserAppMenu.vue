@@ -50,7 +50,10 @@
                           <el-icon style="color: white"><location /></el-icon>
                           <span class="text">数据统计与分析</span>
                       </template>
-                      <el-menu-item class="menu-item" index="/analysis"><span class="text">进入</span></el-menu-item>
+<!--                      <el-menu-item class="menu-item" index="/analysis"><span class="text">进入</span></el-menu-item>-->
+                      <el-menu-item class="menu-item" index="/contestTypeStatistic"><span class="text">数据总览</span></el-menu-item>
+                      <el-menu-item class="menu-item" index="/contestStatistic"><span class="text">进入1</span></el-menu-item>
+                      <el-menu-item class="menu-item" index="/enrollStatistic"><span class="text">进入2</span></el-menu-item>
                     </el-sub-menu>
                 </el-menu>
             </div>

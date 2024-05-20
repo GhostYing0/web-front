@@ -1,15 +1,40 @@
-import { onMounted } from 'vue';
 <template>
+    <div style="display: flex; flex-direction: row; margin-left: auto; margin-right: auto">
+      <div class="statistic-slice">
+        <el-form-item>asd</el-form-item>
+        <el-form-item>asd</el-form-item>
+        <el-form-item>asd</el-form-item>
+      </div>
+      <div class="statistic-slice">
+        <el-form-item>as22d</el-form-item>
+        <el-form-item>11</el-form-item>
+        <el-form-item>as2d</el-form-item>
+      </div>
+    </div>
+    <div>
+    <div style="display: flex; flex-direction: row;">
+      <div class="year-selector">asd</div>
+      <div class="contest-selector">111</div>
+    </div>
+    <div style="display: flex; flex-direction: row;">
     <div
-    ref="testChart"
-    id="testChart"
-    :style="{ width: '800px', height: '400px' }"
-  ></div>
+      ref="testChart"
+      id="testChart"
+      class="main-table"
+    ></div>
+      <div style="display: flex; flex-direction: column; margin-left: auto; margin-right: auto">
+        <div class="cake-table"></div>
+        <div  class="cake-table"></div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import {onMounted, ref, reactive} from "vue"
 import * as echarts from 'echarts';
+// import YearCurrDepartStatistic from "@/views/dataAnalysis/contestType/yearCurrDepartStatistic.vue";
+// import YearStatistic from "@/views/dataAnalysis/contestType/yearStatistic.vue";
 
 const testChart = ref()
 
@@ -188,5 +213,54 @@ return  Chart
 onMounted(initChart)
 </script>
 
-<style>
+<style lang="scss">
+.year-selector {
+  border: black 1px solid;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px grey;
+  height: 40px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 1vw;
+  width: 120px;
+}
+.contest-selector {
+  border: black 1px solid;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px grey;
+  height: 40px;
+  margin-left: 1vw;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 645px;
+  width: 330px;
+}
+.statistic-slice {
+  display: flex;
+  flex-direction: row;
+  border: black 1px solid;
+  border-radius: 5px;
+  width: 38vw;
+  height: 10vh;
+  box-shadow: 1px 1px 1px grey;
+  margin-left: auto;
+  margin-right: auto;
+}
+.main-table {
+  border: black 1px solid;
+  border-radius: 5px;
+  margin-left: 1vw;
+  box-shadow: 1px 1px 1px grey;
+  width: 750px;
+  height: 550px;
+}
+.cake-table{
+  border: black 1px solid;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px grey;
+  height: 270px;
+  width: 330px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
 </style>

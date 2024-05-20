@@ -17,19 +17,28 @@
            <p>使用高校学科竞赛信息管理系统</p>
          </p>
          <p class="dashtext" v-else>欢迎使用高校学科竞赛信息管理系统</p>
-         <div><Statistic/></div>
+         <div v-if="this.$store.getters.roles.includes('student')"><StudentStatistic/></div>
+          <div v-if="this.$store.getters.roles.includes('teacher')"><TeacherStatistic/></div>
+          <div v-if="this.$store.getters.roles.includes('department_manager')"><DepartmentManagerStatistic/></div>
+          <div v-if="this.$store.getters.roles.includes('manager')"><ManagerStatistic/></div>
         <el-button type="success" @click="visit" class="dashboard-button" v-if="this.$store.getters.roles.length === 0">进入系统</el-button>
 </template>
 
 <script>
     import {router} from '../../router'
     import {store} from "@/store";
-    import Statistic from "./statistic"
+    import StudentStatistic from "./student_statistic.vue"
+    import TeacherStatistic from "./teacher_statistic.vue"
+    import DepartmentManagerStatistic from "./department_statistic.vue"
+    import ManagerStatistic from "./manager_statistic.vue"
     export default {
         name: "DashBoard",
         components: {  
-          // 局部注册Statistic组件  
-          Statistic  
+          // 局部注册Statistic组件
+          StudentStatistic,
+          TeacherStatistic,
+          DepartmentManagerStatistic,
+          ManagerStatistic
         },
 
         methods: {

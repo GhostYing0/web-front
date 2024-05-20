@@ -291,12 +291,12 @@ const asyncRoutes = [
                 roles: ["teacher"],
                 name:"成绩信息预览"
             },
-            {
-                path:"/analysis",
-                component: () => import("@/views/dataAnalysis/index.vue"),
-                roles: ["department_manager"],
-                name:"数据统计与分析",
-                children : [
+            //{
+                // path:"/analysis",
+                // component: () => import("@/views/dataAnalysis/index.vue"),
+                // roles: ["department_manager"],
+                // name:"数据统计与分析",
+                // children : [
                     {
                         path:"/contestStatistic",
                         component: () => import("@/views/dataAnalysis/contest/index.vue"),
@@ -321,8 +321,8 @@ const asyncRoutes = [
                         roles: ["department_manager"],
                         name:"数据统计与分析4",
                     }
-                ]
-            },
+                //]
+            //},
         ]
     }
 ];
