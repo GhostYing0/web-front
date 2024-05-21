@@ -297,7 +297,7 @@ const actions = {
                         reject("验证失败，请重新登录")
                     }
 
-                    const {name, gender, school, college, avatar, phone, email} = data
+                    const {name, gender, school, college, avatar, phone, email, department} = data
 
                     commit('SET_NAME', name)
                     commit('SET_GENDER', gender)
@@ -305,6 +305,7 @@ const actions = {
                     commit('SET_COLLEGE', college)
                     commit('SET_AVATAR', avatar)
                     commit('SET_PHONE', phone)
+                    commit('SET_DEPARTMENT', department)
                     commit('SET_EMAIL', email)
 
                     resolve(data)

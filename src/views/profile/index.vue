@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-avatar size="large"
+    <el-avatar style="width: 200px; height: 200px"
         :src=avatar
                v-if="!store.getters.roles.includes('department_manager')"
     />
@@ -108,7 +108,7 @@
         </template>
         <el-text v-text=student_class></el-text>
       </el-descriptions-item>
-    <el-descriptions-item v-if="store.getters.roles.includes('department_manager')">
+    <el-descriptions-item v-if="store.getters.roles.includes('department_manager') || store.getters.roles.includes('teacher')">
       <template #label>
         <div class="cell-item">
           <el-icon :style="iconStyle">

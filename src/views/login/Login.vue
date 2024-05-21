@@ -168,6 +168,13 @@
         border-left: 1px solid;
         flex: 4;
 
+        .title-container{
+            .title {
+              margin-left: auto;
+              margin-right: auto;
+            }
+          }
+
         .login-input {
           margin-left: 20px;
           width: 275px;

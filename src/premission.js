@@ -20,9 +20,9 @@ router.beforeEach(async(to, from, next) => {
 
     console.log(to.path)
     if (hasToken) {
-        if (to.path === '/login' || to.path === "/register") {
+        if (to.path === '/login' || to.path === "/register" || to.path === '/login/') {
             console.log("您已登录")
-            next("/contestInformationManager");
+            next("/dashboard");
             NProgress.done()
         } else {
             console.log("你有令牌访问其他网页,还需要写身份验证")
@@ -87,6 +87,9 @@ router.beforeEach(async(to, from, next) => {
         if (whiteList.indexOf(to.path) !== -1) {
             console.log(to.path)
             // 访问白名单网页，直接跳转S
+            if(to.path === "/dashboard") {
+                next("/login")
+            }
             next()
         } else {
             console.log(to.path)

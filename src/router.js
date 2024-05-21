@@ -106,16 +106,10 @@ const asyncRoutes = [
                 name:"上传成绩竞赛信息"
             },
             {
-                path: "/testtest/",
-                component: () => import("@/views/HelloWorld.vue"),
-                roles: ["teacher"],
-                name:"testtest"
-            },
-            {
                 path: "/uploadGradeDetailA/:contest_id",
                 component: () => import("@/views/grade/teacherViewGrade/detail.vue"),
                 roles: ["teacher"],
-                name:"上传成绩2"
+                name:"上传成绩报名表"
             },
             {
                 path: "/teacherDisplayGradeDetail/:contest_id",
@@ -151,7 +145,7 @@ const asyncRoutes = [
                 path: "/departmentDisplayGrade",
                 component: () => import("@/views/grade/departmentDisplayGrade/index"),
                 roles: ["department_manager"],
-                name:"竞赛成绩信息1"
+                name:"竞赛获奖情况"
             },
             {
                 path: "/departmentDisplayGradeDetail/:contest_id",
@@ -163,7 +157,7 @@ const asyncRoutes = [
                 path: "/departmentDisplayEnroll",
                 component: () => import("@/views/enroll/departmentDisplayEnroll/index"),
                 roles: ["department_manager"],
-                name:"竞赛报名信息1"
+                name:"竞赛报名情况"
             },
             {
                 path: "/departmentDisplayEnrollDetail/:contest_id",
@@ -307,7 +301,7 @@ const asyncRoutes = [
                         path:"/contestTypeStatistic",
                         component: () => import("@/views/dataAnalysis/contestType/index.vue"),
                         roles: ["department_manager"],
-                        name:"数据统计与分析2",
+                        name:"数据统计与分析",
                     },
                     {
                         path:"/enrollStatistic",

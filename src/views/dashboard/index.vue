@@ -1,6 +1,6 @@
 <template>
          <p class="dashtext" v-if="this.$store.getters.roles.includes('department_manager')">
-           <p>欢迎系部管理员{{this.$store.getters.name}}</p>
+           <p>欢迎{{this.$store.getters.department}}系部管理员{{this.$store.getters.name}}</p>
            <p>使用高校学科竞赛信息管理系统</p>
          </p>
          <p class="dashtext" v-else-if="this.$store.getters.roles.includes('student')">
@@ -12,15 +12,14 @@
            <p>使用高校学科竞赛信息管理系统</p>
          </p>
          <p class="dashtext" v-else-if="this.$store.getters.roles.includes('manager')">
-           <p>欢迎系统管理员</p>
-           <p>{{this.$store.getters.username}}</p>
+           <p>欢迎系统管理员{{this.$store.getters.username}}</p>
            <p>使用高校学科竞赛信息管理系统</p>
          </p>
          <p class="dashtext" v-else>欢迎使用高校学科竞赛信息管理系统</p>
-         <div v-if="this.$store.getters.roles.includes('student')"><StudentStatistic/></div>
-          <div v-if="this.$store.getters.roles.includes('teacher')"><TeacherStatistic/></div>
-          <div v-if="this.$store.getters.roles.includes('department_manager')"><DepartmentManagerStatistic/></div>
-          <div v-if="this.$store.getters.roles.includes('manager')"><ManagerStatistic/></div>
+  <div v-if="this.$store.getters.roles.includes('student')" style="margin-top: 100px"><span style="font-size: 30px">网站信息概述</span><StudentStatistic/></div>
+          <div v-if="this.$store.getters.roles.includes('teacher')" style="margin-top: 100px"><span style="font-size: 30px">网站信息概述</span><TeacherStatistic/></div>
+          <div v-if="this.$store.getters.roles.includes('department_manager')" style="margin-top: 100px"><span style="font-size: 30px">网站信息概述</span><DepartmentManagerStatistic/></div>
+          <div v-if="this.$store.getters.roles.includes('manager')" style="margin-top: 100px"><span style="font-size: 30px">网站信息概述</span><ManagerStatistic/></div>
         <el-button type="success" @click="visit" class="dashboard-button" v-if="this.$store.getters.roles.length === 0">进入系统</el-button>
 </template>
 
@@ -57,6 +56,7 @@
 
 }
 .dashtext{
-    font-size: 50px;
+  margin-top: 100px;
+    font-size: 40px;
 }
 </style>

@@ -15,6 +15,13 @@ export function preTypeEnrollCountOfPerYear() {
     })
 }
 
+export function preLevelEnrollCountOfPerYear() {
+    return request({
+        url: '/preLevelEnrollCountOfPerYear',
+        method: 'get',
+    })
+}
+
 export function compareEnrollCount() {
     return request({
         url: '/compareEnrollCount',

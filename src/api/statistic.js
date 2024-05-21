@@ -27,3 +27,11 @@ export function managerStatistic() {
         method: "get"
     })
 }
+
+export function statisticSlice(param) {
+    return request({
+        url: "/statistic_slice",
+        method: "get",
+        params: param
+    })
+}
