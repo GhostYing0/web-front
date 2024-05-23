@@ -218,6 +218,10 @@ const initOptions = async () => {
   })
   getContestEntry().then(resp => {
     try {
+      entryOptions.value.push({
+        value: 0,
+        label: "无所属项目",
+      })
       resp.data.forEach(unit => {
         console.log(unit.type)
         entryOptions.value.push({

@@ -130,7 +130,7 @@ const contest_type_item = ref()
 const time_range = ref([])
 
 const form = reactive({
-  contest_entry: 0,
+  contest_entry_id: 0,
   contest: "",
   contest_level_id: 0,
   is_group: 0,
@@ -206,6 +206,10 @@ const initOptions = async () => {
   })
   getContestEntry().then(resp => {
     try {
+      entryOptions.value.push({
+        value: 0,
+        label: "无所属项目",
+      })
       resp.data.forEach(unit => {
         console.log(unit.type)
         entryOptions.value.push({
@@ -220,7 +224,7 @@ const initOptions = async () => {
 }
 
 const handleEntry = () => {
-  form.contest_entry = contest_entry_item.value[0]}
+  form.contest_entry_id = contest_entry_item.value[0]}
 
 const handleTime = () => {
   form.enroll_time = time_range.value[0]
@@ -253,7 +257,7 @@ const GetContestByID = () => {
         form.desc=resp.data.list[0].desc
         form.ps=resp.data.list[0].ps
         form.state = resp.data.list[0].state
-        form.contest_entry = resp.data.list[0].contest_entry
+        form.contest_entry_id = resp.data.list[0].contest_entry_id
         form.reject_reason = resp.data.list[0].reject_reason
         contest_entry_item.value = resp.data.list[0].contest_entry_id
         contest_type_item.value = resp.data.list[0].contest_type

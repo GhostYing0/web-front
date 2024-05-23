@@ -320,7 +320,7 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="270px" type="index">
             <template #default="{ row, $index }">
-              <el-button v-if="row.state === 3" @click="DoUpdate(row)" type="primary" size="small">编辑</el-button>
+              <el-button v-if="row.state !== 1" @click="DoUpdate(row)" type="primary" size="small">编辑</el-button>
               <el-button v-else type="primary" size="small" disabled>编辑</el-button>
               <template v-if="row.state === 1">
                 <el-button v-if="row.contest_state === 1" size="small" @click="transformContestState(row)" type="warning">关闭报名</el-button>
@@ -329,7 +329,7 @@
               <template v-else>
                 <el-button size="small"  type="success" disabled>打开报名</el-button>
               </template>
-              <el-button v-if="row.state === 3" @click="DoUpdate(row)" type="danger" size="small">撤销</el-button>
+              <el-button v-if="row.state === 3" @click="handleRevoke(row, $index)" type="warning" size="small">撤销</el-button>
               <el-button v-else  type="danger" size="small" disabled>撤销</el-button>
 
             </template>
