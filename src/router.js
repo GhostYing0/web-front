@@ -24,7 +24,7 @@ const asyncRoutes = [
             {
                 path: "/studentEnrollDetail/:enroll_information_id",
                 component: () => import("@/views/enroll/studentEnrollDetail.vue"),
-                roles: ["student", "manager"],
+                roles: ["student", "manager", "teacher"],
                 name:"报名详情"
             },
             {
@@ -181,7 +181,7 @@ const asyncRoutes = [
                 path: "/gradeDetail/:grade_id",
                 component: () => import("@/views/grade/gradeDetail"),
                 roles: ["student","teacher","department_manager", "manager"],
-                name:"成绩信息详情1"
+                name:"上传成绩信息详情"
             },
             {
                 path: "/processGrade",

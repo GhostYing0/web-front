@@ -427,10 +427,6 @@ const handleRecover = (row, index) => {
       }
     })
   }).catch(() => {
-    ElMessage({
-      type: 'error',
-      message: '删除失败',
-    })
   })
 }
 

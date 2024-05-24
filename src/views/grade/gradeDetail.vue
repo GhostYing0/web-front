@@ -58,6 +58,9 @@
 
         </el-image>
       </el-form-item>
+      <el-form-item label="驳回原因" v-if="form.state === 2">
+        <el-input v-model="form.reject_reason" disabled  style="max-width: 300px"/>
+      </el-form-item>
       <el-form-item>
         <el-button class="doUploadGrade-button" type="primary" @click="handleReturn()">返回</el-button>
       </el-form-item>
@@ -93,6 +96,8 @@ const form = reactive({
   title: "",
   prize: "",
   college: "",
+  state: -1,
+  reject_reason: "",
   certificate: "",
 })
 
@@ -101,18 +106,19 @@ const param = reactive({
 })
 
 const handleReturn = () => {
-  if(store.getters.roles.includes("student")) {
-    router.push(`/SearchGrade`)
-    return
-  } else if(store.getters.roles.includes("teacher")) {
-    router.push(`/uploadGradeDetailA/${form.contest_id}`)
-    return
-  } else if(store.getters.roles.includes("manager")) {
-    router.back()
-  } else if(store.getters.roles.includes("department_manager")) {
-    router.back()
-    return
-  }
+  router.back()
+  // if(store.getters.roles.includes("student")) {
+  //   router.push(`/SearchGrade`)
+  //   return
+  // } else if(store.getters.roles.includes("teacher")) {
+  //   router.push(`/uploadGradeDetailA/${form.contest_id}`)
+  //   return
+  // } else if(store.getters.roles.includes("manager")) {
+  //   router.back()
+  // } else if(store.getters.roles.includes("department_manager")) {
+  //   router.back()
+  //   return
+  // }
 };
 
 const handleGetGrade = async () => {
@@ -137,6 +143,8 @@ const handleGetGrade = async () => {
       form.contest_id = resp.data.list[0].contest_id
       form.prize = resp.data.list[0].grade
       form.certificate = resp.data.list[0].certificate
+      form.state = resp.data.list[0].state
+      form.reject_reason = resp.data.list[0].reject_reason
       form.reward_time = resp.data.list[0].reward_time
     }
   })

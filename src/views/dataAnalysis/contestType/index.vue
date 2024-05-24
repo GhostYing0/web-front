@@ -343,9 +343,9 @@ return  Chart
 
 
 const contestOptions = ref([])
-const contest = ref("")
+const contest = ref([])
 const param = reactive({
-  contest: "演讲竞赛",
+  contest: "",
   year: ref(new Date().getFullYear()),
 })
 
@@ -394,6 +394,10 @@ const getContestAndType = () => {
       let value = contestType[key]
       contestOptions.value.push(value)
     }
+/*    contest.value[0] = contestOptions.value[0].value
+    contest.value[1] = contestOptions.value[0].children[0].value
+    param.contest = contest.value[1]
+    console.log("############", contest.value)*/
   }).catch(error => {
     console.error(error)
   })
@@ -401,11 +405,13 @@ const getContestAndType = () => {
 
 const initStudentContestSemesterChartData = () => {
   studentContestSemester(param).then(resp => {
-    console.log(resp)
-    let data = resp.data.data
-    data.forEach(element => {
-      SemesterCountData.value.push( { value: element.enroll_count, name: element.semester },)
-    })
+    if(resp.data.data) {
+      console.log(resp)
+      let data = resp.data.data
+      data.forEach(element => {
+        SemesterCountData.value.push({value: element.enroll_count, name: element.semester},)
+      })
+    }
     initStudentContestSemesterChart()
   }).catch(error => {
     console.error(error)
@@ -463,25 +469,27 @@ const initStudentContestSemesterChart = () => {
 
 const initRewardRateChartData = () => {
   studentRewardRate(param).then(resp => {
-    console.log(resp)
-    rewardRateChartRate["rate"] = resp.data.rate
-    /*if(resp.data.reward_count > 0) {
+    if(resp) {
+      console.log("adssadasdasd:", resp)
+      rewardRateChartRate["rate"] = resp.data.rate
+      /*if(resp.data.reward_count > 0) {
       rewardRateChartData.value.push({value: resp.data.reward_count, name: "获奖"})
     }*/
-    if(resp.data.prize1 > 0) {
-      rewardRateChartData.value.push({value: resp.data.reward_count, name: "特等奖"})
-    }
-    if(resp.data.prize2 > 0) {
-      rewardRateChartData.value.push({value: resp.data.reward_count, name: "一等奖"})
-    }
-    if(resp.data.prize3 > 0) {
-      rewardRateChartData.value.push({value: resp.data.reward_count, name: "二等奖"})
-    }
-    if(resp.data.prize4 > 0) {
-      rewardRateChartData.value.push({value: resp.data.reward_count, name: "三等奖"})
-    }
-    if(resp.data.enroll_count - resp.data.reward_count > 0) {
-      rewardRateChartData.value.push({value: resp.data.enroll_count - resp.data.reward_count, name: "未获奖"})
+      if (resp.data.prize1 > 0) {
+        rewardRateChartData.value.push({value: resp.data.reward_count, name: "特等奖"})
+      }
+      if (resp.data.prize2 > 0) {
+        rewardRateChartData.value.push({value: resp.data.reward_count, name: "一等奖"})
+      }
+      if (resp.data.prize3 > 0) {
+        rewardRateChartData.value.push({value: resp.data.reward_count, name: "二等奖"})
+      }
+      if (resp.data.prize4 > 0) {
+        rewardRateChartData.value.push({value: resp.data.reward_count, name: "三等奖"})
+      }
+      if (resp.data.enroll_count - resp.data.reward_count > 0) {
+        rewardRateChartData.value.push({value: resp.data.enroll_count - resp.data.reward_count, name: "未获奖"})
+      }
     }
     initRewardRateChart()
   }).catch(error => {

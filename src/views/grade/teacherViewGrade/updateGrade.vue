@@ -1,17 +1,22 @@
 <template>
   <div>
-    <el-form class="form-container" :model="information" label-width="auto">
-      <el-tag class="form-tag" v-if="information.state === 3" type="primary">审核中</el-tag>
-      <el-tag class="form-tag" v-else-if="information.state === 2" type="danger">未通过</el-tag>
-      <el-tag class="form-tag" v-else-if="information.state === 1" type="success">通过</el-tag>
-      <el-tag class="form-tag" v-else-if="information.state === 4" type="warning">被撤回</el-tag>
+    <el-form :model="information" label-width="auto" style="max-width: 800px">
+      <el-form-item style="margin-left: 40px">
+        <el-tag class="form-tag" v-if="information.state === 3" type="primary">审核中</el-tag>
+        <el-tag class="form-tag" v-else-if="information.state === 2" type="danger">未通过</el-tag>
+        <el-tag class="form-tag" v-else-if="information.state === 1" type="success">通过</el-tag>
+        <el-tag class="form-tag" v-else-if="information.state === 4" type="warning">被撤回</el-tag>
+      </el-form-item>
       <el-form-item v-if= "store.getters.roles.includes('manager')" label="修改审核状态" prop="role" class="filter-check">
         <el-radio v-model="form.state" :label="1" >通过</el-radio>
         <el-radio v-model="form.state" :label="2" >未通过</el-radio>
         <el-radio v-model="form.state" :label="3" >审核中</el-radio>
         <el-radio v-model="form.state" :label="4" >已撤回</el-radio>
       </el-form-item>
-      <div class="form-item-group">
+      <el-form-item label="驳回原因" v-if="information.state === 2">
+        <el-input v-model="information.reject_reason" disabled style="max-width: 400px"/>
+      </el-form-item>
+      <div class="contest-form">
       <el-form-item class="form-item" label="竞赛名称">
         <el-input v-model="information.contest" disabled />
       </el-form-item>
@@ -24,35 +29,35 @@
       </div>
       <div class="form-item-group">
       <el-form-item class="form-item" label="所属队伍" v-if="information.is_group === 1">
-        <el-input v-model="information.team_name" />
+        <el-input v-model="information.team_name" style="max-width: 200px"/>
       </el-form-item>
       <el-form-item class="form-item" label="学生姓名">
-        <el-input v-model="information.name" disabled />
+        <el-input v-model="information.name" disabled style="max-width: 200px"/>
       </el-form-item>
       <el-form-item class="form-item" label="学生所属学院">
-        <el-input v-model="information.college" disabled />
+        <el-input v-model="information.college" disabled style="max-width: 200px"/>
       </el-form-item>
       </div>
       <div class="form-item-group">
       <el-form-item class="form-item" label="学生专业">
-        <el-input v-model="information.major" disabled />
+        <el-input v-model="information.major" disabled style="max-width: 200px"/>
       </el-form-item>
       <el-form-item class="form-item" label="学号">
-        <el-input v-model="information.student_school_id" disabled />
+        <el-input v-model="information.student_school_id" disabled style="max-width: 200px"/>
       </el-form-item>
       <el-form-item class="form-item" label="班级">
-        <el-input v-model="information.student_class" disabled/>
+        <el-input v-model="information.student_class" disabled style="max-width: 200px"/>
       </el-form-item>
       </div>
       <div class="form-item-group">
       <el-form-item class="form-item" label="指导教师姓名">
-        <el-input v-model="form.guidance_teacher" />
+        <el-input v-model="form.guidance_teacher" style="max-width: 200px"/>
       </el-form-item>
       <el-form-item class="form-item" label="指导教师所在系">
-        <el-input v-model="form.department" />
+        <el-input v-model="form.department" style="max-width: 200px"/>
       </el-form-item>
       <el-form-item class="form-item" label="指导教师职称">
-        <el-input v-model="form.title" />
+        <el-input v-model="form.title" style="max-width: 200px"/>
       </el-form-item>
       </div>
       <el-form-item label="获奖等级" prop="role" class="filter-check">
@@ -90,9 +95,6 @@
             </div>
           </template>
         </el-upload>
-      </el-form-item>
-      <el-form-item label="驳回原因" v-if="information.state === 2">
-        <el-input v-model="information.reject_reason" disabled />
       </el-form-item>
       <div class="form-button-container">
         <el-button class="form-button" @click="returnDesktop()" type="info" size="small" >返回</el-button>

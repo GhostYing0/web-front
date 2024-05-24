@@ -509,6 +509,7 @@
                     page_number: 1,
                     page_size: 10,
                     username: '',
+                    is_group: 2,
                     team_id: '',
                     contest_name: '',
                     start_time: '',

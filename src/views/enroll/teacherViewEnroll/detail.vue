@@ -6,6 +6,7 @@
         <el-input v-model="param.major" placeholder="搜索专业" class="filter-item" @keyup.enter="handleFilter" />
         <el-input v-model="param.student_class" placeholder="搜索班级" class="filter-item" @keyup.enter="handleFilter" />
         <el-input v-model="param.team_name" placeholder="搜索队伍名" class="filter-item" @keyup.enter="handleFilter" />
+        <el-input v-model="param.teacher" placeholder="搜索指导教师" class="filter-item" @keyup.enter="handleFilter" />
         <div class="filter-button-container">
           <el-button class="filter-button" type="primary"  @click="handleFilter">
             搜索
@@ -96,14 +97,19 @@
           label="班级"
           show-overflow-tooltip>
       </el-table-column>
+<!--      <el-table-column-->
+<!--          prop="phone"-->
+<!--          label="电话"-->
+<!--          show-overflow-tooltip>-->
+<!--      </el-table-column>-->
+<!--      <el-table-column-->
+<!--          prop="email"-->
+<!--          label="邮箱"-->
+<!--          show-overflow-tooltip>-->
+<!--      </el-table-column>-->
       <el-table-column
-          prop="phone"
-          label="电话"
-          show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-          prop="email"
-          label="邮箱"
+          prop="teacher_name"
+          label="指导教师"
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -121,11 +127,11 @@
           <el-tag v-else-if="row.state === 2" type="danger">未通过</el-tag>
         </template>
       </el-table-column>
-<!--      <el-table-column fixed="right" label="操作" width="150" type="index">-->
-<!--        <template #default="{ row, $index}">-->
-<!--          <el-button @click="handleProcess(row, $index)" type="primary" size="small">重新审核</el-button>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
+      <el-table-column fixed="right" label="操作" width="150" type="index">
+        <template #default="{ row}">
+          <el-button @click="CheckDetail(row)" type="primary" size="small">详情</el-button>
+        </template>
+      </el-table-column>
     </el-table-column>
   </el-table>
 
@@ -230,6 +236,7 @@ const param = reactive( {
   page_number: 1,
   page_size: 10,
   contest: '',
+  teacher: "",
   type: '',
   start_time: '',
   end_time: '',
@@ -255,6 +262,12 @@ const form = reactive( {
   name: "",
   state: 1
 })
+
+
+const CheckDetail = (row) => {
+  router.push(`/studentEnrollDetail/${row.id}`)
+}
+
 
 // 搜索
 const handleFilter = () => {
@@ -306,6 +319,7 @@ const handleShowContest = async () => {
   param.name = ""
   param.team_name = ""
   item.value = ""
+  param.teacher = ""
   await teacherSearchEnroll(param).then(resp => {
     console.log(resp)
     if(resp.code === 200) {
