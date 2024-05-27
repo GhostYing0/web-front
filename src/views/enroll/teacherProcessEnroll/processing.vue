@@ -97,8 +97,8 @@
               show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-              prop="college"
-              label="所属学院"
+              prop="major"
+              label="专业"
               show-overflow-tooltip>
           </el-table-column>
           <el-table-column

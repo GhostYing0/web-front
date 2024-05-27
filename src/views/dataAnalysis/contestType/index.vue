@@ -476,16 +476,16 @@ const initRewardRateChartData = () => {
       rewardRateChartData.value.push({value: resp.data.reward_count, name: "获奖"})
     }*/
       if (resp.data.prize1 > 0) {
-        rewardRateChartData.value.push({value: resp.data.reward_count, name: "特等奖"})
+        rewardRateChartData.value.push({value: resp.data.prize1, name: "特等奖"})
       }
       if (resp.data.prize2 > 0) {
-        rewardRateChartData.value.push({value: resp.data.reward_count, name: "一等奖"})
+        rewardRateChartData.value.push({value: resp.data.prize2, name: "一等奖"})
       }
       if (resp.data.prize3 > 0) {
-        rewardRateChartData.value.push({value: resp.data.reward_count, name: "二等奖"})
+        rewardRateChartData.value.push({value: resp.data.prize3, name: "二等奖"})
       }
       if (resp.data.prize4 > 0) {
-        rewardRateChartData.value.push({value: resp.data.reward_count, name: "三等奖"})
+        rewardRateChartData.value.push({value: resp.data.prize4, name: "三等奖"})
       }
       if (resp.data.enroll_count - resp.data.reward_count > 0) {
         rewardRateChartData.value.push({value: resp.data.enroll_count - resp.data.reward_count, name: "未获奖"})
