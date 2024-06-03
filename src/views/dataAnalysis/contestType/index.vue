@@ -951,7 +951,7 @@ onMounted(initRewardRateChartData)
   margin-left: 15px;
   margin-top: 5px;
   margin-bottom: 5px;
-  width: 330px;
+  width: 360px;
   .contest-selector {
     width: 300px;
     margin-top: 5px;
@@ -1005,7 +1005,7 @@ onMounted(initRewardRateChartData)
   border-radius: 5px;
   box-shadow: 1px 1px 1px grey;
   height: 270px;
-  width: 330px;
+  width: 360px;
   margin-top: auto;
   margin-bottom: auto;
   .chart-title {

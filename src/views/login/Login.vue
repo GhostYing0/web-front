@@ -64,6 +64,7 @@
     // import request from '../../http/axios';
     // import {login, getUser, state} from "../../store/manger"
     import { getToken } from '@/utils/auth'
+    import {ElMessage} from "element-plus";
     export default {
         name: 'UserLogin',
 
@@ -113,13 +114,20 @@
                                 console.log("data:", data)
 
                                 const redirect = this.$route.query.redirect || '/dashboard';
-
+                                ElMessage({
+                                  message: "登陆成功",
+                                  type: 'success'
+                                })
                                 // 登录成功后跳转到登录前的页面
                                 this.$router.push(redirect);
 
 
                             }).catch((error) => {
                                 console.error("error:", error)
+                                ElMessage({
+                                  message: error,
+                                  type: 'error'
+                                })
                                 this.loading = false
                             })
                         } else {

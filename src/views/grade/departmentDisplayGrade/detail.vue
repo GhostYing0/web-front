@@ -44,7 +44,7 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
   >
-    <el-table-column label="报名审核表">
+    <el-table-column label="成绩信息表">
       <el-table-column
           fixed
           prop="id"

@@ -140,7 +140,7 @@
             show-overflow-tooltip>
         </el-table-column>
       <el-table-column
-          prop="class"
+          prop="student_class"
           label="班级"
           show-overflow-tooltip>
       </el-table-column>

@@ -75,38 +75,43 @@
           <el-table-column
               prop="contest"
               label="竞赛名称"
+              width="160"
               show-overflow-tooltip>
           </el-table-column>
           <el-table-column
               prop="contest_type"
               label="竞赛类型"
-              width="55"
+              width="90"
               show-overflow-tooltip>
           </el-table-column>
           <el-table-column
               prop="contest_level"
               label="竞赛级别"
-              width="55"
+              width="90"
               show-overflow-tooltip>
           </el-table-column>
           <el-table-column
               prop="start_time"
               label="开赛时间"
+              width="160"
               show-overflow-tooltip>
           </el-table-column>
           <el-table-column
               prop="enroll_time"
               label="报名开始时间"
+              width="160"
               show-overflow-tooltip>
           </el-table-column>
           <el-table-column
               prop="deadline"
               label="报名截至时间"
+              width="160"
               show-overflow-tooltip>
           </el-table-column>
           <el-table-column
               prop="state"
               label="审核状态"
+              width="82"
               show-overflow-tooltip>
             <template #default="{ row }">
               <el-tooltip
@@ -120,15 +125,15 @@
               <el-tag v-else-if="row.state === 1" type="success">通过</el-tag>
             </template>
           </el-table-column>
-          <el-table-column
-              prop="contest_state"
-              label="报名状态"
-              show-overflow-tooltip>
-            <template #default="{ row }">
-              <el-tag v-if="row.contest_state === 1" type="success" size="small">可报名</el-tag>
-              <el-tag v-else type="info" size="small">不可报名</el-tag>
-            </template>
-          </el-table-column>
+<!--          <el-table-column-->
+<!--              prop="contest_state"-->
+<!--              label="报名状态"-->
+<!--              show-overflow-tooltip>-->
+<!--            <template #default="{ row }">-->
+<!--              <el-tag v-if="row.contest_state === 1" type="success" size="small">可报名</el-tag>-->
+<!--              <el-tag v-else type="info" size="small">不可报名</el-tag>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
           <el-table-column
               prop="reject_reason"
               label="驳回原因"
@@ -144,7 +149,7 @@
               <el-button v-else type="info" size="small" disabled>不可报名</el-button>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="150" type="index">
+          <el-table-column fixed="right" label="操作" width="150" type="index" >
             <template #default="{ row, $index}">
               <el-button v-if="row.state === 3" @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>
               <el-button  v-if="row.state === 3" @click="writeRejectReason(row, $index)" type="danger" size="small">驳回</el-button>
@@ -301,16 +306,16 @@
               label="驳回原因"
               show-overflow-tooltip>
           </el-table-column>
-          <el-table-column
-              prop="contest_state"
-              label="报名"
-              show-overflow-tooltip
-              v-if="store.getters.roles.includes('student')">
-            <template #default="{ row }">
-              <el-button v-if="row.contest_state === 1" @click="handleEnroll(row)" type="success" size="small">点击报名</el-button>
-              <el-button v-else type="info" size="small" disabled>不可报名</el-button>
-            </template>
-          </el-table-column>
+<!--          <el-table-column-->
+<!--              prop="contest_state"-->
+<!--              label="报名"-->
+<!--              show-overflow-tooltip-->
+<!--              v-if="store.getters.roles.includes('student')">-->
+<!--            <template #default="{ row }">-->
+<!--              <el-button v-if="row.contest_state === 1" @click="handleEnroll(row)" type="success" size="small">点击报名</el-button>-->
+<!--              <el-button v-else type="info" size="small" disabled>不可报名</el-button>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
           <el-table-column fixed="right" label="操作" width="150" type="index">
             <template #default="{ row, $index}">
               <el-button @click="handlePass(row, $index)" type="primary" size="small">通过</el-button>

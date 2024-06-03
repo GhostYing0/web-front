@@ -383,7 +383,7 @@
                     contest: '',
                     start_time: '',
                     end_time: '',
-                    state: -1,
+                    state: 1,
                     contest_level: -1,
                     is_group: 2,
                 },
@@ -478,10 +478,15 @@
                     school: '',
                     phone: '',
                     email: '',
-                    state: -1,
+                    state: 1,
                   contest_level: -1,
                   grade: -1,
                 }
+              if(this.activeName === "first") {
+                this.param.is_group = 2
+              } else if(this.activeName === "second") {
+                this.param.is_group = 1
+              }
                 searchGrade(this.param).then(resp => {
                     console.log(resp)
                     if (resp.code === 200) {

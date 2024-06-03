@@ -7,10 +7,10 @@
         <el-descriptions-item width="10vw" label="竞赛类型">{{form.contest_type}}</el-descriptions-item>
         <el-descriptions-item width="10vw" label="竞赛级别">{{form.contest_level}}</el-descriptions-item>
         <el-descriptions-item width="10vw" label="参与形式">
-          <template v-if="form.is_group === 2">组队赛</template>
+          <template v-if="form.is_group === 1">组队赛</template>
           <template v-else>单人赛</template>
         </el-descriptions-item>
-        <el-descriptions-item width="10vw" label="队伍最大人数" v-if="form.is_group === 2">
+        <el-descriptions-item width="10vw" label="队伍最大人数" v-if="form.is_group === 1">
           {{form.max_group_number}}人
         </el-descriptions-item>
       </el-descriptions>

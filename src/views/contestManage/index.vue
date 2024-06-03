@@ -142,10 +142,13 @@
                 width="55">
         </el-table-column>
         <el-table-column
-            width="100"
+            width="120"
             prop="contest_entry"
             label="竞赛所属项目"
             show-overflow-tooltip>
+          <template #default="{ row }">
+            <el-text v-if="row.contest_entry === ''">无项目</el-text>
+          </template>
         </el-table-column>
         <el-table-column
                 prop="contest"
